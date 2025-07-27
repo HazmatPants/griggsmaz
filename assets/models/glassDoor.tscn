@@ -1,0 +1,41 @@
+[gd_scene load_steps=7 format=4 uid="uid://sr587uge2ij6"]
+
+[ext_resource type="PackedScene" uid="uid://brq43fvvvbi88" path="res://assets/models/glassDoor.glb" id="1_jt0nt"]
+[ext_resource type="Material" uid="uid://drh8m4l73ytvw" path="res://assets/materials/glass.tres" id="2_bugwv"]
+[ext_resource type="SteamAudioMaterial" uid="uid://cqx8833t2v8mo" path="res://addons/godot-steam-audio/materials/metal_material.tres" id="3_hbfwo"]
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_a6hq3"]
+resource_name = "glassDoor_Cube_001"
+_surfaces = [{
+"aabb": AABB(-1, -1, -1, 2, 2, 2),
+"attribute_data": PackedByteArray("/1////+f/7//n////1//v/9f/7//n/9//5//v/9f/3//X/9//5//P/+f/3//X/8//1//P/+fAAD/n/8//18AAP8f/3//X/8//1//f/8f/z//n/9//9//P//f/3//n/8/"),
+"format": 34896613399,
+"index_count": 36,
+"index_data": PackedByteArray("AAABAAIAAAADAAEABAAFAAYABAAHAAUACAAJAAoACAALAAkADAANAA4ADAAPAA0AEAARABIAEAATABEAFAAVABYAFAAXABUA"),
+"material": ExtResource("2_bugwv"),
+"name": "Material.001",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 24,
+"vertex_data": PackedByteArray("AAAAAP//VNUAAP//AABU1QAA/////1TVAAAAAAAAVNUAAAAAAAD///////8AAP//AAD//wAA/////wAAAAD/////AAAAAFTV////////VNX/////AABU1f//AAD//1TV//8AAP///78AAP//////v/////////+/AAAAAP///78AAAAAAAD/v///AAD///+///8AAAAA/78AAAAA////v/////8AAP//AAD///////8AAP//AAD/////////////VNVU1VTVVNVU1VTVVNVU1f+//7//v/+//7//v/+//7+qKqoqqiqqKqoqqiqqKqoq/////////////////////wAA/38AAP9/AAD/fwAA/3//f/+//3//v/9//7//f/+/")
+}]
+blend_shape_mode = 0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_bugwv"]
+transparency = 1
+albedo_color = Color(1, 1, 1, 0)
+
+[sub_resource type="BoxMesh" id="BoxMesh_hbfwo"]
+material = SubResource("StandardMaterial3D_bugwv")
+size = Vector3(0.805, 5.855, 3.63)
+
+[node name="glassDoor" instance=ExtResource("1_jt0nt")]
+
+[node name="Cube_001" parent="." index="1"]
+mesh = SubResource("ArrayMesh_a6hq3")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." index="3"]
+mesh = SubResource("BoxMesh_hbfwo")
+
+[node name="SteamAudioDynamicGeometry" type="SteamAudioDynamicGeometry" parent="MeshInstance3D" index="0"]
+material = ExtResource("3_hbfwo")

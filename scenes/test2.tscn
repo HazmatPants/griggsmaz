@@ -1,0 +1,124 @@
+[gd_scene load_steps=14 format=3 uid="uid://bvwyhusn5pha5"]
+
+[ext_resource type="PackedScene" uid="uid://cycyr22y5agba" path="res://scenes/player.tscn" id="1_uxr5t"]
+[ext_resource type="Material" uid="uid://cdycch70p5o7v" path="res://assets/materials/ducrete.tres" id="2_51wsq"]
+[ext_resource type="AudioStream" uid="uid://cux4kb0ysjyum" path="res://assets/sound/music/MsDos - Actually Gone.mp3" id="2_jorxo"]
+[ext_resource type="Material" uid="uid://b8cwye2rrrmwi" path="res://assets/materials/concrete.tres" id="3_jorxo"]
+[ext_resource type="SteamAudioMaterial" uid="uid://bljhgad6g2vnm" path="res://addons/godot-steam-audio/materials/concrete_material.tres" id="4_jorxo"]
+[ext_resource type="SteamAudioMaterial" uid="uid://b687m7kh5ru1i" path="res://addons/godot-steam-audio/materials/gravel_material.tres" id="6_kamxp"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_kamxp"]
+size = Vector3(10.428, 0.23, 8.119)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_mkcba"]
+size = Vector3(30.282, 0.24, 31.7042)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_kamxp"]
+size = Vector3(10.4327, 0.24646, 8.10416)
+
+[sub_resource type="BoxMesh" id="BoxMesh_ydant"]
+size = Vector3(10.435, 2.585, 0.285)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_fwljx"]
+size = Vector3(10.435, 2.585, 0.285)
+
+[sub_resource type="BoxMesh" id="BoxMesh_pob4m"]
+size = Vector3(7.815, 2.695, 0.285)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_bcusq"]
+size = Vector3(7.815, 2.695, 0.285)
+
+[node name="Node3D" type="Node3D"]
+
+[node name="SteamAudioConfig" type="SteamAudioConfig" parent="."]
+max_reflection_sources = 10.0
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.52142, 0.752278, 0)
+
+[node name="Player" parent="." instance=ExtResource("1_uxr5t")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.49412, 1.18531, 5.67467)
+
+[node name="SteamAudioPlayer" type="SteamAudioPlayer" parent="."]
+distance_attenuation = true
+air_absorption = true
+reflection = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.7621, 0.579443, -1.04546)
+stream = ExtResource("2_jorxo")
+attenuation_model = 3
+autoplay = true
+panning_strength = 0.0
+
+[node name="Cube2" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.2883, 0, 0)
+metadata/material_type = "concrete"
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Cube2"]
+transform = Transform3D(2.89968, 0, 0, 0, 1, 0, 0, 0, 3.89904, 3.62503, 0, -1.53437)
+material_override = ExtResource("2_51wsq")
+mesh = SubResource("BoxMesh_kamxp")
+
+[node name="SteamAudioGeometry" type="SteamAudioGeometry" parent="Cube2/MeshInstance3D"]
+material = ExtResource("4_jorxo")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Cube2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.61517, 0, -1.55886)
+shape = SubResource("BoxShape3D_mkcba")
+
+[node name="Cube3" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.2883, 2.62956, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Cube3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.62503, 0, -1.53437)
+material_override = ExtResource("3_jorxo")
+mesh = SubResource("BoxMesh_kamxp")
+
+[node name="SteamAudioGeometry" type="SteamAudioGeometry" parent="Cube3/MeshInstance3D"]
+material = ExtResource("4_jorxo")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Cube3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.6246, -0.00360107, -1.52541)
+shape = SubResource("BoxShape3D_kamxp")
+
+[node name="Cube4" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.33816, 1.06639, 2.22398)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Cube4"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.614138, 0.267096, 0.173627)
+material_override = ExtResource("3_jorxo")
+mesh = SubResource("BoxMesh_ydant")
+
+[node name="SteamAudioGeometry" type="SteamAudioGeometry" parent="Cube4/MeshInstance3D"]
+material = ExtResource("4_jorxo")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Cube4"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.614138, 0.267096, 0.173627)
+shape = SubResource("BoxShape3D_fwljx")
+
+[node name="Cube5" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.33816, 1.06639, -5.59907)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Cube5"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.614138, 0.267096, 0.173627)
+material_override = ExtResource("3_jorxo")
+mesh = SubResource("BoxMesh_ydant")
+
+[node name="SteamAudioGeometry" type="SteamAudioGeometry" parent="Cube5/MeshInstance3D"]
+material = ExtResource("4_jorxo")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Cube5"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.614138, 0.267096, 0.173627)
+shape = SubResource("BoxShape3D_fwljx")
+
+[node name="Cube6" type="StaticBody3D" parent="."]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 14.2268, 1.06639, -2.02942)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Cube6"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.475479, 0.228176, 0)
+material_override = ExtResource("3_jorxo")
+mesh = SubResource("BoxMesh_pob4m")
+
+[node name="SteamAudioGeometry" type="SteamAudioGeometry" parent="Cube6/MeshInstance3D"]
+material = ExtResource("6_kamxp")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Cube6"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.475479, 0.228176, 0)
+shape = SubResource("BoxShape3D_bcusq")

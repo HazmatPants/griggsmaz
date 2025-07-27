@@ -1,0 +1,107 @@
+[gd_scene load_steps=19 format=3 uid="uid://c54u05i7whgm1"]
+
+[ext_resource type="Texture2D" uid="uid://dr5xnd6x1ip4x" path="res://assets/textures/Sky_day03_06.png" id="1_bl13t"]
+[ext_resource type="Material" uid="uid://c6udtga0g2ybo" path="res://assets/materials/shiny_metal.tres" id="2_at5dv"]
+[ext_resource type="PackedScene" uid="uid://cycyr22y5agba" path="res://scenes/player.tscn" id="2_iyx0m"]
+[ext_resource type="Material" uid="uid://dbfwy7r2mjpdt" path="res://assets/materials/plastic.tres" id="3_jcd4p"]
+[ext_resource type="Material" uid="uid://b8cwye2rrrmwi" path="res://assets/materials/concrete.tres" id="4_at5dv"]
+[ext_resource type="PackedScene" uid="uid://dam2kruydlaop" path="res://scenes/sliding_door.tscn" id="4_j5jx5"]
+[ext_resource type="PackedScene" uid="uid://cwfd85fue5oh3" path="res://scenes/double_sliding_door.tscn" id="5_lpvoh"]
+[ext_resource type="PackedScene" uid="uid://dc7l8xehcc418" path="res://scenes/UI.tscn" id="6_yk7ts"]
+[ext_resource type="PackedScene" uid="uid://dlehkrd75ljll" path="res://scenes/double_glass_sliding_door.tscn" id="7_at5dv"]
+
+[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_sugp2"]
+panorama = ExtResource("1_bl13t")
+
+[sub_resource type="Sky" id="Sky_jyhfs"]
+sky_material = SubResource("PanoramaSkyMaterial_sugp2")
+
+[sub_resource type="Environment" id="Environment_tbgi4"]
+background_mode = 2
+sky = SubResource("Sky_jyhfs")
+tonemap_mode = 2
+ssao_enabled = true
+ssao_radius = 10.0
+glow_enabled = true
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_jcd4p"]
+size = Vector3(20, 1, 20)
+
+[sub_resource type="BoxMesh" id="BoxMesh_uacia"]
+size = Vector3(20, 1, 20)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_sgp6g"]
+size = Vector3(50, 1, 50)
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_74lek"]
+load_path = "res://.godot/imported/plastic.png-147d92affcfb71cd7d9bb7733d30fda3.s3tc.ctex"
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_iyx0m"]
+albedo_texture = SubResource("CompressedTexture2D_74lek")
+uv1_scale = Vector3(300, 200, 300)
+texture_filter = 0
+
+[sub_resource type="BoxMesh" id="BoxMesh_74lek"]
+material = SubResource("StandardMaterial3D_iyx0m")
+size = Vector3(50, 1, 50)
+
+[node name="Main" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_tbgi4")
+
+[node name="metalFloor" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3.68231)
+metadata/material_type = "metal"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="metalFloor"]
+shape = SubResource("BoxShape3D_jcd4p")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="metalFloor"]
+material_override = ExtResource("2_at5dv")
+mesh = SubResource("BoxMesh_uacia")
+skeleton = NodePath("../CollisionShape3D")
+
+[node name="metalFloor2" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -21.5065, 0, -1.79199)
+metadata/material_type = "plastic"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="metalFloor2"]
+shape = SubResource("BoxShape3D_jcd4p")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="metalFloor2"]
+material_override = ExtResource("3_jcd4p")
+mesh = SubResource("BoxMesh_uacia")
+skeleton = NodePath("../CollisionShape3D")
+
+[node name="concreteFloor" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 34.4674)
+metadata/material_type = "concrete"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="concreteFloor"]
+shape = SubResource("BoxShape3D_sgp6g")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="concreteFloor"]
+material_override = ExtResource("4_at5dv")
+mesh = SubResource("BoxMesh_74lek")
+
+[node name="Player" parent="." instance=ExtResource("2_iyx0m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.53874, 0)
+
+[node name="PlayerGUI" parent="." instance=ExtResource("6_yk7ts")]
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(-1, 0, 8.74228e-08, 2.26267e-08, 0.965926, 0.258819, -8.44439e-08, 0.258819, -0.965926, 0, 2.94547, -5.08437)
+fov = 56.25
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -0.258819, 0.965926, 0, -0.965926, -0.258819, 0, 4.42898, 0)
+
+[node name="SlidingDoor" parent="." instance=ExtResource("4_j5jx5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.5515, 2, 32.4101)
+
+[node name="DoubleSlidingDoor" parent="." instance=ExtResource("5_lpvoh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.422609, 2.03982, 32.3509)
+
+[node name="DoubleSlidingDoor2" parent="." instance=ExtResource("7_at5dv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.82067, 1.96016, 33.5056)

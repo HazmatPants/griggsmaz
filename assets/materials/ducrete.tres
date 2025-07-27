@@ -1,0 +1,10 @@
+[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://cdycch70p5o7v"]
+
+[ext_resource type="Texture2D" uid="uid://xy7geljngh0s" path="res://assets/textures/surfaces/ducrete.png" id="1_kgcdi"]
+
+[resource]
+albedo_texture = ExtResource("1_kgcdi")
+uv1_scale = Vector3(4, 4, 4)
+uv1_triplanar = true
+uv1_world_triplanar = true
+texture_filter = 0

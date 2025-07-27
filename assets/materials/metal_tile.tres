@@ -1,0 +1,8 @@
+[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://cqsv1v7da7haq"]
+
+[ext_resource type="Texture2D" uid="uid://dhptd3ac7e6he" path="res://assets/textures/surfaces/metal_tile.png" id="1_8a8ap"]
+
+[resource]
+albedo_texture = ExtResource("1_8a8ap")
+uv1_scale = Vector3(50, 30, 0)
+texture_filter = 0

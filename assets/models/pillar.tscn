@@ -1,0 +1,41 @@
+[gd_scene load_steps=5 format=3 uid="uid://beydo7o8u058"]
+
+[ext_resource type="PackedScene" uid="uid://bm4ssngvxu0jf" path="res://assets/models/pillar.glb" id="1_wwqjk"]
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_wwqjk"]
+emission_shape_scale = Vector3(100, 100, 100)
+emission_shape = 1
+emission_sphere_radius = 1.0
+spread = 20.0
+initial_velocity_min = 1.0
+initial_velocity_max = 15.0
+gravity = Vector3(0, 0, 0)
+turbulence_enabled = true
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_b73mi"]
+transparency = 1
+albedo_color = Color(0.266667, 0, 1, 0.501961)
+metallic = 1.0
+roughness = 0.0
+emission_enabled = true
+emission = Color(0.244, 0.19, 1, 1)
+emission_energy_multiplier = 7000.0
+
+[sub_resource type="SphereMesh" id="SphereMesh_0rise"]
+material = SubResource("StandardMaterial3D_b73mi")
+radius = 0.2
+height = 0.4
+
+[node name="pillar" instance=ExtResource("1_wwqjk")]
+
+[node name="Cube" parent="." index="0"]
+transform = Transform3D(18.3762, 0, 0, 0, 6704.5, 0, 0, 0, 18.3762, 0, -10, 0)
+
+[node name="Cube_001" parent="." index="1"]
+transform = Transform3D(18.3762, 0, 0, 0, 15983.3, 0, 0, 0, 18.3762, 0, 10, 0)
+
+[node name="GPUParticles3D" type="GPUParticles3D" parent="." index="3"]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 0, 0)
+lifetime = 15.0
+process_material = SubResource("ParticleProcessMaterial_wwqjk")
+draw_pass_1 = SubResource("SphereMesh_0rise")

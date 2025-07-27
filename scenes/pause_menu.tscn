@@ -1,0 +1,156 @@
+[gd_scene load_steps=5 format=3 uid="uid://2rek1u00vvrh"]
+
+[ext_resource type="Script" uid="uid://esb0m3hmbjk6" path="res://scripts/pause_menu.gd" id="1_n87rw"]
+[ext_resource type="Script" uid="uid://cv2m12hfdbh2q" path="res://scripts/settings_controller.gd" id="2_myx47"]
+[ext_resource type="Script" uid="uid://dbun3u7vtws6j" path="res://scripts/tooltip.gd" id="3_kukqi"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_kukqi"]
+font_size = 32
+
+[node name="PauseMenu" type="CanvasLayer"]
+process_mode = 3
+script = ExtResource("1_n87rw")
+
+[node name="BG" type="ColorRect" parent="."]
+process_mode = 2
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -124.0
+offset_top = -155.0
+offset_right = 124.0
+offset_bottom = 155.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.0885599, 0.0885599, 0.0885599, 1)
+
+[node name="Label" type="Label" parent="BG"]
+layout_mode = 2
+offset_top = 7.0
+offset_right = 248.0
+offset_bottom = 30.0
+text = "Paused"
+horizontal_alignment = 1
+
+[node name="ButtonContainer" type="VBoxContainer" parent="BG"]
+layout_mode = 0
+offset_top = 36.0
+offset_right = 248.0
+offset_bottom = 310.0
+
+[node name="HSeparator" type="HSeparator" parent="BG/ButtonContainer"]
+layout_mode = 2
+
+[node name="ResumeButton" type="Button" parent="BG/ButtonContainer"]
+layout_mode = 2
+text = "Resume"
+
+[node name="SettingsButton" type="Button" parent="BG/ButtonContainer"]
+layout_mode = 2
+text = "Settings"
+
+[node name="QuitButton" type="Button" parent="BG/ButtonContainer"]
+layout_mode = 2
+text = "Quit"
+
+[node name="Settings" type="ColorRect" parent="."]
+process_mode = 2
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -299.0
+offset_top = -219.0
+offset_right = 299.0
+offset_bottom = 219.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.165656, 0.165656, 0.165656, 1)
+
+[node name="Label" type="Label" parent="Settings"]
+layout_mode = 0
+offset_top = 10.0
+offset_right = 598.0
+offset_bottom = 33.0
+text = "Settings"
+horizontal_alignment = 1
+
+[node name="HSeparator" type="HSeparator" parent="Settings"]
+layout_mode = 2
+offset_left = 1.0
+offset_top = 42.0
+offset_right = 597.0
+offset_bottom = 46.0
+
+[node name="SettingsContainer" type="VBoxContainer" parent="Settings"]
+layout_mode = 0
+offset_left = 15.0
+offset_top = 60.0
+offset_right = 982.0
+offset_bottom = 456.0
+mouse_filter = 0
+
+[node name="SettingsController" type="Node" parent="Settings/SettingsContainer"]
+script = ExtResource("2_myx47")
+
+[node name="VideoTitle" type="Label" parent="Settings/SettingsContainer"]
+layout_mode = 2
+text = "Video Settings"
+label_settings = SubResource("LabelSettings_kukqi")
+
+[node name="HSeparator" type="HSeparator" parent="Settings/SettingsContainer/VideoTitle"]
+layout_mode = 0
+offset_left = 3.0
+offset_top = 30.0
+offset_right = 246.0
+offset_bottom = 34.0
+
+[node name="Bloom" type="HBoxContainer" parent="Settings/SettingsContainer"]
+layout_mode = 2
+mouse_filter = 0
+mouse_default_cursor_shape = 16
+script = ExtResource("3_kukqi")
+
+[node name="Label" type="Label" parent="Settings/SettingsContainer/Bloom"]
+layout_mode = 2
+mouse_filter = 0
+text = "Bloom"
+
+[node name="CheckButton" type="CheckButton" parent="Settings/SettingsContainer/Bloom"]
+layout_mode = 2
+
+[node name="Tooltip" type="Label" parent="Settings/SettingsContainer/Bloom"]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Bloom - Simulates real world eye/camera behavior where bright pixels bleed onto surrounding pixels."
+
+[node name="SSR" type="HBoxContainer" parent="Settings/SettingsContainer"]
+layout_mode = 2
+mouse_filter = 0
+mouse_default_cursor_shape = 16
+script = ExtResource("3_kukqi")
+
+[node name="Label" type="Label" parent="Settings/SettingsContainer/SSR"]
+layout_mode = 2
+mouse_filter = 0
+text = "SSR"
+
+[node name="CheckButton" type="CheckButton" parent="Settings/SettingsContainer/SSR"]
+layout_mode = 2
+mouse_default_cursor_shape = 16
+
+[node name="Tooltip" type="Label" parent="Settings/SettingsContainer/SSR"]
+layout_mode = 2
+text = "Screen Space Reflections - Renders reflections on reflective materials in real-time."
+
+[node name="CloseButton" type="Button" parent="Settings"]
+layout_mode = 0
+offset_left = 555.0
+offset_right = 573.0
+offset_bottom = 31.0
+scale = Vector2(2.36012, 1.4401)
+text = "X"
+flat = true

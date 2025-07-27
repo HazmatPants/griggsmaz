@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://cux4kb0ysjyum"
+path="res://.godot/imported/MsDos - Actually Gone.mp3-d4b0a02f8d8272f0d0fe7fe94bf4f136.mp3str"
+
+[deps]
+
+source_file="res://assets/sound/music/MsDos - Actually Gone.mp3"
+dest_files=["res://.godot/imported/MsDos - Actually Gone.mp3-d4b0a02f8d8272f0d0fe7fe94bf4f136.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

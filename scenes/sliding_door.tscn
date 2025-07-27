@@ -1,0 +1,30 @@
+[gd_scene load_steps=6 format=3 uid="uid://dam2kruydlaop"]
+
+[ext_resource type="Script" uid="uid://l14tj6dsx3bm" path="res://scripts/slidingDoor.gd" id="1_l4ux2"]
+[ext_resource type="AudioStream" uid="uid://xbbmfi02go7w" path="res://assets/sound/sfx/door/doorslide_opening1.ogg" id="2_3by0i"]
+[ext_resource type="PackedScene" uid="uid://b8rvpua8p8inh" path="res://assets/models/door.glb" id="3_vjn6n"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_vjn6n"]
+size = Vector3(4, 3, 4)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ivgr4"]
+size = Vector3(3, 3, 0.3)
+
+[node name="SlidingDoor" type="Node3D"]
+script = ExtResource("1_l4ux2")
+
+[node name="Area3D" type="Area3D" parent="."]
+
+[node name="Collider" type="CollisionShape3D" parent="Area3D"]
+shape = SubResource("BoxShape3D_vjn6n")
+
+[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource("2_3by0i")
+
+[node name="Door" type="StaticBody3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Door"]
+shape = SubResource("BoxShape3D_ivgr4")
+
+[node name="door" parent="Door" instance=ExtResource("3_vjn6n")]
+transform = Transform3D(-1.83588e-08, 0, 0.42, 0, 0.42, 0, -0.42, 0, -1.83588e-08, 0, 0, 0)

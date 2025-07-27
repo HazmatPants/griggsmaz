@@ -1,0 +1,40 @@
+[gd_scene load_steps=3 format=3 uid="uid://dc7l8xehcc418"]
+
+[ext_resource type="Texture2D" uid="uid://dcwbxg4y45jal" path="res://assets/textures/ui/crosshair2.png" id="1_dj8aq"]
+[ext_resource type="Script" uid="uid://3777ip7ok5xn" path="res://scripts/ui.gd" id="1_ro3t7"]
+
+[node name="PlayerGUI" type="CanvasLayer"]
+script = ExtResource("1_ro3t7")
+
+[node name="InteractLabel" type="Label" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 431.0
+offset_top = 614.0
+offset_right = -405.0
+offset_bottom = -10.9999
+text = "Interact [F]"
+horizontal_alignment = 1
+
+[node name="Crosshair" type="TextureRect" parent="."]
+anchors_preset = -1
+anchor_left = 0.499
+anchor_top = 0.504
+anchor_right = 0.499
+anchor_bottom = 0.504
+offset_left = -31.848
+offset_top = -31.592
+offset_right = 32.152
+offset_bottom = 32.408
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_dj8aq")
+stretch_mode = 3
+
+[node name="PopupContainer" type="VBoxContainer" parent="."]
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="SFXPlayer" type="AudioStreamPlayer" parent="."]
+max_polyphony = 2
