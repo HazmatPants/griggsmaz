@@ -24,12 +24,12 @@ func _on_mouse_exit():
 func _process(delta):
 	if tooltip.visible:
 		var pos = get_global_mouse_position() + Vector2(25.0, 0.0)
-		var size = tooltip.size
+		var _size = tooltip.size
 		var screen_size = get_viewport_rect().size
 
-		if pos.x + size.x > screen_size.x:
-			pos.x = screen_size.x - size.x
-		if pos.y + size.y > screen_size.y:
-			pos.y = screen_size.y - size.y
+		if pos.x + _size.x > screen_size.x:
+			pos.x = screen_size.x - _size.x
+		if pos.y + _size.y > screen_size.y:
+			pos.y = screen_size.y - _size.y
 
 		tooltip.global_position = pos

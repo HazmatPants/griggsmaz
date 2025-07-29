@@ -1,0 +1,33 @@
+[gd_scene load_steps=5 format=3 uid="uid://dqc0untajmnri"]
+
+[ext_resource type="Script" uid="uid://dauqorda5lyar" path="res://scripts/prop.gd" id="1_tv3j3"]
+[ext_resource type="Script" uid="uid://bhb3rvw4brymy" path="res://scripts/disk_controller.gd" id="2_58nei"]
+[ext_resource type="PackedScene" uid="uid://c8kmbhc4xpndk" path="res://assets/models/floppy_disk.glb" id="2_ewsl7"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_58nei"]
+size = Vector3(0.036, 0.147, 0.14)
+
+[node name="FloppyDisk" type="RigidBody3D"]
+collision_layer = 3
+mass = 0.7
+freeze_mode = 1
+continuous_cd = true
+script = ExtResource("1_tv3j3")
+metadata/grabbable = true
+
+[node name="mesh" parent="." instance=ExtResource("2_ewsl7")]
+transform = Transform3D(0.04, 0, 0, 0, 0.04, 0, 0, 0, 0.04, 0, 0, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.000627831, 0.00250433, 0)
+shape = SubResource("BoxShape3D_58nei")
+
+[node name="SFXPlayer" type="SteamAudioPlayer" parent="."]
+distance_attenuation = true
+air_absorption = true
+reflection = true
+attenuation_model = 3
+panning_strength = 0.0
+
+[node name="FloppyDisk" type="Node3D" parent="."]
+script = ExtResource("2_58nei")

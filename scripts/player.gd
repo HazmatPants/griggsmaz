@@ -7,6 +7,14 @@ extends CharacterBody3D
 @export var mouse_sensitivity := 0.004
 @export var jump_velocity := 4.5
 @export var gravity := Vector3.DOWN * 9.8
+
+@export var crouch_scale := Vector3(1.0, 0.4, 1.0)
+@export var crouch_move_speed := 2.0
+@export var crouch_bobbing_speed := 8.0
+var crouching := false
+var default_scale: Vector3
+
+var input_enabled := true
 var mouse_look_enabled := true
 
 
@@ -16,7 +24,9 @@ var look_rotation: Vector2 = Vector2.ZERO
 @onready var interactray = $Camera3D/InteractRay
 @onready var footstepRay = $FootstepRay
 @onready var grab_point = $Camera3D/GrabPoint
+@onready var hand_position = $Camera3D/HandPosition
 var held_object: RigidBody3D = null
+var object_in_hand: RigidBody3D = null
 
 # for playing spatialized sounds
 @onready var audio_player = $SFXPlayer
@@ -192,43 +202,45 @@ func footstep_sound(type: String="step"):
 func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	base_camera_position = camera.position
+	default_scale = $CollisionShape3D.scale
 
 func _unhandled_input(event):
-	if event is InputEventMouseMotion and mouse_look_enabled:
-		look_rotation.x -= event.relative.x * mouse_sensitivity
-		look_rotation.y -= event.relative.y * mouse_sensitivity
-		look_rotation.y = clamp(look_rotation.y, -1.5, 1.5)
-		rotation.y = look_rotation.x
-		camera.rotation.x = look_rotation.y
+	if input_enabled:
+		if event is InputEventMouseMotion and mouse_look_enabled:
+			look_rotation.x -= event.relative.x * mouse_sensitivity
+			look_rotation.y -= event.relative.y * mouse_sensitivity
+			look_rotation.y = clamp(look_rotation.y, -1.5, 1.5)
+			rotation.y = look_rotation.x
+			camera.rotation.x = look_rotation.y
 
 func _physics_process(delta):
 	var input_dir = Vector3.ZERO
 	var forward = -transform.basis.z.normalized()
 	var right = transform.basis.x.normalized()
-
-	if Input.is_action_pressed("move_forward"):
-		input_dir += forward
-	if Input.is_action_pressed("move_backward"):
-		input_dir -= forward
-	if Input.is_action_pressed("move_right"):
-		input_dir += right
-	if Input.is_action_pressed("move_left"):
-		input_dir -= right
+	if input_enabled:
+		if Input.is_action_pressed("move_forward"):
+			input_dir += forward
+		if Input.is_action_pressed("move_backward"):
+			input_dir -= forward
+		if Input.is_action_pressed("move_right"):
+			input_dir += right
+		if Input.is_action_pressed("move_left"):
+			input_dir -= right
 
 	var target_roll = 0.0
-
-	if is_on_floor():
-		if Input.is_action_pressed("move_left"):
-			target_roll = deg_to_rad(strafe_roll_amount)
-		elif Input.is_action_pressed("move_right"):
-			target_roll = -deg_to_rad(strafe_roll_amount)
+	if input_enabled:
+		if is_on_floor():
+			if Input.is_action_pressed("move_left"):
+				target_roll = deg_to_rad(strafe_roll_amount)
+			elif Input.is_action_pressed("move_right"):
+				target_roll = -deg_to_rad(strafe_roll_amount)
 
 	current_strafe_roll = lerp(current_strafe_roll, target_roll, delta * strafe_roll_speed)
 
 	input_dir = input_dir.normalized()
-	var sprinting = Input.is_action_pressed("sprint") and is_on_floor()
+	var sprinting = Input.is_action_pressed("sprint") and is_on_floor() and not crouching
 	
-	var speed = sprint_speed if sprinting else move_speed
+	var speed = sprint_speed if sprinting else move_speed if not crouching else crouch_move_speed
 	var desired_velocity = input_dir * speed
 	# Separate XZ velocity
 	var horizontal_velocity = Vector3(velocity.x, 0, velocity.z)
@@ -252,20 +264,27 @@ func _physics_process(delta):
 	velocity.x = horizontal_velocity.x
 	velocity.z = horizontal_velocity.z
 	
-	var current_bobbing_speed = sprint_bobbing_speed if sprinting else bobbing_speed
+	var current_bobbing_speed = sprint_bobbing_speed if sprinting else bobbing_speed if not crouching else crouch_bobbing_speed
 	var current_bobbing_amount = sprint_bobbing_amount if sprinting else bobbing_amount
 	var current_footstep_interval = sprint_footstep_interval if sprinting else footstep_interval
 
 
-
-	if not is_on_floor():
-		velocity += gravity * delta
-	else:
-		velocity.y = 0
-		if Input.is_action_just_pressed("jump"):
-			velocity.y = jump_velocity
-			viewpunch_velocity += jump_viewpunch
-			footstep_sound("impact")
+	if input_enabled:
+		if not is_on_floor():
+			velocity += gravity * delta
+		else:
+			velocity.y = 0
+			if Input.is_action_just_pressed("jump"):
+				velocity.y = jump_velocity
+				viewpunch_velocity += jump_viewpunch
+				footstep_sound("impact")
+		
+		if Input.is_action_pressed("crouch"):
+			crouching = true
+			$CollisionShape3D.scale = lerp($CollisionShape3D.scale, crouch_scale, 0.3)
+		else:
+			crouching = false
+			$CollisionShape3D.scale = lerp($CollisionShape3D.scale, default_scale, 0.3)
 
 	move_and_slide()
 
@@ -338,11 +357,13 @@ func _physics_process(delta):
 	camera.rotation = camera_rot
 
 	if held_object:
-		move_held_object_physical(delta)
+		move_held_object_physical(delta, grab_point.global_transform.origin, held_object)
+	elif object_in_hand:
+		object_in_hand.global_transform.origin = hand_position.global_transform.origin
+		object_in_hand.global_transform.basis = hand_position.global_transform.basis
 
-func move_held_object_physical(delta):
-	var target_pos = grab_point.global_transform.origin
-	var current_pos = held_object.global_transform.origin
+func move_held_object_physical(delta, target_pos, object):
+	var current_pos = object.global_transform.origin
 	var direction = target_pos - current_pos
 
 	var distance = direction.length()
@@ -351,16 +372,16 @@ func move_held_object_physical(delta):
 	var spring_strength = 50.0
 	var damping = 8.0
 	
-	var relative_velocity = held_object.linear_velocity
+	var relative_velocity = object.linear_velocity
 	var force = direction_normalized * (distance * spring_strength) - relative_velocity * damping
 	
-	held_object.angular_velocity = held_object.angular_velocity.lerp(Vector3.ZERO, 0.1)
-	held_object.apply_central_force(force)
+	object.angular_velocity = object.angular_velocity.lerp(Vector3.ZERO, 0.1)
+	object.apply_central_force(force)
 	
 	var is_rotating_object := Input.is_action_pressed("rmb")
 	mouse_look_enabled = not is_rotating_object
 	
-	if is_rotating_object and held_object:
+	if is_rotating_object and object:
 		var mouse_delta = Input.get_last_mouse_velocity()
 
 		# Sensitivity multiplier — tweak to your liking
@@ -434,8 +455,10 @@ func _process(_delta: float) -> void:
 			print("Interacted with: ", collider.name)
 			if collider.name == "LockButton":
 				collider.get_parent().toggle_lock()
-			elif collider.name == "ToggleButton":
+			elif collider.has_meta("InteractWithParent"):
 				collider.get_parent().interact()
+			elif collider.has_meta("InteractWithSelf"):
+				collider.interact()
 	else:
 		interactText.visible = false
 		crosshair.texture = image_crosshair
@@ -443,3 +466,19 @@ func _process(_delta: float) -> void:
 		crosshair.texture = image_crosshair_hand
 		interactText.text = "Drop [E]"
 		interactText.visible = true
+	if Input.is_action_just_pressed("hold_object"):
+		if held_object:
+			if object_in_hand:
+				local_audio_player.stream = deny_sound
+				local_audio_player.play()
+			else:
+				object_in_hand = held_object
+				print("Put object ", object_in_hand, " in hand")
+				object_in_hand.gravity_scale = 0.0
+				object_in_hand.collider.disabled = true
+				held_object = null
+		else:
+			if object_in_hand:
+				object_in_hand.gravity_scale = 1.0
+				object_in_hand.collider.disabled = false
+				object_in_hand = null

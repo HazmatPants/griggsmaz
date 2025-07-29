@@ -105,6 +105,7 @@ mesh = SubResource("CapsuleMesh_oigqx")
 [node name="ToggleButton" type="Area3D" parent="."]
 collision_layer = 2
 metadata/Method = "ToggleDoor"
+metadata/InteractWithParent = true
 
 [node name="Collider" type="CollisionShape3D" parent="ToggleButton"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00969833, 0, 0)

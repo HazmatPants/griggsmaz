@@ -19,21 +19,26 @@ func _ready():
 	QuitButton.pressed.connect(_on_quitbutton_pressed)
 	SettingsCloseButton.pressed.connect(_on_settingsclosebutton_pressed)
 	
-	GLOBAL.settings = get_settings()
+	var settings = get_settings()
+	
+	GLOBAL.settings = settings
 	
 	apply_settings(GLOBAL.settings)
 	
 	SettingsController._UpdateSettings()
+	
+	save_dict_as_config(settings, "user://settings.cfg")
 
 func _process(_delta):
 	if Input.is_action_just_pressed("escape"):
-		_toggle_pause()
+		if GLOBAL.CanPause:
+			_toggle_pause()
 
 func _toggle_pause():
 	is_paused = not is_paused
 	get_tree().paused = is_paused
 	visible = is_paused
-	playerGUI.visible = not playerGUI.visible
+	playerGUI.visible = not is_paused
 	
 	if not is_paused:
 		if SettingsContainer.visible:
@@ -49,6 +54,7 @@ func _on_resumebutton_pressed():
 	is_paused = false
 	get_tree().paused = is_paused
 	visible = is_paused
+	playerGUI.visible = true
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	Input.flush_buffered_events()
 
@@ -71,7 +77,7 @@ func get_settings():
 	var err = config.load("user://settings.cfg")
 	if err != OK:
 		print("Failed to load config")
-		return
+		return GLOBAL.settings
 	else:
 		var result = {}
 		for section in config.get_sections():
@@ -103,6 +109,5 @@ func save_dict_as_config(data: Dictionary, path: String) -> int:
 	var err = config.save(path)
 	if err != OK:
 		push_error("Failed to save config file: %s" % path)
-		
-	print("Saved settings")
+	print("Saved settings: ", err)
 	return err

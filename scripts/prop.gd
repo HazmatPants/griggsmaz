@@ -2,6 +2,7 @@ extends RigidBody3D
 
 @onready var audio_player = $SFXPlayer
 @onready var material_type: String = get_meta("impact_sound_material") if has_meta("impact_sound_material") else "default"
+@onready var collider = $CollisionShape3D
 
 var impact_cooldown := 0.0
 
@@ -35,8 +36,8 @@ var hard_impact_sounds = {
 	]
 }
 
-const SOFT_IMPACT_THRESHOLD: float = 5.0
-const HARD_IMPACT_THRESHOLD: float = 8.0
+const SOFT_IMPACT_THRESHOLD: float = 2.0
+const HARD_IMPACT_THRESHOLD: float = 5.0
 
 func _ready() -> void:
 	contact_monitor = true

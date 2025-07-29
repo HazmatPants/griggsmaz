@@ -1,4 +1,4 @@
-[gd_scene load_steps=133 format=4 uid="uid://dl28unae5bin0"]
+[gd_scene load_steps=143 format=4 uid="uid://dl28unae5bin0"]
 
 [ext_resource type="Material" uid="uid://b8cwye2rrrmwi" path="res://assets/materials/concrete.tres" id="1_baglu"]
 [ext_resource type="Script" uid="uid://dylpoa3vbpyfg" path="res://scripts/quakecontroller.gd" id="1_sa2y1"]
@@ -7,21 +7,24 @@
 [ext_resource type="PackedScene" uid="uid://dlehkrd75ljll" path="res://scenes/double_glass_sliding_door.tscn" id="4_40w10"]
 [ext_resource type="SteamAudioMaterial" uid="uid://76vceaiftu7i" path="res://addons/godot-steam-audio/materials/glass_material.tres" id="5_lefm6"]
 [ext_resource type="PackedScene" uid="uid://cycyr22y5agba" path="res://scenes/player.tscn" id="5_xvvcp"]
-[ext_resource type="Texture2D" uid="uid://baowpqvv6rlf6" path="res://assets/textures/decals/signs/sign_topside.png" id="6_hh5oj"]
 [ext_resource type="Material" uid="uid://cdycch70p5o7v" path="res://assets/materials/ducrete.tres" id="6_vciil"]
 [ext_resource type="PackedScene" uid="uid://beydo7o8u058" path="res://assets/models/pillar.tscn" id="7_hh5oj"]
 [ext_resource type="Texture2D" uid="uid://rab3ko7uus1p" path="res://assets/textures/decals/lambda_spray.png" id="8_vqfsp"]
 [ext_resource type="AudioStream" uid="uid://mb0pholbju6m" path="res://assets/sound/sfx/ambient/gears.ogg" id="10_jn13j"]
 [ext_resource type="PackedScene" uid="uid://d3rb7ujfws0qy" path="res://assets/models/air_vent.tscn" id="14_ot4hf"]
+[ext_resource type="PackedScene" uid="uid://dn8x1fkjjesbj" path="res://scenes/floppy_disk_drive.tscn" id="14_pmwj3"]
 [ext_resource type="PackedScene" uid="uid://ba3qc1k6j3okd" path="res://assets/models/ceiling_light.tscn" id="15_ot4hf"]
 [ext_resource type="PackedScene" uid="uid://2rek1u00vvrh" path="res://scenes/pause_menu.tscn" id="16_7wyq8"]
 [ext_resource type="PackedScene" uid="uid://dc7l8xehcc418" path="res://scenes/UI.tscn" id="16_vciil"]
 [ext_resource type="Script" uid="uid://b8i8qwitju25q" path="res://scripts/forcefield.gd" id="18_qty1u"]
 [ext_resource type="Material" uid="uid://c6udtga0g2ybo" path="res://assets/materials/shiny_metal.tres" id="19_yjh04"]
 [ext_resource type="SteamAudioMaterial" uid="uid://cp5pfey82wrv5" path="res://addons/godot-steam-audio/materials/default_material.tres" id="20_wklje"]
+[ext_resource type="PackedScene" uid="uid://ctg2bknrr3dxr" path="res://scenes/main_terminal.tscn" id="21_82vju"]
 [ext_resource type="AudioStream" uid="uid://b0f47mlfwyvow" path="res://assets/sound/sfx/ambient/pcWorking_loop.ogg" id="22_aomoi"]
 [ext_resource type="Texture2D" uid="uid://5q502ufvw47a" path="res://assets/textures/decals/signs/hearing_protection_sign.jpg" id="22_pmwj3"]
 [ext_resource type="AudioStream" uid="uid://bwujlvj4x3kgr" path="res://assets/sound/sfx/ambient/vent.ogg" id="26_03t26"]
+[ext_resource type="Script" uid="uid://kimemt2xqbeq" path="res://scripts/processor.gd" id="27_vs80n"]
+[ext_resource type="PackedScene" uid="uid://dqc0untajmnri" path="res://scenes/floppy_disk.tscn" id="29_c8kgi"]
 [ext_resource type="FontFile" uid="uid://dgkwgfyrwu1fk" path="res://assets/fonts/CONSOLA.TTF" id="31_s6kkj"]
 [ext_resource type="Material" uid="uid://ho2k2cllt7sm" path="res://assets/materials/rough_metal.tres" id="31_vs80n"]
 [ext_resource type="Script" uid="uid://cjia86g85rtev" path="res://scripts/starmail_terminal.gd" id="33_ei55q"]
@@ -43,8 +46,14 @@ material = SubResource("StandardMaterial3D_wklje")
 radius = 0.01
 height = 0.02
 
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_82vju"]
+
+[sub_resource type="Sky" id="Sky_vs80n"]
+sky_material = SubResource("ProceduralSkyMaterial_82vju")
+
 [sub_resource type="Environment" id="Environment_hh5oj"]
-background_mode = 3
+background_mode = 2
+sky = SubResource("Sky_vs80n")
 ssr_enabled = true
 ssr_max_steps = 300
 ssao_enabled = true
@@ -93,7 +102,7 @@ blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_7f18t")
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_40w10"]
-size = Vector3(8.894, 0.24, 11.708)
+size = Vector3(8.894, 0.243228, 11.708)
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_v10wu"]
 _surfaces = [{
@@ -252,7 +261,10 @@ size = Vector3(0.18, 1.775, 1.98)
 
 [sub_resource type="BoxMesh" id="BoxMesh_sa2y1"]
 material = ExtResource("19_yjh04")
-size = Vector3(0.305, 0.365, 1.96)
+size = Vector3(0.315, 0.39, 2.04)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_65va3"]
+size = Vector3(0.315, 0.39, 2.04)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_jrl1q"]
 
@@ -736,6 +748,26 @@ shadow_mesh = SubResource("ArrayMesh_mxpow")
 [sub_resource type="BoxShape3D" id="BoxShape3D_ot4hf"]
 size = Vector3(0.246124, 1.13184, 1.61299)
 
+[sub_resource type="ArrayMesh" id="ArrayMesh_82vju"]
+resource_name = "base_Cube_022"
+_surfaces = [{
+"aabb": AABB(-1, -1, -1, 2, 2, 2),
+"attribute_data": PackedByteArray("/1////+f/7//n////1//v/9f/7//n/9//5//v/9f/3//X/9//5//P/+f/3//X/8//1//P/+fAAD/n/8//18AAP8f/3//X/8//1//f/8f/z//n/9//9//P//f/3//n/8/"),
+"format": 34896613399,
+"index_count": 36,
+"index_data": PackedByteArray("AAABAAIAAAADAAEABAAFAAYABAAHAAUACAAJAAoACAALAAkADAANAA4ADAAPAA0AEAARABIAEAATABEAFAAVABYAFAAXABUA"),
+"material": SubResource("StandardMaterial3D_u8q2f"),
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 24,
+"vertex_data": PackedByteArray("AAAAAP//VNUAAP//AABU1QAA/////1TVAAAAAAAAVNUAAAAAAAD///////8AAP//AAD//wAA/////wAAAAD/////AAAAAFTV////////VNX/////AABU1f//AAD//1TV//8AAP///78AAP//////v/////////+/AAAAAP///78AAAAAAAD/v///AAD///+///8AAAAA/78AAAAA////v/////8AAP//AAD///////8AAP//AAD/////////////VNVU1VTVVNVU1VTVVNVU1f+//7//v/+//7//v/+//7+qKqoqqiqqKqoqqiqqKqoq/////////////////////wAA/38AAP9/AAD/fwAA/3//f/+//3//v/9//7//f/+/")
+}]
+blend_shape_mode = 0
+shadow_mesh = SubResource("ArrayMesh_mxpow")
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_vs80n"]
+size = Vector3(0.166, 1.182, 1.613)
+
 [sub_resource type="ArrayMesh" id="ArrayMesh_2pbo5"]
 _surfaces = [{
 "aabb": AABB(-1, -1, -1, 2, 2, 2),
@@ -812,31 +844,34 @@ size = Vector3(10.895, 2.585, 0.285)
 [sub_resource type="BoxShape3D" id="BoxShape3D_b085t"]
 size = Vector3(10.895, 2.585, 0.285)
 
+[sub_resource type="BoxMesh" id="BoxMesh_rtpsq"]
+size = Vector3(10.675, 2.585, 0.285)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ei55q"]
+size = Vector3(7.55725, 2.585, 0.16)
+
+[sub_resource type="BoxMesh" id="BoxMesh_65va3"]
+size = Vector3(2.165, 2.585, 0.285)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_qty1u"]
+size = Vector3(1.72171, 2.585, 0.16)
+
 [sub_resource type="BoxMesh" id="BoxMesh_33mrd"]
 size = Vector3(7.815, 2.695, 0.285)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_aomoi"]
 size = Vector3(7.815, 2.695, 0.285)
 
+[sub_resource type="BoxMesh" id="BoxMesh_82vju"]
+material = ExtResource("19_yjh04")
+size = Vector3(0.715, 0.565, 3.98)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_s6kkj"]
+size = Vector3(0.715, 0.565, 3.98)
+
 [sub_resource type="BoxShape3D" id="BoxShape3D_82vju"]
 resource_local_to_scene = true
 size = Vector3(0.3, 0.5, 0.796875)
-
-[sub_resource type="ViewportTexture" id="ViewportTexture_vs80n"]
-viewport_path = NodePath("Level/Console/MainTerminal/Screen/Viewport")
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_s6kkj"]
-resource_local_to_scene = true
-albedo_texture = SubResource("ViewportTexture_vs80n")
-roughness = 0.0
-
-[sub_resource type="PlaneMesh" id="PlaneMesh_rtpsq"]
-resource_local_to_scene = true
-material = SubResource("StandardMaterial3D_s6kkj")
-size = Vector2(0.75, 0.45)
-
-[sub_resource type="Theme" id="Theme_rtpsq"]
-default_font = ExtResource("31_s6kkj")
 
 [sub_resource type="BoxMesh" id="BoxMesh_ei55q"]
 material = ExtResource("31_vs80n")
@@ -860,10 +895,10 @@ font_size = 46
 
 [sub_resource type="BoxMesh" id="BoxMesh_s6kkj"]
 material = ExtResource("31_vs80n")
-size = Vector3(0.59, 1, 5.7)
+size = Vector3(0.99, 1, 5.7)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_rtpsq"]
-size = Vector3(0.59, 1, 5.7)
+size = Vector3(0.779, 1, 5.7)
 
 [sub_resource type="BoxMesh" id="BoxMesh_7wyq8"]
 material = ExtResource("31_vs80n")
@@ -1003,12 +1038,18 @@ max_db = -5.0
 max_polyphony = 2
 panning_strength = 0.0
 
-[node name="Emitter" type="MeshInstance3D" parent="Level/Forcefield"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.827561, -0.0311855)
-mesh = SubResource("BoxMesh_sa2y1")
+[node name="Emitter" type="StaticBody3D" parent="Level/Forcefield"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.765679, 0)
 
-[node name="SteamAudioGeometry" type="SteamAudioGeometry" parent="Level/Forcefield/Emitter"]
+[node name="Mesh" type="MeshInstance3D" parent="Level/Forcefield/Emitter"]
+mesh = SubResource("BoxMesh_sa2y1")
+skeleton = NodePath("../../root/@EditorNode@21272/@Panel@14/@VBoxContainer@15/DockHSplitLeftL/DockHSplitLeftR/DockHSplitMain/@VBoxContainer@26/DockVSplitCenter/@VSplitContainer@54/@VBoxContainer@55/@EditorMainScreen@102/MainScreen/@CanvasItemEditor@11482/@VSplitContainer@11134/@HSplitContainer@11136/@HSplitContainer@11138/@Control@11139/@SubViewportContainer@11140/@SubViewport@11141/base/Level/Forcefield")
+
+[node name="SteamAudioGeometry" type="SteamAudioGeometry" parent="Level/Forcefield/Emitter/Mesh"]
 material = ExtResource("35_b73mi")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Level/Forcefield/Emitter"]
+shape = SubResource("BoxShape3D_65va3")
 
 [node name="Cube_005" type="StaticBody3D" parent="Level"]
 
@@ -1205,6 +1246,21 @@ material = ExtResource("3_s5nuq")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.57933, 1.99018, 0.079291)
 shape = SubResource("BoxShape3D_ot4hf")
 
+[node name="Cube_022" type="StaticBody3D" parent="Level"]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 11.8497, 2.00685, -2.92319)
+
+[node name="Cube_021" type="MeshInstance3D" parent="Level/Cube_022"]
+transform = Transform3D(0.081, 0, 0, 0, 0.594, 0, 0, 0, 0.8, 0, 0, 0)
+material_override = ExtResource("1_baglu")
+mesh = SubResource("ArrayMesh_82vju")
+skeleton = NodePath("")
+
+[node name="SteamAudioGeometry" type="SteamAudioGeometry" parent="Level/Cube_022/Cube_021"]
+material = ExtResource("3_s5nuq")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Level/Cube_022"]
+shape = SubResource("BoxShape3D_vs80n")
+
 [node name="Cube" type="StaticBody3D" parent="Level"]
 metadata/material_type = "concrete"
 
@@ -1215,7 +1271,7 @@ mesh = SubResource("ArrayMesh_8vu6d")
 skeleton = NodePath("")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Level/Cube"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.844, 0, -2.303)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.844, 0.00161377, -2.303)
 shape = SubResource("BoxShape3D_40w10")
 
 [node name="Cube_007" type="MeshInstance3D" parent="Level/Cube"]
@@ -1270,6 +1326,36 @@ material = ExtResource("3_s5nuq")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.614138, 0.267096, 0.173627)
 shape = SubResource("BoxShape3D_b085t")
 
+[node name="Cube7" type="StaticBody3D" parent="Level"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.33816, 1.06639, -3.09984)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Level/Cube7"]
+transform = Transform3D(0.691877, 0, 0, 0, 1, 0, 0, 0, 0.527805, -0.967066, 0.267096, 0.173627)
+material_override = ExtResource("1_baglu")
+mesh = SubResource("BoxMesh_rtpsq")
+
+[node name="SteamAudioGeometry" type="SteamAudioGeometry" parent="Level/Cube7/MeshInstance3D"]
+material = ExtResource("3_s5nuq")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Level/Cube7"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.05461, 0.267096, 0.173627)
+shape = SubResource("BoxShape3D_ei55q")
+
+[node name="Cube8" type="StaticBody3D" parent="Level"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.342, 1.06639, -3.09984)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Level/Cube8"]
+transform = Transform3D(0.691877, 0, 0, 0, 1, 0, 0, 0, 0.527805, -0.967066, 0.267096, 0.173627)
+material_override = ExtResource("1_baglu")
+mesh = SubResource("BoxMesh_65va3")
+
+[node name="SteamAudioGeometry" type="SteamAudioGeometry" parent="Level/Cube8/MeshInstance3D"]
+material = ExtResource("3_s5nuq")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Level/Cube8"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.852118, 0.267096, 0.173627)
+shape = SubResource("BoxShape3D_qty1u")
+
 [node name="Cube5" type="StaticBody3D" parent="Level"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.26237, 1.06639, -5.59907)
 
@@ -1299,11 +1385,6 @@ material = ExtResource("3_s5nuq")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Level/Cube6"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.475479, 0.228176, 0)
 shape = SubResource("BoxShape3D_aomoi")
-
-[node name="Decal" type="Decal" parent="Level"]
-transform = Transform3D(-2.42841e-08, -0.555556, 2.42841e-08, 0, -2.42841e-08, -0.555556, 0.555556, -2.42841e-08, 1.06149e-15, 3.39941, 1.64443, 0.109776)
-size = Vector3(1.47344, 0.351074, 0.427307)
-texture_albedo = ExtResource("6_hh5oj")
 
 [node name="Decal3" type="Decal" parent="Level"]
 transform = Transform3D(0.121, 0, 0, 0, -2.59646e-08, -0.8, 0, 0.594, -3.49691e-08, 6.63094, 1.01804, -5.26372)
@@ -1339,6 +1420,20 @@ door_type = 1
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="Level"]
 transform = Transform3D(1, 0, 0, 0, -0.173648, 0.984808, 0, -0.984808, -0.173648, 0, 5.38989, 0)
 
+[node name="VentDuct" type="StaticBody3D" parent="Level"]
+transform = Transform3D(4.37114e-08, -1, 1.50996e-07, -1, -4.37114e-08, 4.37114e-08, -4.37114e-08, -1.50996e-07, -1, 3.87186, 1.89916, -3.61274)
+
+[node name="Mesh" type="MeshInstance3D" parent="Level/VentDuct"]
+transform = Transform3D(1, -5.05188e-16, 0, -1.82688e-14, 1, -7.10543e-14, -2.13163e-14, 7.10543e-14, 1, 0, 0, 0)
+mesh = SubResource("BoxMesh_82vju")
+skeleton = NodePath("../../root/@EditorNode@21272/@Panel@14/@VBoxContainer@15/DockHSplitLeftL/DockHSplitLeftR/DockHSplitMain/@VBoxContainer@26/DockVSplitCenter/@VSplitContainer@54/@VBoxContainer@55/@EditorMainScreen@102/MainScreen/@CanvasItemEditor@11482/@VSplitContainer@11134/@HSplitContainer@11136/@HSplitContainer@11138/@Control@11139/@SubViewportContainer@11140/@SubViewport@11141/base/Level/Forcefield")
+
+[node name="SteamAudioGeometry" type="SteamAudioGeometry" parent="Level/VentDuct/Mesh"]
+material = ExtResource("35_b73mi")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Level/VentDuct"]
+shape = SubResource("BoxShape3D_s6kkj")
+
 [node name="AirVent" parent="Level" instance=ExtResource("14_ot4hf")]
 transform = Transform3D(4.37114e-09, -0.1, 4.37114e-09, -0.1, -4.37114e-09, 4.37114e-09, -4.37114e-09, -4.37114e-09, -0.1, 3.44836, 1.89916, -1.97004)
 
@@ -1371,45 +1466,11 @@ panning_strength = 0.0
 transform = Transform3D(0.555556, 0, 0, 0, 0.555556, 0, 0, 0, 0.555556, -5.0489, 0.624283, 0.09019)
 metadata/material_type = "metal"
 
-[node name="MainTerminal" type="StaticBody3D" parent="Level/Console"]
+[node name="MainTerminal" parent="Level/Console" instance=ExtResource("21_82vju")]
 transform = Transform3D(0.965926, -0.258819, 0, 0.258819, 0.965926, 0, 0, 0, 1, -0.131664, 0.152987, 0)
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Level/Console/MainTerminal"]
-shape = SubResource("BoxShape3D_82vju")
-
-[node name="Screen" type="MeshInstance3D" parent="Level/Console/MainTerminal"]
-transform = Transform3D(-4.37114e-08, 1, 1.49012e-08, 4.37114e-08, 1.49012e-08, -1, -1, -4.37114e-08, -4.37114e-08, 0.150277, 0, 0)
-mesh = SubResource("PlaneMesh_rtpsq")
-skeleton = NodePath("../../root/@EditorNode@21272/@Panel@14/@VBoxContainer@15/DockHSplitLeftL/DockHSplitLeftR/DockHSplitMain/@VBoxContainer@26/DockVSplitCenter/@VSplitContainer@54/@VBoxContainer@55/@EditorMainScreen@102/MainScreen/@CanvasItemEditor@11482/@VSplitContainer@11134/@HSplitContainer@11136/@HSplitContainer@11138/@Control@11139/@SubViewportContainer@11140/@SubViewport@11141/base/Level")
-
-[node name="Viewport" type="SubViewport" parent="Level/Console/MainTerminal/Screen"]
-own_world_3d = true
-size = Vector2i(800, 512)
-render_target_update_mode = 4
-
-[node name="Control" type="Control" parent="Level/Console/MainTerminal/Screen/Viewport"]
-layout_mode = 3
-anchors_preset = 0
-offset_right = 800.0
-offset_bottom = 512.0
-mouse_filter = 2
-
-[node name="CodeEdit" type="CodeEdit" parent="Level/Console/MainTerminal/Screen/Viewport/Control"]
-layout_mode = 0
-offset_right = 800.0
-offset_bottom = 512.0
-theme = SubResource("Theme_rtpsq")
-text = "~ $ sudo rm -rf / --no-preserve-root
-
-Lorem ipsum dolor sit amet consectetur adipiscing elit quisque faucibus ex sapien vitae pellentesque sem placerat in id cursus mi pretium tellus duis convallis tempus leo eu aenean sed diam urna tempor pulvinar vivamus fringilla lacus nec metus bibendum egestas iaculis massa nisl malesuada lacinia integer nunc posuere ut hendrerit semper vel class aptent taciti sociosqu ad litora torquent per conubia nostra inceptos himenaeos orci varius natoque penatibus et magnis dis parturient montes nascetur ridiculus mus donec rhoncus eros lobortis nulla molestie mattis scelerisque maximus eget fermentum odio phasellus non purus est efficitur laoreet mauris pharetra vestibulum fusce dictum risus blandit quis suspendisse aliquet nisi sodales consequat magna ante condimentum neque at luctus nibh finibus facilisis dapibus etiam interdum tortor ligula congue sollicitudin erat viverra ac tincidunt nam porta elementum a enim euismod quam justo lectus commodo augue arcu dignissim velit aliquam imperdiet mollis nullam volutpat porttitor ullamcorper rutrum gravida cras eleifend turpis fames primis vulputate ornare sagittis vehicula praesent dui felis venenatis ultrices proin libero feugiat tristique accumsan maecenas potenti ultricies habitant morbi senectus netus suscipit auctor curabitur facilisi cubilia curae hac habitasse platea dictumst lorem ipsum dolor sit amet consectetur adipiscing elit quisque faucibus ex sapien vitae pellentesque."
-wrap_mode = 1
-
-[node name="Monitor" type="MeshInstance3D" parent="Level/Console/MainTerminal"]
-mesh = SubResource("BoxMesh_ei55q")
 
 [node name="StarmailTerminal" type="StaticBody3D" parent="Level/Console"]
 transform = Transform3D(0.933012, -0.25, 0.258819, 0.258819, 0.965925, 4.99188e-07, -0.25, 0.0669872, 0.965926, -0.0070219, 0.145767, 0.824196)
-collision_layer = 3
 script = ExtResource("33_ei55q")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Level/Console/StarmailTerminal"]
@@ -1483,6 +1544,9 @@ volume_db = 12.0
 max_db = 6.0
 panning_strength = 0.0
 
+[node name="FloppyDiskDrive" parent="Level/Console" instance=ExtResource("14_pmwj3")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0.170883, -0.0175561, -0.563624)
+
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Level/Console"]
 transform = Transform3D(1, 2.08616e-07, 0, -2.08616e-07, 1, 0, 0, 0, 1, 0.0348902, -0.549417, 0)
 mesh = SubResource("BoxMesh_s6kkj")
@@ -1491,11 +1555,13 @@ mesh = SubResource("BoxMesh_s6kkj")
 material = ExtResource("35_b73mi")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Level/Console"]
-transform = Transform3D(1, 2.08616e-07, 0, -2.08616e-07, 1, 0, 0, 0, 1, 0.035, -0.549, 0)
+transform = Transform3D(1, 2.08616e-07, 0, -2.08616e-07, 1, 0, 0, 0, 1, 0.139453, -0.549, 0)
 shape = SubResource("BoxShape3D_rtpsq")
 
 [node name="Processor" type="StaticBody3D" parent="Level/Console"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 4.28735)
+script = ExtResource("27_vs80n")
+metadata/material_type = "metal"
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Level/Console/Processor"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00821495, 0.0941516, 0)
@@ -1520,6 +1586,16 @@ attenuation_model = 3
 autoplay = true
 panning_strength = 0.0
 
+[node name="DiskSoundPlayer" type="SteamAudioPlayer" parent="Level/Console/Processor"]
+max_polyphony = 4
+panning_strength = 0.0
+
+[node name="Fan" parent="Level/Console/Processor" instance=ExtResource("14_ot4hf")]
+transform = Transform3D(3.49691e-09, -3.49691e-09, 0.08, -0.08, -3.49691e-09, 3.49691e-09, 3.49691e-09, -0.08, -3.49691e-09, 0.00298119, 0.841557, -0.865738)
+
+[node name="Fan2" parent="Level/Console/Processor" instance=ExtResource("14_ot4hf")]
+transform = Transform3D(3.49691e-09, -3.49691e-09, 0.08, -0.08, -3.49691e-09, 3.49691e-09, 3.49691e-09, -0.08, -3.49691e-09, 0.00298119, 0.318466, -0.865738)
+
 [node name="CeilingLight" parent="Level" instance=ExtResource("15_ot4hf")]
 transform = Transform3D(0.555556, 0, 0, 0, 0.555556, 0, 0, 0, 0.555556, 1.91861, 2.41358, 0.09019)
 
@@ -1540,3 +1616,13 @@ transform = Transform3D(0.995101, 0, -0.0988682, 0, 1, 0, 0.0988682, 0, 0.995101
 
 [node name="Crate3" parent="." instance=ExtResource("34_rtpsq")]
 transform = Transform3D(0.995101, 0, -0.0988682, 0, 1, 0, 0.0988682, 0, 0.995101, 7.46963, 1.73626, -8.96724)
+
+[node name="FloppyDisk" parent="." instance=ExtResource("29_c8kgi")]
+transform = Transform3D(0.515668, -0.744109, -0.424721, 0.821925, 0.569595, 0, 0.241919, -0.349089, 0.905324, -8.89148, 1.14642, -0.76931)
+
+[node name="FloppyDisk" parent="FloppyDisk" index="3"]
+DiskContents = {
+"README.TXT": "Grigga Industries is sigma"
+}
+
+[editable path="FloppyDisk"]

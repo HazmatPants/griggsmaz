@@ -4,8 +4,6 @@ extends StaticBody3D
 @onready var msg_count_label := $Screen/Viewport/Control/TitleContainer/MessageCount
 @onready var audio_player := $SFXPlayer
 
-@onready var player = get_tree().get_root().get_node("base/Player")
-
 func _ready() -> void:
 	print()
 	start_sending_random_mails()

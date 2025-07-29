@@ -1,0 +1,112 @@
+[gd_scene load_steps=10 format=3 uid="uid://ctg2bknrr3dxr"]
+
+[ext_resource type="Script" uid="uid://b67cbl4he55ik" path="res://scripts/main_terminal.gd" id="1_byiao"]
+[ext_resource type="Material" uid="uid://ho2k2cllt7sm" path="res://assets/materials/rough_metal.tres" id="2_4ldxf"]
+[ext_resource type="FontFile" uid="uid://dgkwgfyrwu1fk" path="res://assets/fonts/CONSOLA.TTF" id="3_amwpv"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_82vju"]
+resource_local_to_scene = true
+size = Vector3(0.3, 0.5, 0.796875)
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_vs80n"]
+viewport_path = NodePath("SubViewportContainer/Viewport")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_s6kkj"]
+resource_local_to_scene = true
+albedo_texture = SubResource("ViewportTexture_vs80n")
+roughness = 0.0
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_rtpsq"]
+resource_local_to_scene = true
+material = SubResource("StandardMaterial3D_s6kkj")
+size = Vector2(0.75, 0.45)
+
+[sub_resource type="BoxMesh" id="BoxMesh_ei55q"]
+material = ExtResource("2_4ldxf")
+size = Vector3(0.3, 0.5, 0.795)
+
+[sub_resource type="Theme" id="Theme_rtpsq"]
+default_font = ExtResource("3_amwpv")
+
+[node name="MainTerminal" type="StaticBody3D"]
+transform = Transform3D(0.965926, -0.258819, 0, 0.258819, 0.965926, 0, 0, 0, 1, 0, 0, 0)
+collision_layer = 3
+script = ExtResource("1_byiao")
+metadata/InteractWithSelf = true
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_82vju")
+
+[node name="Screen" type="MeshInstance3D" parent="."]
+transform = Transform3D(-4.37114e-08, 1, 1.49012e-08, 4.37114e-08, 1.49012e-08, -1, -1, -4.37114e-08, -4.37114e-08, 0.150277, 0, 0)
+mesh = SubResource("PlaneMesh_rtpsq")
+skeleton = NodePath("../../root/@EditorNode@21272/@Panel@14/@VBoxContainer@15/DockHSplitLeftL/DockHSplitLeftR/DockHSplitMain/@VBoxContainer@26/DockVSplitCenter/@VSplitContainer@54/@VBoxContainer@55/@EditorMainScreen@102/MainScreen/@CanvasItemEditor@11482/@VSplitContainer@11134/@HSplitContainer@11136/@HSplitContainer@11138/@Control@11139/@SubViewportContainer@11140/@SubViewport@11141/base/Level")
+
+[node name="Monitor" type="MeshInstance3D" parent="."]
+mesh = SubResource("BoxMesh_ei55q")
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -400.0
+offset_top = -256.0
+offset_right = 400.0
+offset_bottom = 256.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Viewport" type="SubViewport" parent="SubViewportContainer"]
+own_world_3d = true
+handle_input_locally = false
+size = Vector2i(800, 512)
+render_target_update_mode = 4
+
+[node name="Control" type="Control" parent="SubViewportContainer/Viewport"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 800.0
+offset_bottom = 512.0
+focus_mode = 2
+mouse_filter = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="SubViewportContainer/Viewport/Control"]
+layout_mode = 0
+offset_right = 800.0
+offset_bottom = 512.0
+focus_mode = 2
+
+[node name="CodeEdit" type="CodeEdit" parent="SubViewportContainer/Viewport/Control/VBoxContainer"]
+custom_minimum_size = Vector2(0, 450)
+layout_mode = 2
+theme = SubResource("Theme_rtpsq")
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+editable = false
+context_menu_enabled = false
+emoji_menu_enabled = false
+deselect_on_focus_loss_enabled = false
+drag_and_drop_selection_enabled = false
+virtual_keyboard_enabled = false
+middle_mouse_paste_enabled = false
+wrap_mode = 1
+caret_type = 1
+caret_blink = true
+caret_multiple = false
+
+[node name="CWD" type="Label" parent="SubViewportContainer/Viewport/Control/VBoxContainer"]
+layout_mode = 2
+text = "/home/"
+
+[node name="LineEdit" type="LineEdit" parent="SubViewportContainer/Viewport/Control/VBoxContainer"]
+layout_mode = 2
+placeholder_text = "Type a command here..."
+keep_editing_on_text_submit = true
+emoji_menu_enabled = false
+caret_blink = true
+
+[node name="SFXPlayer" type="SteamAudioPlayer" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.365122, -0.0619643, 0)
+max_polyphony = 4
+panning_strength = 0.0
