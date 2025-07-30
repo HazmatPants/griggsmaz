@@ -15,19 +15,21 @@ var fs = {
 	"/": {
 		"home": {
 			"notes.txt": "Don't forget to fuel the nuclear reactor.",
+			"radioman.wav": preload("res://assets/sound/music/radioman.wav")
 		},
 		"dev": {
-			"sda": str(generate_random_bytes(1024))
+			"sda": generate_random_bytes(1024)
+		},
+		"etc": {
+			"mtab": {}
 		},
 		"mnt": {
 			
-		},
-		"bin": {
-			"echo": "builtin",
-			"clear": "builtin"
 		}
 	}
 }
+
+var mtab := {}
 
 var current_path = ["/", "home"]
 
@@ -39,7 +41,7 @@ var enter_key_sounds := GLOBAL.load_sounds_from_dir("res://assets/sound/sfx/ui/k
 
 func _ready() -> void:
 	viewportContainer.visible = false
-	terminalOutput.text = "Welcome to GIOS v0.1!"
+	terminalOutput.text = "Welcome to GIOS v0.1!\nType \"help\" for a list of commands"
 	terminalInput.text_submitted.connect(_on_terminalInput_text_submitted)
 	
 	floppyDrive.DiskInserted.connect(_disk_inserted)
@@ -100,39 +102,86 @@ func generate_random_bytes(count: int) -> PackedByteArray:
 	
 	return bytes
 
+func parse_and_execute(input: String) -> void:
+	var output_redirect: String = ""
+	var append_mode := false
+
+	# Check for >> first (append)
+	if input.find(">>") != -1:
+		var parts = input.split(">>", false, 2)
+		input = parts[0].strip_edges()
+		output_redirect = parts[1].strip_edges()
+		append_mode = true
+	# Then check for > (overwrite)
+	elif input.find(">") != -1:
+		var parts = input.split(">", false, 2)
+		input = parts[0].strip_edges()
+		output_redirect = parts[1].strip_edges()
+
+	# Tokenize the command
+	var args := input.split(" ")
+	
+	var command := args[0]
+	args = args.slice(1)
+
+	# Run the command and capture its output
+	var result = await run_command(command, args)
+
+	# Handle redirection
+	if output_redirect != "":
+		write_file(output_redirect, result, append_mode)
+	else:
+		if result != null:
+			print_to_terminal(result)
+
 func parse_command(cmd: String):
 	terminalInput.grab_focus()
-	var args = cmd.split(" ")
-	var command_name = args[0].to_lower()
-	args.remove_at(0)
-	
 	print_to_terminal("$ " + cmd)
 	
-	match command_name:
+	parse_and_execute(cmd)
+
+func run_command(command, args):
+	# implemented commands
+	match command:
 		"help":
-			print_to_terminal("Available commands: help, clear, echo, floppy, cd, ls, pwd, mkdir, cat")
+			return "Available commands: 
+			help: shows this message
+			clear: clears the terminal output
+			echo: display a line of text
+			floppy: commands for managing floppy disks
+				mount: mount a floppy disk's filesystem
+				umount: unmount a floppy disk's filesystem
+			cd: change the current working directory
+			ls: list directory contents
+			pwd: print the current working directory
+			mkdir: create directory
+			cat: print on the standard output
+			file: determine file type
+			"
 		"clear":
 			terminalOutput.text = ""
 		"echo":
-			print_to_terminal(args.join(" "))
+			return cmd_echo(args)
 		"floppy":
-			await cmd_floppy(args)
+			return await cmd_floppy(args)
 		"cd":
 			cmd_cd(args)
 		"ls":
-			cmd_ls(args)
+			return cmd_ls(args)
 		"pwd":
 			cmd_pwd()
 		"mkdir":
 			cmd_mkdir(args)
 		"cat":
-			cmd_cat(args)
+			return cmd_cat(args)
+		"file":
+			return cmd_file(args)
 		_:
-			print_to_terminal("gish: command not found: " + command_name)
-	
+			return "gish: command not found: " + command
 
 func print_to_terminal(text: String):
 	terminalOutput.text += "\n" + text
+	terminalOutput.scroll_vertical = len(terminalOutput.text)
 
 func get_current_dir() -> Dictionary:
 	var dir = fs["/"]
@@ -182,7 +231,11 @@ func resolve_path(path: String) -> Variant:
 
 	return dir_ref  # for root or valid directory
 
-func cmd_ls(args: Array) -> void:
+func cmd_echo(args):
+	var echo := " ".join(Array(args))
+	return echo
+
+func cmd_ls(args: Array) -> String:
 	var target_dir: Dictionary
 
 	if args.size() == 0:
@@ -194,18 +247,18 @@ func cmd_ls(args: Array) -> void:
 		var resolved = resolve_path(target)
 		if resolved == null:
 			print_to_terminal("ls: cannot access '%s': No such file or directory" % target)
-			return
+			return ""
 		
 		if typeof(resolved) != TYPE_DICTIONARY:
 			print_to_terminal("ls: '%s' is not a directory" % target)
-			return
+			return ""
 
 		target_dir = resolved
 	
 	if target_dir.is_empty():
-		print_to_terminal("<empty>")
+		return "<empty>"
 	else:
-		print_to_terminal("  ".join(target_dir.keys()))
+		return "  ".join(target_dir.keys())
 
 func cmd_pwd():
 	print_to_terminal("/" + "/".join(current_path.slice(1)))
@@ -258,25 +311,26 @@ func cmd_mkdir(args):
 	else:
 		dir[dir_name] = {}
 
-func cmd_floppy(args):
+func cmd_floppy(args) -> String:
 	if args.size() < 1:
-		print_to_terminal("floppy: missing subcommand\nsubcommands: 'eject', 'mount'")
-		return
+		return "floppy: missing subcommand\nsubcommands: 'eject', 'mount'"
 
 	var subcommand = args[0]
 
 	match subcommand:
 		"eject":
-			floppy_eject()
+			return floppy_eject()
 		"mount":
-			await floppy_mount()
+			return await floppy_mount()
 		"umount":
-			await floppy_umount(args)
+			return await floppy_umount(args)
+	
+	return ""
 
-func cmd_cat(args: Array) -> void:
+func cmd_cat(args: Array) -> String:
 	if args.size() == 0:
 		print_to_terminal("cat: missing file operand")
-		return
+		return ""
 
 	for path in args:
 		var file = resolve_path(path)
@@ -288,7 +342,9 @@ func cmd_cat(args: Array) -> void:
 			print_to_terminal("cat: %s: Is a directory" % path)
 			continue
 		
-		print_to_terminal(str(file))
+		return str(file)
+	
+	return ""
 
 func floppy_eject():
 	if floppyDrive.Disk == null:
@@ -296,21 +352,36 @@ func floppy_eject():
 	else:
 		floppyDrive.eject_disk()
 
-func create_file(path: String, content="") -> void:
-	var parts: Array = path.split("/")
-	var file_name: String = parts.pop_back()
+func write_file(path: String, contents: String="", append: bool=false) -> void:
+	var full_path_parts := []
+	var parts := path.strip_edges(true, false).split("/")
 
-	# Resolve parent directory
-	var dir: Variant = resolve_path("/" + "/".join(parts))
-	if dir.is_empty():
-		print_to_terminal("create_file: cannot create '" + path + "': Invalid path")
+	if path.begins_with("/"):
+		full_path_parts = parts
+	else:
+		full_path_parts = current_path.duplicate()
+		full_path_parts.append_array(parts)
+
+	if full_path_parts.size() == 0:
+		print_to_terminal("write: invalid path")
 		return
-	
-	if file_name in dir and typeof(dir[file_name]) == TYPE_DICTIONARY:
-		print_to_terminal("create_file: cannot overwrite directory '" + file_name + "'")
+
+	var file_name: Variant = full_path_parts.pop_back()
+	var dir: Variant = resolve_path("/" + "/".join(full_path_parts))
+
+	if dir == null or typeof(dir) != TYPE_DICTIONARY:
+		print_to_terminal("write: cannot write to '%s': No such directory" % path)
 		return
-	
-	dir[file_name] = content
+
+	if not dir.has(file_name):
+		dir[file_name] = ""
+
+	if append:
+		dir[file_name] += contents + "\n"
+	else:
+		dir[file_name] = contents + "\n"
+
+
 
 func delete_file(path: String) -> void:
 	var parts: Array = path.split("/")
@@ -332,13 +403,66 @@ func delete_file(path: String) -> void:
 	dir.erase(file_name)
 	print("Deleted '" + file_name + "'")
 
-func floppy_mount() -> void:
+func cmd_file(args) -> String:
+	if args.size() == 0:
+		return "file: missing file operand"
+	
+	var filepath: String = args[0]
+	var file = resolve_path(filepath)
+	
+	return get_file_description(file)
+
+func get_file_description(file: Variant) -> String:
+	match typeof(file):
+		TYPE_STRING:
+			return "UTF-8 Unicode text"
+		TYPE_INT:
+			return "integer data"
+		TYPE_FLOAT:
+			return "floating point data"
+		TYPE_BOOL:
+			return "boolean"
+		TYPE_DICTIONARY:
+			return "directory"
+		TYPE_ARRAY:
+			return "array data"
+		TYPE_PACKED_BYTE_ARRAY:
+			return "block special"
+		TYPE_OBJECT:
+			if file is AudioStreamWAV:
+				return describe_audio_wav(file)
+			elif file is AudioStreamOggVorbis:
+				return "OGG Vorbis AudioStream"
+			elif file is AudioStream:
+				return "AudioStream"
+			elif file is Texture2D:
+				return "Texture2DD"
+			elif file is Resource:
+				return "Godot resource"
+			else:
+				return file.get_class()
+		_:
+			return "unknown data type"
+	
+
+func describe_audio_wav(stream: AudioStreamWAV) -> String:
+	var stereo = "stereo" if stream.stereo else "mono"
+	var format = "Microsoft PCM"
+	return "RIFF (little-endian) data, WAVE audio, %s, 16 bit, %s %d Hz" % [
+		format,
+		stereo,
+		int(stream.mix_rate)
+	]
+
+func floppy_mount() -> String:
 	if floppyDrive.Disk == null:
-		print_to_terminal("No disk inserted.")
-		return
+		return "No disk inserted."
 	
 	floppyDrive.play_access_sound()
 	
+	if "/mnt/floppy0" in mtab:
+		return "floppy0: device already mounted"
+
 	for i in randi_range(3, 5):
 		floppyDrive.play_access_sound()
 		await get_tree().create_timer(randf_range(0.5, 1.0)).timeout
@@ -360,13 +484,25 @@ func floppy_mount() -> void:
 		var mount_name := "floppy%d" % i
 		if not mnt.has(mount_name):
 			mnt[mount_name] = floppyDrive.DiskController.duplicate_contents(floppyDrive.DiskController.DiskContents)
-			print_to_terminal("Disk mounted at /mnt/%s" % mount_name)
-			return
+			mtab["/mnt/floppy0"] = {
+				"device": "floppy0",
+				"readonly": floppyDrive.DiskController.ReadOnly
+			}
+			
+			var fs_mtab = resolve_path("/etc/mtab")
+			fs_mtab["/mnt/floppy0"] = mtab["/mnt/floppy0"]
+			return "Disk mounted at /mnt/%s" % mount_name
 		i += 1
+	return ""
 
-func floppy_umount(args: Array) -> void:
+func floppy_umount(args: Array) -> String:
 	var mnt = resolve_path("/mnt")
-	print(floppyDrive.DiskController.DiskContents)
+	
+	floppyDrive.play_access_sound()
+	
+	var current_dir := "/" + "/".join(current_path.slice(1, current_path.size()))
+	if current_dir.begins_with("/mnt/floppy0"):
+		return "floppy: umount: device is busy (currently in use)"
 	
 	print_to_terminal("writing changes...")
 	
@@ -379,11 +515,14 @@ func floppy_umount(args: Array) -> void:
 			await get_tree().create_timer(randf_range(0.5, 1.0)).timeout
 		floppyDrive.DiskController.DiskContents = resolve_path("/mnt/floppy0")
 		floppyDrive.play_access_sound()
-		
+
+	# Remove from mtab if unmounted
+	mtab.erase("/mnt/floppy0")
+	var fs_mtab = resolve_path("/etc/mtab")
+	fs_mtab.erase("/mnt/floppy0")
 	
 	if mnt == null:
-		print_to_terminal("floppy umount: /mnt does not exist")
-		return
+		return "floppy umount: /mnt does not exist"
 
 	if args.size() == 1:
 		args.append("floppy0")
@@ -391,19 +530,21 @@ func floppy_umount(args: Array) -> void:
 	var target = args[1]
 
 	if not mnt.has(target):
-		print_to_terminal("floppy umount: %s is not mounted" % target)
-		return
+		return "floppy umount: %s is not mounted" % target
 
 	mnt.erase(target)
-	print_to_terminal("Unmounted /mnt/%s" % target)
+	return "Unmounted /mnt/%s" % target
 
 func _disk_inserted():
-	create_file("/dev/disk0")
+	write_file("/dev/disk0")
 
 func _disk_ejected():
 	var mount_ref = resolve_path("/mnt/floppy0")
 	if mount_ref != null:
 		print_to_terminal("floppy0: WARNING: please unmount before ejecting!")
+		mtab.erase("/mnt/floppy0")
+		var fs_mtab = resolve_path("/etc/mtab")
+		fs_mtab.erase("/mnt/floppy0")
 		var mnt = resolve_path("/mnt")
 		if mnt and "floppy0" in mnt:
 			mnt.erase("floppy0")

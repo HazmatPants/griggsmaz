@@ -14,6 +14,8 @@ viewport_path = NodePath("SubViewportContainer/Viewport")
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_s6kkj"]
 resource_local_to_scene = true
 albedo_texture = SubResource("ViewportTexture_vs80n")
+metallic = 0.19
+metallic_specular = 0.83
 roughness = 0.0
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_rtpsq"]
@@ -62,6 +64,7 @@ grow_vertical = 2
 own_world_3d = true
 handle_input_locally = false
 size = Vector2i(800, 512)
+size_2d_override = Vector2i(26515, 0)
 render_target_update_mode = 4
 
 [node name="Control" type="Control" parent="SubViewportContainer/Viewport"]
@@ -91,6 +94,7 @@ drag_and_drop_selection_enabled = false
 virtual_keyboard_enabled = false
 middle_mouse_paste_enabled = false
 wrap_mode = 1
+scroll_smooth = true
 caret_type = 1
 caret_blink = true
 caret_multiple = false

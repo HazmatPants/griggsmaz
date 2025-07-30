@@ -883,6 +883,9 @@ viewport_path = NodePath("Level/Console/StarmailTerminal/Screen/Viewport")
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ei55q"]
 resource_local_to_scene = true
 albedo_texture = SubResource("ViewportTexture_rtpsq")
+metallic = 0.15
+metallic_specular = 0.77
+roughness = 0.0
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_ei55q"]
 resource_local_to_scene = true
