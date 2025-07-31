@@ -37,6 +37,7 @@ var mtab := {}
 var current_path = ["/", "home"]
 
 @onready var audio_player := $SFXPlayer
+@onready var aplay := $APlayer
 
 var key_sounds := GLOBAL.load_sounds_from_dir("res://assets/sound/sfx/ui/keypress/key")
 var back_key_sounds := GLOBAL.load_sounds_from_dir("res://assets/sound/sfx/ui/keypress/back")
@@ -183,8 +184,63 @@ func run_command(command, args):
 			cmd_cam(args)
 		"time":
 			return cmd_time()
+		"aplay":
+			cmd_aplay(args)
+		"radio":
+			await cmd_radio(args)
 		_:
 			return "gish: command not found: " + command
+
+func cmd_radio(args):
+	if args.size() == 0:
+		print_to_terminal("radio: missing subcommand\nsubcommands: 'list', 'receive', 'info'")
+		return
+	
+	var subcommand = args[0]
+	
+	match subcommand:
+		"list":
+			print_to_terminal("Pinging...")
+			await get_tree().create_timer(randf_range(4, 8)).timeout
+			var contacts = ""
+			for contact in GLOBAL.radio_contacts.keys():
+				var c = contact + ": " + GLOBAL.radio_contacts[contact]["address"]
+				contacts += c + "\n"
+			
+			print_to_terminal(contacts)
+		"receive":
+			print_to_terminal("not implemented")
+		"info":
+			if args.size() == 1:
+				print_to_terminal("radio: info: missing signal address")
+				return
+			
+			var contacts = GLOBAL.radio_contacts
+			var contact = args[1]
+			if contact in contacts:
+				var address = contacts[contact]["address"]
+				var datatype = contacts[contact]["data"].get_class()
+				print_to_terminal("%s:\naddress: %s\ndata type: %s" % [contact, address, datatype])
+		_:
+			print_to_terminal("radio: invalid subcommand")
+
+func cmd_aplay(args):
+	if args.size() == 0:
+		print_to_terminal("aplay: missing AudioStream operand")
+		return
+	
+	if args[0] == "stop":
+		aplay.playing = false
+		return
+	
+	var stream = resolve_path(args[0])
+	
+	if stream is not AudioStream:
+		print_to_terminal("aplay: '%s' is not an AudioStream" % args[0])
+		return
+	
+	aplay.play_stream(stream)
+	print_to_terminal("playing '%s', type `aplay stop` to stop" % args[0])
 
 func cmd_cam(args):
 	if args.size() == 0:

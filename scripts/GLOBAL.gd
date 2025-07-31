@@ -18,6 +18,13 @@ var settings: Dictionary = {
 	}
 }
 
+var radio_contacts: Dictionary = {
+	"test": {
+		"address": "1234789612348974",
+		"data": preload("res://assets/sound/sfx/funny/vomit.ogg")
+	}
+}
+
 func load_sounds_from_dir(path: String) -> Array:
 	var sounds := []
 	var dir := DirAccess.open(path)

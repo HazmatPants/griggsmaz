@@ -118,3 +118,11 @@ caret_blink = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.365122, -0.0619643, 0)
 max_polyphony = 4
 panning_strength = 0.0
+
+[node name="APlayer" type="SteamAudioPlayer" parent="."]
+distance_attenuation = true
+air_absorption = true
+reflection = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.340355, -0.0911977, 0)
+attenuation_model = 3
+panning_strength = 0.0
