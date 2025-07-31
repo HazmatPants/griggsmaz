@@ -40,7 +40,7 @@ collision_mask = 2
 collide_with_areas = true
 
 [node name="GrabPoint" type="Node3D" parent="Camera3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.95989)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.65122)
 
 [node name="HandPosition" type="Node3D" parent="Camera3D"]
 transform = Transform3D(1.31134e-07, 0, -1, 0, 1, 0, 1, 0, 1.31134e-07, 0.428411, -0.215955, -0.416155)

@@ -12,7 +12,8 @@ var senders: Array[String] = [
 	"Gordon Freeman",
 	"Anonymous User",
 	"Dr. Wallace Breen",
-	"Dr. Isaac Kleiner"
+	"Dr. Isaac Kleiner",
+	"Barney Calhoun"
 ]
 
 var subjects: Array[String] = [

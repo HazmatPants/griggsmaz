@@ -1,0 +1,56 @@
+[gd_scene load_steps=8 format=3 uid="uid://jhd52y4bpkog"]
+
+[ext_resource type="Script" uid="uid://c5m717ipiy1s6" path="res://scripts/camera_terminal.gd" id="1_t80i8"]
+[ext_resource type="Material" uid="uid://ho2k2cllt7sm" path="res://assets/materials/rough_metal.tres" id="2_vdoxv"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_82vju"]
+resource_local_to_scene = true
+size = Vector3(0.3, 0.5, 0.796875)
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_vs80n"]
+viewport_path = NodePath("SubViewport")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_s6kkj"]
+resource_local_to_scene = true
+albedo_texture = SubResource("ViewportTexture_vs80n")
+metallic = 0.19
+metallic_specular = 0.83
+roughness = 0.3
+texture_filter = 0
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_rtpsq"]
+resource_local_to_scene = true
+material = SubResource("StandardMaterial3D_s6kkj")
+size = Vector2(0.75, 0.45)
+
+[sub_resource type="BoxMesh" id="BoxMesh_ei55q"]
+material = ExtResource("2_vdoxv")
+size = Vector3(0.3, 0.5, 0.795)
+
+[node name="CameraTerminal" type="StaticBody3D"]
+transform = Transform3D(0.933013, -0.25, -0.258819, 0.258819, 0.965926, 0, 0.25, -0.0669873, 0.965926, 0, 0, 0)
+script = ExtResource("1_t80i8")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_82vju")
+
+[node name="Screen" type="MeshInstance3D" parent="."]
+transform = Transform3D(-4.37114e-08, 1, 1.49012e-08, 4.37114e-08, 1.49012e-08, -1, -1, -4.37114e-08, -4.37114e-08, 0.150277, 0, 0)
+mesh = SubResource("PlaneMesh_rtpsq")
+skeleton = NodePath("../../root/@EditorNode@21272/@Panel@14/@VBoxContainer@15/DockHSplitLeftL/DockHSplitLeftR/DockHSplitMain/@VBoxContainer@26/DockVSplitCenter/@VSplitContainer@54/@VBoxContainer@55/@EditorMainScreen@102/MainScreen/@CanvasItemEditor@11482/@VSplitContainer@11134/@HSplitContainer@11136/@HSplitContainer@11138/@Control@11139/@SubViewportContainer@11140/@SubViewport@11141/base/Level")
+
+[node name="Monitor" type="MeshInstance3D" parent="."]
+mesh = SubResource("BoxMesh_ei55q")
+
+[node name="SFXPlayer" type="SteamAudioPlayer" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.365122, -0.0619643, 0)
+max_polyphony = 4
+panning_strength = 0.0
+
+[node name="SubViewport" type="SubViewport" parent="."]
+render_target_update_mode = 0
+
+[node name="cam1" type="Camera3D" parent="SubViewport"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 4.6274, 0, 0)
+
+[node name="cam2" type="Camera3D" parent="SubViewport"]

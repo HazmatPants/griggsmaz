@@ -4,6 +4,7 @@ extends StaticBody3D
 @onready var terminalInput := $SubViewportContainer/Viewport/Control/VBoxContainer/LineEdit
 @onready var terminalOutput :=$SubViewportContainer/Viewport/Control/VBoxContainer/CodeEdit
 @onready var currentPathLabel := $SubViewportContainer/Viewport/Control/VBoxContainer/CWD
+@onready var CameraTerminal := $"../CameraTerminal"
 @onready var floppyDrive := $"../FloppyDiskDrive"
 
 @onready var player = get_tree().get_root().get_node("base/Player")
@@ -11,14 +12,16 @@ extends StaticBody3D
 
 var terminal_focus := false
 
-var fs = {
+@onready var fs = {
 	"/": {
 		"home": {
 			"notes.txt": "Don't forget to fuel the nuclear reactor.",
 			"radioman.wav": preload("res://assets/sound/music/radioman.wav")
 		},
 		"dev": {
-			"sda": generate_random_bytes(1024)
+			"sda": generate_random_bytes(1024),
+			"cam1": CameraTerminal.get_node("SubViewport/cam1"),
+			"cam2": CameraTerminal.get_node("SubViewport/cam2")
 		},
 		"etc": {
 			"mtab": {}
@@ -176,8 +179,34 @@ func run_command(command, args):
 			return cmd_cat(args)
 		"file":
 			return cmd_file(args)
+		"cam":
+			cmd_cam(args)
+		"time":
+			return cmd_time()
 		_:
 			return "gish: command not found: " + command
+
+func cmd_cam(args):
+	if args.size() == 0:
+		print_to_terminal("cam: missing subcommand\nsubcommands: 'switch', 'snap', 'list'")
+		return
+	
+	var subcommand = args[0]
+	
+	match subcommand:
+		"switch":
+			if args.size() == 1:
+				print_to_terminal("cam: switch: missing camera operand")
+				return
+			var camName = args[1]
+			if not camName in CameraTerminal.cameras:
+				print_to_terminal("cam: switch: camera '%s' does not exist" % camName)
+				return
+			CameraTerminal.switch_camera(CameraTerminal.cameras[camName])
+		"snap":
+			CameraTerminal.cam_snapshot()
+		"list":
+			print_to_terminal("Available Cameras:\n" + "  ".join(CameraTerminal.cameras.keys()))
 
 func print_to_terminal(text: String):
 	terminalOutput.text += "\n" + text
@@ -352,7 +381,7 @@ func floppy_eject():
 	else:
 		floppyDrive.eject_disk()
 
-func write_file(path: String, contents: String="", append: bool=false) -> void:
+func write_file(path: String, contents="", append: bool=false) -> void:
 	var full_path_parts := []
 	var parts := path.strip_edges(true, false).split("/")
 
@@ -379,9 +408,7 @@ func write_file(path: String, contents: String="", append: bool=false) -> void:
 	if append:
 		dir[file_name] += contents + "\n"
 	else:
-		dir[file_name] = contents + "\n"
-
-
+		dir[file_name] = contents
 
 func delete_file(path: String) -> void:
 	var parts: Array = path.split("/")
@@ -417,42 +444,34 @@ func get_file_description(file: Variant) -> String:
 		TYPE_STRING:
 			return "UTF-8 Unicode text"
 		TYPE_INT:
-			return "integer data"
+			return "Integer data"
 		TYPE_FLOAT:
-			return "floating point data"
+			return "Floating point data"
 		TYPE_BOOL:
-			return "boolean"
+			return "Boolean"
 		TYPE_DICTIONARY:
-			return "directory"
+			return "Directory"
 		TYPE_ARRAY:
-			return "array data"
+			return "Array data"
 		TYPE_PACKED_BYTE_ARRAY:
-			return "block special"
-		TYPE_OBJECT:
+			return "Block special"
+		TYPE_OBJECT: 
 			if file is AudioStreamWAV:
-				return describe_audio_wav(file)
+				return "WAVE AudioStream"
 			elif file is AudioStreamOggVorbis:
 				return "OGG Vorbis AudioStream"
 			elif file is AudioStream:
 				return "AudioStream"
 			elif file is Texture2D:
-				return "Texture2DD"
+				return "Texture2D"
 			elif file is Resource:
 				return "Godot resource"
+			elif file is Camera3D:
+				return "Camera Special Device"
 			else:
 				return file.get_class()
 		_:
 			return "unknown data type"
-	
-
-func describe_audio_wav(stream: AudioStreamWAV) -> String:
-	var stereo = "stereo" if stream.stereo else "mono"
-	var format = "Microsoft PCM"
-	return "RIFF (little-endian) data, WAVE audio, %s, 16 bit, %s %d Hz" % [
-		format,
-		stereo,
-		int(stream.mix_rate)
-	]
 
 func floppy_mount() -> String:
 	if floppyDrive.Disk == null:
@@ -536,7 +555,7 @@ func floppy_umount(args: Array) -> String:
 	return "Unmounted /mnt/%s" % target
 
 func _disk_inserted():
-	write_file("/dev/disk0")
+	write_file("/dev/disk0", generate_random_bytes(144))
 
 func _disk_ejected():
 	var mount_ref = resolve_path("/mnt/floppy0")
@@ -549,3 +568,6 @@ func _disk_ejected():
 		if mnt and "floppy0" in mnt:
 			mnt.erase("floppy0")
 	delete_file("/dev/disk0")
+
+func cmd_time():
+	return "%s (%s)" % [str(GLOBAL.TIME), GLOBAL.get_time_string()]

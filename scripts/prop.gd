@@ -4,6 +4,8 @@ extends RigidBody3D
 @onready var material_type: String = get_meta("impact_sound_material") if has_meta("impact_sound_material") else "default"
 @onready var collider = $CollisionShape3D
 
+@export var weight := 1.0
+
 var impact_cooldown := 0.0
 
 var soft_impact_sounds = {
@@ -43,6 +45,7 @@ func _ready() -> void:
 	contact_monitor = true
 	max_contacts_reported = 5
 	continuous_cd = true
+	
 
 func _physics_process(delta: float) -> void:
 	if impact_cooldown > 0.0:

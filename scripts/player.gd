@@ -8,11 +8,11 @@ extends CharacterBody3D
 @export var jump_velocity := 4.5
 @export var gravity := Vector3.DOWN * 9.8
 
-@export var crouch_scale := Vector3(1.0, 0.4, 1.0)
+@export var crouch_scale := 1.0
 @export var crouch_move_speed := 2.0
 @export var crouch_bobbing_speed := 8.0
 var crouching := false
-var default_scale: Vector3
+var default_scale := 2.0
 
 var input_enabled := true
 var mouse_look_enabled := true
@@ -34,8 +34,10 @@ var object_in_hand: RigidBody3D = null
 # for playing non-spatialized sounds
 @onready var local_audio_player = $LocalSFXPlayer
 
-@onready var interactText = $"../PlayerGUI/InteractLabel"
-@onready var crosshair = $"../PlayerGUI/Crosshair"
+@onready var playerGUI = $"../PlayerGUI"
+@onready var interactText = playerGUI.get_node("InteractLabel")
+@onready var crosshair = playerGUI.get_node("Crosshair")
+@onready var ScreenBlur = playerGUI.get_node("BlurRect")
 var image_crosshair = preload("res://assets/textures/ui/crosshair2.png")
 var image_crosshair_interact = preload("res://assets/textures/ui/crosshair_interact.png")
 var image_crosshair_hand = preload("res://assets/textures/ui/crosshair_hand.png")
@@ -86,7 +88,13 @@ var rotating: bool = false
 var last_mouse_pos := Vector2.ZERO
 @export var rotation_sensitivity := 0.01
 
-var step_sounds = {
+var fall_damage_threshold: float = -15.0
+var max_fall_speed: float = 0.0
+var fall_velocity: float = 0.0
+
+var health: int = 100
+
+const sfx_foot_step = {
 	"default": [
 		preload("res://assets/sound/sfx/footsteps/default/default_step1.wav"),
 		preload("res://assets/sound/sfx/footsteps/default/default_step2.wav"),
@@ -119,7 +127,7 @@ var step_sounds = {
 	]
 }
 
-var impact_sounds = {
+const sfx_foot_impact = {
 	"default": [
 		preload("res://assets/sound/sfx/footsteps/default/default_step1.wav"),
 		preload("res://assets/sound/sfx/footsteps/default/default_step2.wav"),
@@ -142,7 +150,7 @@ var impact_sounds = {
 	]
 }
 
-var wander_sounds = {
+const sfx_foot_wander = {
 	"default": [
 		preload("res://assets/sound/sfx/footsteps/default/default_wander1.ogg"),
 		preload("res://assets/sound/sfx/footsteps/default/default_wander2.ogg"),
@@ -175,7 +183,9 @@ var wander_sounds = {
 	]
 }
 
-var deny_sound = preload("res://assets/sound/sfx/ui/suit_denydevice.wav")
+const sfx_deny := preload("res://assets/sound/sfx/ui/suit_denydevice.wav")
+
+const sfx_fall_damage := preload("res://assets/sound/sfx/player/pl_fallpain3.wav")
 
 func play_random_sfx(sound_list):
 	var idx = randi() % sound_list.size()
@@ -191,18 +201,17 @@ func footstep_sound(type: String="step"):
 			material = collider.get_meta("material_type")
 		
 		if type == "impact":
-			sound_list = impact_sounds.get(material, step_sounds.get(material, impact_sounds["default"]))
+			sound_list = sfx_foot_impact.get(material, sfx_foot_step.get(material, sfx_foot_impact["default"]))
 		elif type == "step":
-			sound_list = step_sounds.get(material, step_sounds["default"])
+			sound_list = sfx_foot_step.get(material, sfx_foot_step["default"])
 		elif type == "wander":
-			sound_list = wander_sounds.get(material, wander_sounds["default"])
+			sound_list = sfx_foot_wander.get(material, sfx_foot_wander["default"])
 
 		play_random_sfx(sound_list)
 
 func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	base_camera_position = camera.position
-	default_scale = $CollisionShape3D.scale
 
 func _unhandled_input(event):
 	if input_enabled:
@@ -272,6 +281,10 @@ func _physics_process(delta):
 	if input_enabled:
 		if not is_on_floor():
 			velocity += gravity * delta
+			fall_velocity = velocity.y
+
+			if fall_velocity < 0:
+				max_fall_speed = min(max_fall_speed, fall_velocity)
 		else:
 			velocity.y = 0
 			if Input.is_action_just_pressed("jump"):
@@ -281,10 +294,10 @@ func _physics_process(delta):
 		
 		if Input.is_action_pressed("crouch"):
 			crouching = true
-			$CollisionShape3D.scale = lerp($CollisionShape3D.scale, crouch_scale, 0.3)
+			$CollisionShape3D.shape.height = lerp($CollisionShape3D.shape.height, crouch_scale, 0.1)
 		else:
 			crouching = false
-			$CollisionShape3D.scale = lerp($CollisionShape3D.scale, default_scale, 0.3)
+			$CollisionShape3D.shape.height = lerp($CollisionShape3D.shape.height, default_scale, 0.1)
 
 	move_and_slide()
 
@@ -310,6 +323,16 @@ func _physics_process(delta):
 	if not was_on_floor and is_on_floor():
 		viewpunch_velocity += land_viewpunch
 		footstep_sound("impact")
+		if max_fall_speed < fall_damage_threshold:
+			var damage = abs(int((max_fall_speed - fall_damage_threshold) * 5))
+			health -= damage
+			viewpunch_velocity += Vector3(randf_range(-200, -300), 0.0, randf_range(-200, 200))
+			local_audio_player.stream = sfx_fall_damage
+			local_audio_player.play()
+			ScreenBlur.material.set_shader_parameter("direction", Vector2(randf_range(0.0, 2.0), randf_range(0.0, 2.0)))
+			print("Took ", damage, " fall damage. Health now: ", health)
+
+		max_fall_speed = 0
 
 	viewpunch_rotation += viewpunch_velocity * delta
 	viewpunch_velocity = lerp(viewpunch_velocity, Vector3.ZERO, delta * viewpunch_damping)
@@ -362,7 +385,7 @@ func _physics_process(delta):
 		object_in_hand.global_transform.origin = hand_position.global_transform.origin
 		object_in_hand.global_transform.basis = hand_position.global_transform.basis
 
-func move_held_object_physical(delta, target_pos, object):
+func move_held_object_physical(_delta, target_pos, object):
 	var current_pos = object.global_transform.origin
 	var direction = target_pos - current_pos
 
@@ -416,7 +439,7 @@ func try_grab():
 				held_object.linear_velocity = Vector3.ZERO
 				held_object.angular_velocity = Vector3.ZERO
 			else:
-				local_audio_player.stream = deny_sound
+				local_audio_player.stream = sfx_deny
 				local_audio_player.play()
 
 func drop_object():
@@ -425,7 +448,10 @@ func drop_object():
 		held_object.gravity_scale = 1.0
 		held_object = null
 
-func _process(_delta: float) -> void:
+func _process(delta: float) -> void:
+	var blurAmount = ScreenBlur.material.get_shader_parameter("direction")
+	if blurAmount > Vector2(0, 0):
+		ScreenBlur.material.set_shader_parameter("direction", lerp(blurAmount, Vector2.ZERO, 0.8 * delta))
 	if Input.is_action_just_pressed("lmb"):
 		if held_object:
 			throw_object()
@@ -469,14 +495,17 @@ func _process(_delta: float) -> void:
 	if Input.is_action_just_pressed("hold_object"):
 		if held_object:
 			if object_in_hand:
-				local_audio_player.stream = deny_sound
+				local_audio_player.stream = sfx_deny
 				local_audio_player.play()
 			else:
-				object_in_hand = held_object
-				print("Put object ", object_in_hand, " in hand")
-				object_in_hand.gravity_scale = 0.0
-				object_in_hand.collider.disabled = true
-				held_object = null
+				if held_object.weight < 10:
+					object_in_hand = held_object
+					print("Put object ", object_in_hand, " in hand")
+					object_in_hand.gravity_scale = 0.0
+					object_in_hand.collider.disabled = true
+					held_object = null
+				else:
+					playerGUI.show_popup("Too heavy!", sfx_deny)
 		else:
 			if object_in_hand:
 				object_in_hand.gravity_scale = 1.0

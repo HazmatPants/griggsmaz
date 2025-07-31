@@ -1,8 +1,17 @@
 extends Node
 
-var CanPause := true
+var DAYS: int = 0
+# how many days have passed
 
-var settings := {
+var TIME: float = 360 # in-game minutes
+# 1 in-game minute is 3 real seconds
+# 1 in-game hour is 3 real minutes
+# 1 in-game day is 72 real minutes
+# 1 in-game day is 1440 in-game minutes
+
+var CanPause: bool = true
+
+var settings: Dictionary = {
 	"video": {
 		"bloom": true,
 		"ssr": true
@@ -24,3 +33,15 @@ func load_sounds_from_dir(path: String) -> Array:
 		dir.list_dir_end()
 		return sounds
 	return []
+
+func _process(delta: float) -> void:
+	TIME += delta / 3
+	if TIME > 1440:
+		TIME = 0
+		DAYS += 1
+
+func get_time_string() -> String:
+	var hours = TIME / 60
+	var minutes = int(TIME) % 60
+	var time_string = "%02d:%02d" % [hours, minutes]
+	return time_string

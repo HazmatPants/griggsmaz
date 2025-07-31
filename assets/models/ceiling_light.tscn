@@ -139,7 +139,7 @@ mesh = SubResource("ArrayMesh_ltutk")
 skeleton = NodePath("")
 
 [node name="OmniLight3D" type="OmniLight3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.725753, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.274115, 0)
 omni_range = 10.107
 
 [node name="SteamAudioPlayer" type="SteamAudioPlayer" parent="."]

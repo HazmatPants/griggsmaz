@@ -1,0 +1,114 @@
+[gd_scene load_steps=12 format=3 uid="uid://dkda6vxgbbfdq"]
+
+[ext_resource type="Script" uid="uid://dauqorda5lyar" path="res://scripts/prop.gd" id="1_1e6cl"]
+[ext_resource type="Script" uid="uid://36odqqguxejp" path="res://scripts/alarm_clock.gd" id="2_1e6cl"]
+[ext_resource type="FontFile" uid="uid://uxbj4x4jihe0" path="res://assets/fonts/ErbosDraco1StOpenNbpRegular-l5wX.ttf" id="3_ur6w0"]
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_funxo"]
+viewport_path = NodePath("SubViewport")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1e6cl"]
+resource_local_to_scene = true
+albedo_texture = SubResource("ViewportTexture_funxo")
+metallic = 0.12
+roughness = 0.32
+emission_enabled = true
+emission = Color(1, 0, 0, 1)
+emission_energy_multiplier = 2.0
+emission_operator = 1
+emission_texture = SubResource("ViewportTexture_funxo")
+texture_filter = 0
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_32agw"]
+resource_local_to_scene = true
+material = SubResource("StandardMaterial3D_1e6cl")
+size = Vector2(0.365, 0.19)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_lq5we"]
+albedo_color = Color(0.468777, 0.468777, 0.468777, 1)
+metallic = 0.35
+roughness = 0.73
+
+[sub_resource type="BoxMesh" id="BoxMesh_vw8ac"]
+material = SubResource("StandardMaterial3D_lq5we")
+size = Vector3(0.195, 0.195, 0.37)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_c0adh"]
+size = Vector3(0.195, 0.195, 0.37)
+
+[sub_resource type="Theme" id="Theme_ur6w0"]
+default_font = ExtResource("3_ur6w0")
+default_font_size = 110
+
+[sub_resource type="Theme" id="Theme_i6n2i"]
+default_font = ExtResource("3_ur6w0")
+default_font_size = 30
+
+[node name="AlarmClock" type="RigidBody3D"]
+script = ExtResource("1_1e6cl")
+weight = 2.0
+metadata/grabbable = true
+
+[node name="Screen" type="MeshInstance3D" parent="."]
+transform = Transform3D(-4.37114e-08, 1, 0, 4.37114e-08, 1.91069e-15, -1, -1, -4.37114e-08, -4.37114e-08, 0.0975565, 0, 0)
+mesh = SubResource("PlaneMesh_32agw")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("BoxMesh_vw8ac")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_c0adh")
+
+[node name="SFXPlayer" type="SteamAudioPlayer" parent="."]
+distance_attenuation = true
+air_absorption = true
+reflection = true
+attenuation_model = 3
+panning_strength = 0.0
+
+[node name="SubViewport" type="SubViewport" parent="."]
+disable_3d = true
+own_world_3d = true
+transparent_bg = true
+handle_input_locally = false
+size = Vector2i(500, 200)
+render_target_update_mode = 4
+script = ExtResource("2_1e6cl")
+clock_type = 1
+
+[node name="Control" type="Control" parent="SubViewport"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Label" type="Label" parent="SubViewport/Control"]
+modulate = Color(1, 0, 0, 1)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -231.18
+offset_top = -65.12
+offset_right = 253.82
+offset_bottom = 44.88
+grow_horizontal = 2
+grow_vertical = 2
+theme = SubResource("Theme_ur6w0")
+text = "00:00"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="AM_PM_Label" type="Label" parent="SubViewport/Control"]
+modulate = Color(1, 0, 0, 1)
+offset_left = 441.0
+offset_top = 8.09
+offset_right = 494.0
+offset_bottom = 38.09
+theme = SubResource("Theme_i6n2i")
+text = "PM"

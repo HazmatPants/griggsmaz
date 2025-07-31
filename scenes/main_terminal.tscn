@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://ctg2bknrr3dxr"]
+[gd_scene load_steps=11 format=3 uid="uid://ctg2bknrr3dxr"]
 
 [ext_resource type="Script" uid="uid://b67cbl4he55ik" path="res://scripts/main_terminal.gd" id="1_byiao"]
 [ext_resource type="Material" uid="uid://ho2k2cllt7sm" path="res://assets/materials/rough_metal.tres" id="2_4ldxf"]
@@ -16,7 +16,8 @@ resource_local_to_scene = true
 albedo_texture = SubResource("ViewportTexture_vs80n")
 metallic = 0.19
 metallic_specular = 0.83
-roughness = 0.0
+roughness = 0.29
+texture_filter = 0
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_rtpsq"]
 resource_local_to_scene = true
@@ -29,6 +30,8 @@ size = Vector3(0.3, 0.5, 0.795)
 
 [sub_resource type="Theme" id="Theme_rtpsq"]
 default_font = ExtResource("3_amwpv")
+
+[sub_resource type="Theme" id="Theme_byiao"]
 
 [node name="MainTerminal" type="StaticBody3D"]
 transform = Transform3D(0.965926, -0.258819, 0, 0.258819, 0.965926, 0, 0, 0, 1, 0, 0, 0)
@@ -101,6 +104,7 @@ caret_multiple = false
 
 [node name="CWD" type="Label" parent="SubViewportContainer/Viewport/Control/VBoxContainer"]
 layout_mode = 2
+theme = SubResource("Theme_byiao")
 text = "/home/"
 
 [node name="LineEdit" type="LineEdit" parent="SubViewportContainer/Viewport/Control/VBoxContainer"]
