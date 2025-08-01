@@ -15,7 +15,8 @@ var settings: Dictionary = {
 	"video": {
 		"bloom": true,
 		"ssr": true,
-		"reflection_probes": false
+		"reflection_probes": false,
+		"shadow_mode": 0
 	}
 }
 

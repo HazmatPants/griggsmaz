@@ -65,9 +65,10 @@ func _on_quitbutton_pressed():
 	get_tree().quit()
 
 func apply_settings(settings: Dictionary):
-	$Settings/SettingsContainer/Bloom/CheckButton.button_pressed = get_nested(settings, ["video", "bloom"], false)
-	$Settings/SettingsContainer/SSR/CheckButton.button_pressed = get_nested(settings, ["video", "ssr"], false)
-	$Settings/SettingsContainer/ReflectionProbes/CheckButton.button_pressed = get_nested(settings, ["video", "reflection_probes"], false)
+	SettingsController.SettingBloom.button_pressed = get_nested(settings, ["video", "bloom"], false)
+	SettingsController.SettingSSR.button_pressed = get_nested(settings, ["video", "ssr"], false)
+	SettingsController.SettingReflectionProbes.button_pressed = get_nested(settings, ["video", "reflection_probes"], false)
+	SettingsController.SettingShadowMode.selected = get_nested(settings, ["video", "shadow_mode"], 0)
 
 func get_settings():
 	var config = ConfigFile.new()

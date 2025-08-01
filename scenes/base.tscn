@@ -1682,7 +1682,7 @@ interior = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.0178, 2.51668, -2.64078)
 size = Vector3(18.3525, 6.67219, 15.4556)
 
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+[node name="Sun" type="DirectionalLight3D" parent="."]
 transform = Transform3D(-4.37114e-08, -0.978148, 0.207912, 0, 0.207912, 0.978148, -1, 4.27562e-08, -9.08811e-09, 0.710337, 7.74718, 0)
 shadow_enabled = true
 directional_shadow_mode = 1

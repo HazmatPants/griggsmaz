@@ -165,6 +165,42 @@ text = "Reflection Probes"
 layout_mode = 2
 text = "Reflection Probes - Generates cubemaps for better reflections"
 
+[node name="ShadowMode" type="HBoxContainer" parent="Settings/SettingsContainer"]
+layout_mode = 2
+mouse_filter = 0
+mouse_default_cursor_shape = 16
+script = ExtResource("3_kukqi")
+
+[node name="OptionButton" type="OptionButton" parent="Settings/SettingsContainer/ShadowMode"]
+layout_mode = 2
+item_count = 3
+popup/item_0/text = "Orthogonal"
+popup/item_0/id = 0
+popup/item_1/text = "PSSM 2 Split"
+popup/item_1/id = 1
+popup/item_2/text = "PSSM 4 Split"
+popup/item_2/id = 2
+
+[node name="Label" type="Label" parent="Settings/SettingsContainer/ShadowMode"]
+layout_mode = 2
+mouse_filter = 0
+text = "Shadow Mode"
+
+[node name="Tooltip" type="Label" parent="Settings/SettingsContainer/ShadowMode"]
+layout_mode = 2
+text = "Orthogonal
+TL;DR: Lowest quality, fastest
+Renders the entire scene's shadow map from an orthogonal point of view. This is the fastest directional shadow mode. May result in blurrier shadows on close objects.
+
+PSSM 2 Splits
+TL;DR: Balanced quality and performance
+Splits the view frustum in 2 areas, each with its own shadow map. This shadow mode is a compromise between Orthogonal and PSSM 4 Splits in terms of performance.
+
+PSSM 4 Splits
+TL;DR: Highest quality, slowest
+Splits the view frustum in 4 areas, each with its own shadow map. This is the slowest shadow mode.
+"
+
 [node name="CloseButton" type="Button" parent="Settings"]
 layout_mode = 0
 offset_left = 555.0
