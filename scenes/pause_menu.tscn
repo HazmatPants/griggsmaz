@@ -114,13 +114,13 @@ mouse_filter = 0
 mouse_default_cursor_shape = 16
 script = ExtResource("3_kukqi")
 
+[node name="CheckButton" type="CheckButton" parent="Settings/SettingsContainer/Bloom"]
+layout_mode = 2
+
 [node name="Label" type="Label" parent="Settings/SettingsContainer/Bloom"]
 layout_mode = 2
 mouse_filter = 0
 text = "Bloom"
-
-[node name="CheckButton" type="CheckButton" parent="Settings/SettingsContainer/Bloom"]
-layout_mode = 2
 
 [node name="Tooltip" type="Label" parent="Settings/SettingsContainer/Bloom"]
 layout_mode = 2
@@ -133,18 +133,37 @@ mouse_filter = 0
 mouse_default_cursor_shape = 16
 script = ExtResource("3_kukqi")
 
+[node name="CheckButton" type="CheckButton" parent="Settings/SettingsContainer/SSR"]
+layout_mode = 2
+mouse_default_cursor_shape = 16
+
 [node name="Label" type="Label" parent="Settings/SettingsContainer/SSR"]
 layout_mode = 2
 mouse_filter = 0
 text = "SSR"
 
-[node name="CheckButton" type="CheckButton" parent="Settings/SettingsContainer/SSR"]
-layout_mode = 2
-mouse_default_cursor_shape = 16
-
 [node name="Tooltip" type="Label" parent="Settings/SettingsContainer/SSR"]
 layout_mode = 2
 text = "Screen Space Reflections - Renders reflections on reflective materials in real-time."
+
+[node name="ReflectionProbes" type="HBoxContainer" parent="Settings/SettingsContainer"]
+layout_mode = 2
+mouse_filter = 0
+mouse_default_cursor_shape = 16
+script = ExtResource("3_kukqi")
+
+[node name="CheckButton" type="CheckButton" parent="Settings/SettingsContainer/ReflectionProbes"]
+layout_mode = 2
+mouse_default_cursor_shape = 16
+
+[node name="Label" type="Label" parent="Settings/SettingsContainer/ReflectionProbes"]
+layout_mode = 2
+mouse_filter = 0
+text = "Reflection Probes"
+
+[node name="Tooltip" type="Label" parent="Settings/SettingsContainer/ReflectionProbes"]
+layout_mode = 2
+text = "Reflection Probes - Generates cubemaps for better reflections"
 
 [node name="CloseButton" type="Button" parent="Settings"]
 layout_mode = 0

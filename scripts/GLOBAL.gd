@@ -14,7 +14,8 @@ var CanPause: bool = true
 var settings: Dictionary = {
 	"video": {
 		"bloom": true,
-		"ssr": true
+		"ssr": true,
+		"reflection_probes": false
 	}
 }
 
@@ -52,3 +53,6 @@ func get_time_string() -> String:
 	var minutes = int(TIME) % 60
 	var time_string = "%02d:%02d" % [hours, minutes]
 	return time_string
+
+func get_normalized_time() -> float:
+	return TIME / 1440

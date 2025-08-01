@@ -19,15 +19,11 @@ func _ready():
 	QuitButton.pressed.connect(_on_quitbutton_pressed)
 	SettingsCloseButton.pressed.connect(_on_settingsclosebutton_pressed)
 	
-	var settings = get_settings()
-	
-	GLOBAL.settings = settings
-	
-	apply_settings(GLOBAL.settings)
-	
+	GLOBAL.settings = get_settings()
+	SettingsController.apply_settings_to_ui(GLOBAL.settings)
 	SettingsController._UpdateSettings()
 	
-	save_dict_as_config(settings, "user://settings.cfg")
+	apply_settings(GLOBAL.settings)
 
 func _process(_delta):
 	if Input.is_action_just_pressed("escape"):
@@ -71,6 +67,7 @@ func _on_quitbutton_pressed():
 func apply_settings(settings: Dictionary):
 	$Settings/SettingsContainer/Bloom/CheckButton.button_pressed = get_nested(settings, ["video", "bloom"], false)
 	$Settings/SettingsContainer/SSR/CheckButton.button_pressed = get_nested(settings, ["video", "ssr"], false)
+	$Settings/SettingsContainer/ReflectionProbes/CheckButton.button_pressed = get_nested(settings, ["video", "reflection_probes"], false)
 
 func get_settings():
 	var config = ConfigFile.new()
@@ -96,6 +93,7 @@ func get_nested(dict: Dictionary, keys: Array, default = null):
 	return current
 
 func save_dict_as_config(data: Dictionary, path: String) -> int:
+	print("Saving settings: ", data)
 	var config = ConfigFile.new()
 
 	for section in data.keys():
@@ -109,5 +107,6 @@ func save_dict_as_config(data: Dictionary, path: String) -> int:
 	var err = config.save(path)
 	if err != OK:
 		push_error("Failed to save config file: %s" % path)
-	print("Saved settings: ", err)
+		return err
+	print("Saved settings:")
 	return err
