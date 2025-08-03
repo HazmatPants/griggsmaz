@@ -12,13 +12,26 @@ var sound_access := [
 	preload("res://assets/sound/sfx/disk/hdd/hdd_access7.ogg")
 ]
 
+@onready var base = get_node("/root/base")
+@onready var power: bool
+
+var base_had_power
+
 func _ready() -> void:
 	randomize()
 	play_sound()
 
 func play_sound():
+	power = base.power
 	var time = randf_range(0.5, 4.0)
 	await get_tree().create_timer(time).timeout
-	if randi_range(0, 1) == 1:
-		audio_player.play_stream(sound_access[randi_range(0, sound_access.size() - 1)])
+	if power:
+		if randi_range(0, 1) == 1:
+			audio_player.play_stream(sound_access[randi_range(0, sound_access.size() - 1)])
 	play_sound()
+
+func _process(delta: float) -> void:
+	if base_had_power != power:
+		$SteamAudioPlayer.playing = power
+	
+	base_had_power = power

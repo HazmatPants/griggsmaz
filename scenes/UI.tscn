@@ -1,12 +1,25 @@
-[gd_scene load_steps=5 format=3 uid="uid://dc7l8xehcc418"]
+[gd_scene load_steps=9 format=3 uid="uid://dc7l8xehcc418"]
 
 [ext_resource type="Texture2D" uid="uid://dcwbxg4y45jal" path="res://assets/textures/ui/crosshair2.png" id="1_dj8aq"]
 [ext_resource type="Script" uid="uid://3777ip7ok5xn" path="res://scripts/ui.gd" id="1_ro3t7"]
 [ext_resource type="Shader" uid="uid://bncslxpqswxrq" path="res://assets/shaders/blur.gdshader" id="3_5en4g"]
+[ext_resource type="Shader" uid="uid://b777pjq22cm6s" path="res://assets/shaders/vignette.gdshader" id="4_75u2n"]
+[ext_resource type="Shader" uid="uid://cfb8vogvv1k1h" path="res://assets/shaders/nightvision.gdshader" id="4_ua6yw"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_ua6yw"]
 shader = ExtResource("3_5en4g")
 shader_parameter/direction = Vector2(0, 0)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_75u2n"]
+shader = ExtResource("4_ua6yw")
+shader_parameter/intensity = 0.05
+shader_parameter/spark_density = 0.001
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_3wlde"]
+shader = ExtResource("4_75u2n")
+shader_parameter/vignette_strength = 0.2
+shader_parameter/vignette_softness = 1.0
+shader_parameter/overlay_color = Color(0.1, 1, 1, 0.4)
 
 [node name="PlayerGUI" type="CanvasLayer"]
 script = ExtResource("1_ro3t7")
@@ -42,7 +55,7 @@ offset_right = 40.0
 offset_bottom = 40.0
 
 [node name="SFXPlayer" type="AudioStreamPlayer" parent="."]
-max_polyphony = 2
+max_polyphony = 4
 
 [node name="Control" type="Control" parent="."]
 layout_mode = 3
@@ -68,3 +81,24 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 color = Color(1, 0, 0, 1)
+
+[node name="NVGRect" type="ColorRect" parent="."]
+visible = false
+material = SubResource("ShaderMaterial_75u2n")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 1, 0.815686, 1)
+
+[node name="Vignette" type="ColorRect" parent="."]
+visible = false
+material = SubResource("ShaderMaterial_3wlde")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2

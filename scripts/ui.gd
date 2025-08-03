@@ -1,15 +1,36 @@
 extends CanvasLayer
 
 @onready var audio_player := $SFXPlayer
+@onready var wenv: WorldEnvironment = get_node("/root/base/WorldEnvironment/")
+@onready var light = get_node("/root/base/Player/Camera3D/NVGLight")
 
-var camera_sound := preload("res://assets/sound/sfx/ui/camera.wav")
-var popup_sound := preload("res://assets/sound/sfx/ui/toast_short.wav")
+var sfx_camera := preload("res://assets/sound/sfx/ui/camera.wav")
+var sfx_popup := preload("res://assets/sound/sfx/ui/toast_short.wav")
+
+var sfx_nvg_on := preload("res://assets/sound/sfx/player/night_vision_on.wav")
+var sfx_nvg_off := preload("res://assets/sound/sfx/player/night_vision_off.wav")
+
+var nvg_on = false
 
 func _process(delta):
 	if Input.is_action_just_pressed("hide_hud"):
 		visible = not visible
 	if Input.is_action_just_pressed("take_screenshot"):
 		take_screenshot()
+	if Input.is_action_just_pressed("toggle_nvg"):
+		nvg_on = !nvg_on
+		$Vignette.visible = nvg_on
+		$NVGRect.visible = nvg_on
+		light.visible = nvg_on
+		wenv.environment.ambient_light_source = Environment.AMBIENT_SOURCE_COLOR if nvg_on else Environment.AMBIENT_SOURCE_DISABLED
+		wenv.environment.ambient_light_color = Color(0, 1, 1 ,1)
+		wenv.environment.ambient_light_energy = 50.0
+		audio_player.stream = sfx_nvg_on if nvg_on else sfx_nvg_off
+		audio_player.play()
+	
+	if nvg_on:
+		var target_light_energy = 1.8 if nvg_on else 0.0
+		wenv.environment.ambient_light_energy = lerp(wenv.environment.ambient_light_energy, target_light_energy, 0.05)
 
 func take_screenshot():
 	var image = get_viewport().get_texture().get_image()
@@ -27,10 +48,10 @@ func take_screenshot():
 	var error = image.save_png(path)
 	if error == OK:
 		print("Screenshot saved to: ", ProjectSettings.globalize_path(path))
-		show_popup("Screenshot saved to: " + ProjectSettings.globalize_path(path), camera_sound)
+		show_popup("Screenshot saved to: " + ProjectSettings.globalize_path(path), sfx_camera)
 	else:
 		print("Screenshot failed to save.")
-		show_popup("Screenshot failed to save.", popup_sound)
+		show_popup("Screenshot failed to save.", sfx_popup)
 	
 	visible = true
 

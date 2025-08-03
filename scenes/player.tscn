@@ -45,6 +45,20 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.65122)
 [node name="HandPosition" type="Node3D" parent="Camera3D"]
 transform = Transform3D(1.31134e-07, 0, -1, 0, 1, 0, 1, 0, 1.31134e-07, 0.428411, -0.215955, -0.416155)
 
+[node name="SpotLight3D" type="SpotLight3D" parent="Camera3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.738785)
+light_energy = 2.0
+shadow_enabled = true
+spot_range = 7.21629
+spot_angle = 39.489
+
+[node name="NVGLight" type="SpotLight3D" parent="Camera3D"]
+visible = false
+light_energy = 16.0
+light_volumetric_fog_energy = 0.0
+spot_range = 9.84089
+spot_angle = 45.3697
+
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("CapsuleShape3D_g2els")
 
@@ -63,3 +77,12 @@ attenuation_model = 3
 panning_strength = 0.0
 
 [node name="LocalSFXPlayer" type="AudioStreamPlayer" parent="."]
+
+[node name="Viewport" type="SubViewport" parent="."]
+size = Vector2i(32, 18)
+
+[node name="Camera3D" type="Camera3D" parent="Viewport"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.638906, 0)
+cull_mask = 1048573
+fov = 85.0
+near = 0.01

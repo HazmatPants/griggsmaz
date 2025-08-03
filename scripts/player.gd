@@ -20,19 +20,19 @@ var mouse_look_enabled := true
 
 var look_rotation: Vector2 = Vector2.ZERO
 
-@onready var camera = $Camera3D
-@onready var interactray = $Camera3D/InteractRay
-@onready var footstepRay = $FootstepRay
-@onready var grab_point = $Camera3D/GrabPoint
-@onready var hand_position = $Camera3D/HandPosition
+@onready var camera: Camera3D = $Camera3D
+@onready var interactray: RayCast3D = $Camera3D/InteractRay
+@onready var footstepRay: RayCast3D = $FootstepRay
+@onready var grab_point: Node3D = $Camera3D/GrabPoint
+@onready var hand_position: Node3D = $Camera3D/HandPosition
 var held_object: RigidBody3D = null
 var object_in_hand: RigidBody3D = null
+var held_object_distance: float = 3.0
 
 # for playing spatialized sounds
-@onready var audio_player = $SFXPlayer
-
+@onready var audio_player: SteamAudioPlayer = $SFXPlayer
 # for playing non-spatialized sounds
-@onready var local_audio_player = $LocalSFXPlayer
+@onready var local_audio_player: AudioStreamPlayer = $LocalSFXPlayer
 
 @onready var playerGUI = $"../PlayerGUI"
 @onready var interactText = playerGUI.get_node("InteractLabel")
@@ -187,11 +187,12 @@ const sfx_deny := preload("res://assets/sound/sfx/ui/suit_denydevice.wav")
 
 const sfx_fall_damage := preload("res://assets/sound/sfx/player/pl_fallpain3.wav")
 
-func play_random_sfx(sound_list):
+func play_random_sfx(sound_list, volume: float=0):
 	var idx = randi() % sound_list.size()
+	audio_player.max_db = volume
 	audio_player.play_stream(sound_list[idx], 0.0, 0.0, randf_range(0.95, 1.05))
 
-func footstep_sound(type: String="step"):
+func footstep_sound(type: String="step", volume: float=0.0):
 	if footstepRay.is_colliding():
 		var collider = footstepRay.get_collider()
 		var material = "default"
@@ -207,7 +208,7 @@ func footstep_sound(type: String="step"):
 		elif type == "wander":
 			sound_list = sfx_foot_wander.get(material, sfx_foot_wander["default"])
 
-		play_random_sfx(sound_list)
+		play_random_sfx(sound_list, volume)
 
 func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
@@ -313,7 +314,8 @@ func _physics_process(delta):
 	if not is_moving and not was_moving:
 		stop_timer += delta
 		if stop_timer > 0.05:
-			footstep_sound("wander")
+			var volume: float = -1 if crouching else 0
+			footstep_sound("wander", volume)
 			viewpunch_velocity += step_viewpunch / 2
 			stop_timer = -999  # prevent multiple plays
 
@@ -352,7 +354,8 @@ func _physics_process(delta):
 		var bob_value = sin(bobbing_time)
 
 		if bob_value < 0.0 and last_bob_value >= 0.0 and footstep_cooldown <= 0.0:
-			footstep_sound("step")
+			var volume: float = -1 if crouching else 0
+			footstep_sound("step", volume)
 			viewpunch_velocity += step_viewpunch
 			footstep_cooldown = current_footstep_interval
 			step_side = not step_side
@@ -380,20 +383,19 @@ func _physics_process(delta):
 	camera.rotation = camera_rot
 
 	if held_object:
+		var target_position = camera.global_transform.origin + camera.global_transform.basis.z * -held_object_distance
+		grab_point.global_transform.origin = grab_point.global_transform.origin.lerp(target_position, 0.3)
 		move_held_object_physical(delta, grab_point.global_transform.origin, held_object)
 	elif object_in_hand:
-		object_in_hand.global_transform.origin = hand_position.global_transform.origin
-		object_in_hand.global_transform.basis = hand_position.global_transform.basis
+		move_held_object_physical(delta, hand_position.global_transform.origin, object_in_hand, 900, 35, false)
+		object_in_hand.global_transform.basis = lerp(object_in_hand.global_transform.basis, hand_position.global_transform.basis, 0.6)
 
-func move_held_object_physical(_delta, target_pos, object):
+func move_held_object_physical(_delta, target_pos, object, spring_strength=200.0, damping=20.0, can_rotate=true):
 	var current_pos = object.global_transform.origin
 	var direction = target_pos - current_pos
 
 	var distance = direction.length()
 	var direction_normalized = direction.normalized()
-	
-	var spring_strength = 50.0
-	var damping = 8.0
 	
 	var relative_velocity = object.linear_velocity
 	var force = direction_normalized * (distance * spring_strength) - relative_velocity * damping
@@ -401,24 +403,30 @@ func move_held_object_physical(_delta, target_pos, object):
 	object.angular_velocity = object.angular_velocity.lerp(Vector3.ZERO, 0.1)
 	object.apply_central_force(force)
 	
-	var is_rotating_object := Input.is_action_pressed("rmb")
+	var is_rotating_object := Input.is_action_pressed("rmb") and can_rotate
 	mouse_look_enabled = not is_rotating_object
+	
+	if can_rotate:
+		if Input.is_action_just_pressed("mwheelup"):
+			print(held_object_distance)
+			held_object_distance = min(2.0, held_object_distance + 0.25)
+		if Input.is_action_just_pressed("mwheeldown"):
+			held_object_distance = max(1.0, held_object_distance - 0.25)
 	
 	if is_rotating_object and object:
 		var mouse_delta = Input.get_last_mouse_velocity()
+		var sensitivity = 0.007
 
-		# Sensitivity multiplier — tweak to your liking
-		var sensitivity = 0.00005
+		var pitch_axis = camera.global_transform.basis.x.normalized()
 
-		# Apply rotation around Y (horizontal) and X (vertical)
-		var rot_x = mouse_delta.y * sensitivity
-		var rot_y = -mouse_delta.x * sensitivity  # negative to make dragging feel natural
+		var yaw_axis = camera.global_transform.basis.y.normalized()
 
-		# Apply local rotation
-		held_object.rotate_object_local(Vector3.UP, rot_y)
-		held_object.rotate_object_local(Vector3.RIGHT, rot_x)
+		var pitch = mouse_delta.y * sensitivity
+		var yaw = mouse_delta.x * sensitivity
 
+		var angular = yaw_axis * yaw + pitch_axis * pitch
 
+		object.angular_velocity = object.angular_velocity.lerp(angular, 0.2)
 
 func throw_object():
 	if held_object:
@@ -438,6 +446,8 @@ func try_grab():
 				held_object.gravity_scale = 0.0
 				held_object.linear_velocity = Vector3.ZERO
 				held_object.angular_velocity = Vector3.ZERO
+				held_object_distance = camera.global_transform.origin.distance_to(held_object.global_transform.origin)
+				grab_point.global_transform.origin = camera.global_transform.origin + camera.global_transform.basis.z * -held_object_distance
 			else:
 				local_audio_player.stream = sfx_deny
 				local_audio_player.play()
@@ -478,12 +488,14 @@ func _process(delta: float) -> void:
 		else:
 			interactText.text = "Interact [E]"
 		if Input.is_action_just_pressed("interact"):
-			print("Interacted with: ", collider.name)
 			if collider.name == "LockButton":
+				print("Interacted with: ", collider.get_parent().name)
 				collider.get_parent().toggle_lock()
 			elif collider.has_meta("InteractWithParent"):
+				print("Interacted with: ", collider.get_parent().name)
 				collider.get_parent().interact()
 			elif collider.has_meta("InteractWithSelf"):
+				print("Interacted with: ", collider.name)
 				collider.interact()
 	else:
 		interactText.visible = false

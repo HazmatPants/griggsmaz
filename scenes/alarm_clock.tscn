@@ -50,7 +50,7 @@ weight = 2.0
 metadata/grabbable = true
 
 [node name="Screen" type="MeshInstance3D" parent="."]
-transform = Transform3D(-4.37114e-08, 1, 0, 4.37114e-08, 1.91069e-15, -1, -1, -4.37114e-08, -4.37114e-08, 0.0975565, 0, 0)
+transform = Transform3D(-3.86846e-08, 0.885, -3.86846e-08, 0, -3.86846e-08, -0.885, -0.885, -3.86846e-08, 1.69096e-15, 0.0975565, 0, 0)
 mesh = SubResource("PlaneMesh_32agw")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
@@ -106,6 +106,7 @@ vertical_alignment = 1
 
 [node name="AM_PM_Label" type="Label" parent="SubViewport/Control"]
 modulate = Color(1, 0, 0, 1)
+layout_mode = 0
 offset_left = 441.0
 offset_top = 8.09
 offset_right = 494.0

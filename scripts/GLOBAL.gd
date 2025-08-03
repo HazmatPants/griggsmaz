@@ -27,8 +27,8 @@ var radio_contacts: Dictionary = {
 	}
 }
 
-func load_sounds_from_dir(path: String) -> Array:
-	var sounds := []
+func load_sounds_from_dir(path: String) -> Array[AudioStream]:
+	var sounds: Array[AudioStream] = []
 	var dir := DirAccess.open(path)
 	if dir:
 		dir.list_dir_begin()
