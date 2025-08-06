@@ -1,5 +1,7 @@
 # Griggsmaz
 
+![img](https://img.itch.zone/aW1nLzIyMzM5NjM3LnBuZw==/original/Yd7m4W.png)
+
 A game created with [Godot Engine](https://github.com/godotengine/godot), inspired by [Voices of the Void](https://mrdrnose.itch.io/votv).
 
 Builds are available for download on [itch.io](https://hazmatpants.itch.io/griggsmaz).
