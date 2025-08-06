@@ -93,25 +93,32 @@ transform = Transform3D(0.3, 0, 0, 0, 0.3, 0, 0, 0, 0.3, 0, 0, 0)
 
 [node name="Cube" type="MeshInstance3D" parent="Node3D"]
 transform = Transform3D(1.34343, 0, 0, 0, -0.307771, 2.02853e-07, 0, -4.64721e-08, -1.34343, 0, 0.525048, 0)
+layers = 4
 mesh = SubResource("ArrayMesh_8kgoa")
 skeleton = NodePath("")
 
 [node name="Cylinder" type="MeshInstance3D" parent="Node3D"]
 transform = Transform3D(1.33795, 0, 0, 0, -0.203396, 2.02026e-07, 0, -3.0712e-08, -1.33795, 0, 0.204632, 0)
+layers = 4
 mesh = SubResource("ArrayMesh_y7133")
 skeleton = NodePath("")
 
 [node name="Sphere" type="MeshInstance3D" parent="Node3D"]
 transform = Transform3D(1.16303, 0, 0, 0, -0.685201, 1.75613e-07, 0, -1.03462e-07, -1.16303, 0, 0.0371052, 0)
+layers = 4
 mesh = SubResource("SphereMesh_7uou3")
 skeleton = NodePath("")
 
 [node name="OmniLight3D" type="OmniLight3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.274115, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.220763, 0)
+shadow_enabled = true
+shadow_caster_mask = 4294967291
+distance_fade_enabled = true
 omni_range = 10.107
 
 [node name="SteamAudioPlayer" type="SteamAudioPlayer" parent="."]
 distance_attenuation = true
+air_absorption = true
 reflection = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.488548, 0)
 stream = ExtResource("1_2npfa")

@@ -66,7 +66,7 @@ func interact():
 		eject_disk()
 	else:
 		if player.object_in_hand != null:
-			if player.object_in_hand.name == "FloppyDisk":
+			if player.object_in_hand.name.begins_with("FloppyDisk"):
 				Disk = player.object_in_hand
 				player.object_in_hand = null
 				DiskController = Disk.get_node("FloppyDisk")

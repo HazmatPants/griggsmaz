@@ -1,4 +1,4 @@
-[gd_scene load_steps=155 format=4 uid="uid://dl28unae5bin0"]
+[gd_scene load_steps=164 format=4 uid="uid://dl28unae5bin0"]
 
 [ext_resource type="Material" uid="uid://b8cwye2rrrmwi" path="res://assets/materials/concrete.tres" id="1_baglu"]
 [ext_resource type="Script" uid="uid://cst0itywnsoq3" path="res://scripts/base.gd" id="1_ei55q"]
@@ -27,6 +27,7 @@
 [ext_resource type="Script" uid="uid://kimemt2xqbeq" path="res://scripts/processor.gd" id="27_vs80n"]
 [ext_resource type="PackedScene" uid="uid://dqc0untajmnri" path="res://scenes/floppy_disk.tscn" id="29_c8kgi"]
 [ext_resource type="PackedScene" uid="uid://jhd52y4bpkog" path="res://scenes/camera_terminal.tscn" id="29_vs80n"]
+[ext_resource type="PackedScene" uid="uid://bdg4njg82j5ad" path="res://scenes/double_glass_sliding_keycard_door.tscn" id="31_qty1u"]
 [ext_resource type="FontFile" uid="uid://dgkwgfyrwu1fk" path="res://assets/fonts/CONSOLA.TTF" id="31_s6kkj"]
 [ext_resource type="Material" uid="uid://ho2k2cllt7sm" path="res://assets/materials/rough_metal.tres" id="31_vs80n"]
 [ext_resource type="Script" uid="uid://cjia86g85rtev" path="res://scripts/starmail_terminal.gd" id="33_ei55q"]
@@ -37,6 +38,7 @@
 [ext_resource type="SteamAudioMaterial" uid="uid://cqx8833t2v8mo" path="res://addons/godot-steam-audio/materials/metal_material.tres" id="35_b73mi"]
 [ext_resource type="PackedScene" uid="uid://bdkeh1hao5xve" path="res://scenes/emergency_light.tscn" id="36_65va3"]
 [ext_resource type="Script" uid="uid://b0jq5gojbnvcx" path="res://scripts/power_box.gd" id="37_b73mi"]
+[ext_resource type="PackedScene" uid="uid://ckmm7vcwpsswh" path="res://scenes/keycard.tscn" id="39_yjh04"]
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_wklje"]
 emission_shape_scale = Vector3(17.54, 0.12, 9.79)
@@ -849,6 +851,12 @@ size = Vector3(10.428, 0.23, 8.119)
 [sub_resource type="BoxShape3D" id="BoxShape3D_isyof"]
 size = Vector3(10.4284, 0.24, 8.11875)
 
+[sub_resource type="BoxMesh" id="BoxMesh_v7bl5"]
+size = Vector3(10.428, 0.23, 8.119)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_q5qra"]
+size = Vector3(10.4284, 0.24, 8.11875)
+
 [sub_resource type="BoxMesh" id="BoxMesh_uo6h6"]
 size = Vector3(10.895, 2.585, 0.285)
 
@@ -868,10 +876,22 @@ size = Vector3(2.165, 2.585, 0.285)
 size = Vector3(1.72171, 2.585, 0.16)
 
 [sub_resource type="BoxMesh" id="BoxMesh_33mrd"]
-size = Vector3(7.815, 2.695, 0.285)
+size = Vector3(5.265, 2.695, 0.215)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_aomoi"]
-size = Vector3(7.815, 2.695, 0.285)
+size = Vector3(4.60721, 2.695, 0.285)
+
+[sub_resource type="BoxMesh" id="BoxMesh_wt3to"]
+size = Vector3(1.83, 2.695, 0.215)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_npva4"]
+size = Vector3(1.84492, 2.695, 0.285)
+
+[sub_resource type="BoxMesh" id="BoxMesh_npva4"]
+size = Vector3(1.83, 1.37, 0.215)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_wklje"]
+size = Vector3(1.84492, 1.25229, 0.285)
 
 [sub_resource type="BoxMesh" id="BoxMesh_82vju"]
 material = ExtResource("19_yjh04")
@@ -953,6 +973,10 @@ size = Vector3(1, 1.545, 0.365)
 [sub_resource type="BoxShape3D" id="BoxShape3D_sa2y1"]
 size = Vector3(1, 1.575, 0.465)
 
+[sub_resource type="BoxMesh" id="BoxMesh_b73mi"]
+material = ExtResource("19_yjh04")
+size = Vector3(0.055, 0.095, 0.76)
+
 [node name="base" type="Node3D"]
 script = ExtResource("1_ei55q")
 
@@ -975,7 +999,7 @@ draw_pass_1 = SubResource("SphereMesh_7wyq8")
 environment = SubResource("Environment_hh5oj")
 
 [node name="Player" parent="." instance=ExtResource("5_xvvcp")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.37263, 1.23496, 0.392311)
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 3.37263, 1.23496, 0.392311)
 strafe_roll_amount = 4.0
 strafe_roll_speed = 2.0
 
@@ -1337,6 +1361,22 @@ material = ExtResource("3_s5nuq")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.62503, 0, -1.53437)
 shape = SubResource("BoxShape3D_isyof")
 
+[node name="Cube11" type="StaticBody3D" parent="Level"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.7921, 0, 0)
+metadata/material_type = "concrete"
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Level/Cube11"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.62503, 0, -1.53437)
+material_override = ExtResource("6_vciil")
+mesh = SubResource("BoxMesh_v7bl5")
+
+[node name="SteamAudioGeometry" type="SteamAudioGeometry" parent="Level/Cube11/MeshInstance3D"]
+material = ExtResource("3_s5nuq")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Level/Cube11"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.62503, 0, -1.53437)
+shape = SubResource("BoxShape3D_q5qra")
+
 [node name="Cube3" type="StaticBody3D" parent="Level"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.2883, 2.62956, 0)
 
@@ -1416,7 +1456,7 @@ shape = SubResource("BoxShape3D_b085t")
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 14.2268, 1.06639, -2.02942)
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Level/Cube6"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.475479, 0.228176, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.47043, 0.228176, 0)
 material_override = ExtResource("1_baglu")
 mesh = SubResource("BoxMesh_33mrd")
 
@@ -1424,8 +1464,38 @@ mesh = SubResource("BoxMesh_33mrd")
 material = ExtResource("3_s5nuq")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Level/Cube6"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.475479, 0.228176, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.12842, 0.228176, 0)
 shape = SubResource("BoxShape3D_aomoi")
+
+[node name="Cube9" type="StaticBody3D" parent="Level"]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 14.2268, 1.06639, 3.32024)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Level/Cube9"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.68356, 0.228176, 0)
+material_override = ExtResource("1_baglu")
+mesh = SubResource("BoxMesh_wt3to")
+
+[node name="SteamAudioGeometry" type="SteamAudioGeometry" parent="Level/Cube9/MeshInstance3D"]
+material = ExtResource("3_s5nuq")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Level/Cube9"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.69082, 0.228176, 0)
+shape = SubResource("BoxShape3D_npva4")
+
+[node name="Cube10" type="StaticBody3D" parent="Level"]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 14.2268, 2.53727, 1.60173)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Level/Cube10"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.68356, -0.429688, 0)
+material_override = ExtResource("1_baglu")
+mesh = SubResource("BoxMesh_npva4")
+
+[node name="SteamAudioGeometry" type="SteamAudioGeometry" parent="Level/Cube10/MeshInstance3D"]
+material = ExtResource("3_s5nuq")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Level/Cube10"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.69082, -0.493181, 0)
+shape = SubResource("BoxShape3D_wklje")
 
 [node name="Decal3" type="Decal" parent="Level"]
 transform = Transform3D(0.121, 0, 0, 0, -2.59646e-08, -0.8, 0, 0.594, -3.49691e-08, 6.63094, 1.01804, -5.26372)
@@ -1657,7 +1727,19 @@ transform = Transform3D(0.555556, 0, 0, 0, 0.555556, 0, 0, 0, 0.555556, -2.80253
 transform = Transform3D(0.555556, 0, 0, 0, 0.555556, 0, 0, 0, 0.555556, -2.80253, 2.41358, -5.55878)
 
 [node name="CeilingLight4" parent="Level" instance=ExtResource("15_ot4hf")]
-transform = Transform3D(0.555556, 0, 0, 0, 0.555556, 0, 0, 0, 0.555556, 7.86067, 2.37435, -0.430923)
+transform = Transform3D(0.555556, 0, 0, 0, 0.555556, 0, 0, 0, 0.555556, 6.02067, 2.37435, -0.430923)
+
+[node name="CeilingLight6" parent="Level" instance=ExtResource("15_ot4hf")]
+transform = Transform3D(0.555556, 0, 0, 0, 0.555556, 0, 0, 0, 0.555556, 11.6579, 2.37435, -0.430923)
+
+[node name="CeilingLight5" parent="Level" instance=ExtResource("15_ot4hf")]
+transform = Transform3D(0.555556, 0, 0, 0, 0.555556, 0, 0, 0, 0.555556, 7.35939, 2.37435, -4.07219)
+
+[node name="CeilingLight7" parent="Level" instance=ExtResource("15_ot4hf")]
+transform = Transform3D(0.555556, 0, 0, 0, 0.555556, 0, 0, 0, 0.555556, 11.8368, 2.37937, -4.0678)
+
+[node name="DoubleSlidingDoor2" parent="Level" instance=ExtResource("31_qty1u")]
+transform = Transform3D(0, 0, -0.444, 0, 0.444, 0, 0.444, 0, 0, 14.2149, 0.76367, -0.0631123)
 
 [node name="Crate" parent="." instance=ExtResource("34_rtpsq")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.18263, 0.716, -8.96724)
@@ -1674,6 +1756,14 @@ transform = Transform3D(0.515668, -0.744109, -0.424721, 0.821925, 0.569595, 0, 0
 [node name="FloppyDisk" parent="FloppyDisk" index="3"]
 DiskContents = {
 "README.TXT": "Grigga Industries is sigma"
+}
+
+[node name="FloppyDisk2" parent="." instance=ExtResource("29_c8kgi")]
+transform = Transform3D(0.680485, -0.577502, 0.451033, 0.647056, 0.762443, 0, -0.343887, 0.291844, 0.892507, 7.16094, 0.749936, -6.47288)
+
+[node name="FloppyDisk" parent="FloppyDisk2" index="3"]
+DiskContents = {
+"README.TXT": "8&nt9867y 9*^&t r7%e57$3 658 76%876N8976nm(87mN86&*53Y *6578675%876784"
 }
 
 [node name="AlarmClock" parent="." instance=ExtResource("33_s6kkj")]
@@ -1719,6 +1809,9 @@ transform = Transform3D(-1.02722e-08, 3.88235e-23, -0.235, 0.235, -1.02722e-08, 
 [node name="EmergencyLight3" parent="." instance=ExtResource("36_65va3")]
 transform = Transform3D(-1.02722e-08, 3.88235e-23, -0.235, 0.235, -1.02722e-08, -1.02722e-08, -1.02722e-08, -0.235, 4.49011e-16, 18.4454, 1.93373, -9.39428)
 
+[node name="EmergencyLight5" parent="." instance=ExtResource("36_65va3")]
+transform = Transform3D(-1.02722e-08, 3.88235e-23, -0.235, 0.235, -1.02722e-08, -1.02722e-08, -1.02722e-08, -0.235, 4.49011e-16, 13.3365, 2.80214, -9.39428)
+
 [node name="EmergencyLight4" parent="." instance=ExtResource("36_65va3")]
 transform = Transform3D(-1.02722e-08, 3.88235e-23, -0.235, 0.235, -1.02722e-08, -1.02722e-08, -1.02722e-08, -0.235, 4.49011e-16, 22.9367, 1.93373, -9.39428)
 
@@ -1747,5 +1840,17 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.382336, 0.212512)
 attenuation_model = 3
 panning_strength = 0.0
 
+[node name="LeverPivot" type="Node3D" parent="PowerBox"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -0.525328, 0.295976, -0.29574)
+
+[node name="Lever" type="MeshInstance3D" parent="PowerBox/LeverPivot"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.326202)
+mesh = SubResource("BoxMesh_b73mi")
+skeleton = NodePath("../..")
+
+[node name="Keycard" parent="." instance=ExtResource("39_yjh04")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.73484, 0.490212, -1.01532)
+
 [editable path="Level/Console/CameraTerminal"]
 [editable path="FloppyDisk"]
+[editable path="FloppyDisk2"]

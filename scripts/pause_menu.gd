@@ -68,7 +68,7 @@ func apply_settings(settings: Dictionary):
 	SettingsController.SettingBloom.button_pressed = get_nested(settings, ["video", "bloom"], false)
 	SettingsController.SettingSSR.button_pressed = get_nested(settings, ["video", "ssr"], false)
 	SettingsController.SettingReflectionProbes.button_pressed = get_nested(settings, ["video", "reflection_probes"], false)
-	SettingsController.SettingShadowMode.selected = get_nested(settings, ["video", "shadow_mode"], 0)
+	SettingsController.SettingShadowMode.button_pressed = get_nested(settings, ["video", "shadows"], false)
 
 func get_settings():
 	var config = ConfigFile.new()

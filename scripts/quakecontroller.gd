@@ -76,6 +76,5 @@ func _apply_quake():
 
 	var velocity_punch = direction * randf_range(0.0, 20.0) * strength
 	strength = lerp(strength, 0.0, 0.003)
-	print(strength)
 	
 	return velocity_punch

@@ -92,7 +92,8 @@ var fall_damage_threshold: float = -15.0
 var max_fall_speed: float = 0.0
 var fall_velocity: float = 0.0
 
-var health: int = 100
+var max_health: float = 100.0
+var health: float = max_health
 
 const sfx_foot_step = {
 	"default": [
@@ -331,7 +332,7 @@ func _physics_process(delta):
 			viewpunch_velocity += Vector3(randf_range(-200, -300), 0.0, randf_range(-200, 200))
 			local_audio_player.stream = sfx_fall_damage
 			local_audio_player.play()
-			ScreenBlur.material.set_shader_parameter("direction", Vector2(randf_range(0.0, 2.0), randf_range(0.0, 2.0)))
+			ScreenBlur.material.set_shader_parameter("direction", Vector2(randf_range(-6.0, 6.0), randf_range(-6.0, 6.0)))
 			print("Took ", damage, " fall damage. Health now: ", health)
 
 		max_fall_speed = 0
@@ -390,6 +391,20 @@ func _physics_process(delta):
 		move_held_object_physical(delta, hand_position.global_transform.origin, object_in_hand, 900, 35, false)
 		object_in_hand.global_transform.basis = lerp(object_in_hand.global_transform.basis, hand_position.global_transform.basis, 0.6)
 
+	if position.y < -20:
+		position = Vector3(3, 2, 0)
+	
+	if health <= 0:
+		die()
+		health = 0.1
+
+func die():
+	local_audio_player.stream = load("res://assets/sound/sfx/ui/8bitAhh.ogg")
+	local_audio_player.play()
+
+	await get_tree().create_timer(0.2).timeout
+
+	get_tree().quit()
 func move_held_object_physical(_delta, target_pos, object, spring_strength=200.0, damping=20.0, can_rotate=true):
 	var current_pos = object.global_transform.origin
 	var direction = target_pos - current_pos
@@ -460,7 +475,7 @@ func drop_object():
 
 func _process(delta: float) -> void:
 	var blurAmount = ScreenBlur.material.get_shader_parameter("direction")
-	if blurAmount > Vector2(0, 0):
+	if abs(blurAmount) > Vector2(0, 0):
 		ScreenBlur.material.set_shader_parameter("direction", lerp(blurAmount, Vector2.ZERO, 0.8 * delta))
 	if Input.is_action_just_pressed("lmb"):
 		if held_object:

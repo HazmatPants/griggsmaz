@@ -1,0 +1,21 @@
+[gd_scene load_steps=4 format=3 uid="uid://ckmm7vcwpsswh"]
+
+[ext_resource type="Script" uid="uid://dauqorda5lyar" path="res://scripts/prop.gd" id="1_oxx7j"]
+[ext_resource type="PackedScene" uid="uid://by83jr1br4hhs" path="res://assets/models/card.glb" id="2_ujkgs"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_b3fy7"]
+size = Vector3(0.05, 0.175, 0.283)
+
+[node name="Keycard" type="RigidBody3D"]
+collision_layer = 3
+script = ExtResource("1_oxx7j")
+metadata/grabbable = true
+metadata/access_level = 1
+
+[node name="card" parent="." instance=ExtResource("2_ujkgs")]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_b3fy7")
+
+[node name="SFXPlayer" type="SteamAudioPlayer" parent="."]
+panning_strength = 0.0

@@ -9,5 +9,5 @@ void fragment() {
 	float dist = length(uv);
 	float vignette = smoothstep(vignette_strength, vignette_strength + vignette_softness, dist);
 
-	COLOR = vec4(vec3(0.0, 0.0, 0.0), vignette);
+	COLOR = overlay_color + vec4(vec3(0.0, 0.0, 0.0), vignette);
 }

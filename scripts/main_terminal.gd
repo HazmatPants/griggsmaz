@@ -186,70 +186,10 @@ func run_command(command, args):
 			return cmd_time()
 		"aplay":
 			cmd_aplay(args)
-		"radio":
-			await cmd_radio(args)
 		"debug":
 			cmd_debug(args)
 		_:
 			return "gish: command not found: " + command
-
-func cmd_radio(args):
-	if args.size() == 0:
-		print_to_terminal("radio: missing subcommand\nsubcommands: 'list', 'receive', 'info'")
-		return
-
-	var subcommand = args[0]
-
-	match subcommand:
-		"list":
-			print_to_terminal("Scanning...")
-			await get_tree().create_timer(randf_range(4, 8)).timeout
-			var contacts = ""
-			for contact in GLOBAL.radio_contacts.keys():
-				var c = contact + ": " + GLOBAL.radio_contacts[contact]["address"]
-				contacts += c + "\n"
-
-			print_to_terminal(contacts)
-		"receive":
-			if args.size() == 1:
-				print_to_terminal("radio: info: missing target signal address")
-				return
-			var address = args[1]
-			var contacts = GLOBAL.radio_contacts
-			var contact
-			var datatype
-			print_to_terminal("Pinging '%s'..." % address)
-			await get_tree().create_timer(randf_range(1, 3)).timeout
-			for i in contacts.keys():
-				if contacts[i]["address"] == address:
-					contact = i
-					datatype = contacts[contact]["data"].get_class()
-					break
-			if contact in contacts:
-				print_to_terminal("Receiving %s data from '%s'......" % [datatype, contact])
-				await get_tree().create_timer(randf_range(4, 8)).timeout
-				var filename = "radio_%s" % address
-				write_file(filename, contacts[contact]["data"])
-				print_to_terminal("File saved to '%s'" % filename)
-			else:
-				print_to_terminal("radio: receive: address '%s' did not respond" % [contact])
-		"info":
-			if args.size() == 1:
-				print_to_terminal("radio: info: missing target signal identifier")
-				return
-
-			var contacts = GLOBAL.radio_contacts
-			var contact = args[1]
-			print_to_terminal("Pinging %s..." % args[1])
-			await get_tree().create_timer(randf_range(2, 4)).timeout
-			if contact in contacts:
-				var address = contacts[contact]["address"]
-				var datatype = contacts[contact]["data"].get_class()
-				print_to_terminal("%s:\naddress: %s\ndata type: %s" % [contact, address, datatype])
-			else:
-				print_to_terminal("radio: info: failed to get info for '%s'" % contact)
-		_:
-			print_to_terminal("radio: invalid subcommand")
 
 func cmd_debug(args):
 	if args.size() == 0:

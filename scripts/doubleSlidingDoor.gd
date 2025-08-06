@@ -40,7 +40,6 @@ func _ready():
 	closed_pos1 = door1.position
 	closed_pos2 = door2.position
 
-	# Doors slide away from center — adjust this to match your setup
 	open_pos1 = closed_pos1 + Vector3(-1.5, 0, 0)
 	open_pos2 = closed_pos2 + Vector3(1.5, 0, 0)
 	

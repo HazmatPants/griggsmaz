@@ -25,4 +25,5 @@ layers = 3
 mesh = SubResource("BoxMesh_kn6iu")
 
 [node name="SFXPlayer" type="SteamAudioPlayer" parent="."]
+air_absorption = true
 panning_strength = 0.0

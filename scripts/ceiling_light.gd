@@ -17,3 +17,4 @@ func _process(delta: float) -> void:
 		player.playing = power
 	
 	base_had_power = power
+	light.shadow_enabled = GLOBAL.settings["video"]["shadows"]

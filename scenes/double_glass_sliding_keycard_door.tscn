@@ -1,0 +1,88 @@
+[gd_scene load_steps=10 format=3 uid="uid://bdg4njg82j5ad"]
+
+[ext_resource type="Script" uid="uid://c4eotbkltcw2e" path="res://scripts/keycard_door.gd" id="1_pjfmd"]
+[ext_resource type="PackedScene" uid="uid://sr587uge2ij6" path="res://assets/models/glassDoor.tscn" id="2_1hd8l"]
+[ext_resource type="Material" uid="uid://ho2k2cllt7sm" path="res://assets/materials/rough_metal.tres" id="3_ah6f7"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_onw0i"]
+size = Vector3(1.5, 3, 0.3)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_e4m50"]
+size = Vector3(1.5, 3, 0.3)
+
+[sub_resource type="BoxMesh" id="BoxMesh_pai4u"]
+material = ExtResource("3_ah6f7")
+size = Vector3(0.36, 0.945, 0.575)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_loko5"]
+albedo_color = Color(0, 0, 0, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_4sbrc"]
+material = SubResource("StandardMaterial3D_loko5")
+size = Vector3(0.045, 0.735, 0.604)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_qe4k5"]
+size = Vector3(0.355, 0.945, 0.715)
+
+[node name="DoubleSlidingDoor" type="Node3D"]
+script = ExtResource("1_pjfmd")
+required_keycard_level = 1
+
+[node name="Door1" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.9, 0, 0)
+
+[node name="Collider" type="CollisionShape3D" parent="Door1"]
+shape = SubResource("BoxShape3D_onw0i")
+
+[node name="Mesh" parent="Door1" instance=ExtResource("2_1hd8l")]
+transform = Transform3D(-2.18557e-08, 0, 0.5, 0, 0.5, 0, -0.5, 0, -2.18557e-08, 0, 0, 0)
+
+[node name="Door2" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.9, 0, 0)
+
+[node name="Collider" type="CollisionShape3D" parent="Door2"]
+shape = SubResource("BoxShape3D_e4m50")
+
+[node name="Mesh" parent="Door2" instance=ExtResource("2_1hd8l")]
+transform = Transform3D(-2.18557e-08, 0, 0.5, 0, 0.5, 0, -0.5, 0, -2.18557e-08, 0, 0, 0)
+
+[node name="SFXPlayer" type="SteamAudioPlayer" parent="."]
+distance_attenuation = true
+min_attenuation_distance = 5.0
+air_absorption = true
+reflection = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0486022, -0.00749367)
+attenuation_model = 3
+panning_strength = 0.0
+area_mask = 2
+
+[node name="SFXPlayer2" type="SteamAudioPlayer" parent="."]
+distance_attenuation = true
+min_attenuation_distance = 5.0
+air_absorption = true
+occlusion = false
+reflection = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.294, 0.911, 0)
+attenuation_model = 3
+panning_strength = 0.0
+area_mask = 2
+
+[node name="Panel" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.31, 0.187791, 0)
+mesh = SubResource("BoxMesh_pai4u")
+skeleton = NodePath("../ToggleButton")
+
+[node name="ToggleButton" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.31, 0.187791, 0)
+collision_layer = 2
+metadata/Method = "ToggleDoor"
+metadata/InteractWithParent = true
+
+[node name="Button" type="MeshInstance3D" parent="ToggleButton"]
+mesh = SubResource("BoxMesh_4sbrc")
+skeleton = NodePath("../..")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="ToggleButton"]
+shape = SubResource("BoxShape3D_qe4k5")
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]

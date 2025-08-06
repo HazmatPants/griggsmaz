@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3 uid="uid://dlehkrd75ljll"]
+[gd_scene load_steps=16 format=3 uid="uid://dlehkrd75ljll"]
 
 [ext_resource type="Script" uid="uid://0q68d10bfstb" path="res://scripts/doubleSlidingDoor.gd" id="1_xx0j5"]
 [ext_resource type="Material" uid="uid://ho2k2cllt7sm" path="res://assets/materials/rough_metal.tres" id="3_knboo"]
@@ -27,9 +27,6 @@ emission_energy_multiplier = 4.0
 material = SubResource("StandardMaterial3D_1ipdu")
 radius = 0.02
 height = 0.685
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_4sbrc"]
-size = Vector3(3.562, 2.98, 0.34)
 
 [sub_resource type="BoxMesh" id="BoxMesh_4sbrc"]
 size = Vector3(0.3, 0.3, 0.705)
@@ -106,10 +103,6 @@ mesh = SubResource("CapsuleMesh_oigqx")
 collision_layer = 2
 metadata/Method = "ToggleDoor"
 metadata/InteractWithParent = true
-
-[node name="Collider" type="CollisionShape3D" parent="ToggleButton"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00969833, 0, 0)
-shape = SubResource("BoxShape3D_4sbrc")
 
 [node name="Button" type="MeshInstance3D" parent="ToggleButton"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.31, 0, 0)

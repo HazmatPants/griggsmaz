@@ -16,7 +16,7 @@ var settings: Dictionary = {
 		"bloom": true,
 		"ssr": true,
 		"reflection_probes": false,
-		"shadow_mode": 0
+		"shadow_mode": false
 	}
 }
 
