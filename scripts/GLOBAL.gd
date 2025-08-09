@@ -11,12 +11,14 @@ var TIME: float = 360 # in-game minutes
 
 var CanPause: bool = true
 
+@onready var PlayerGUI = get_node("/root/base/PlayerGUI")
+
 var settings: Dictionary = {
 	"video": {
 		"bloom": true,
 		"ssr": true,
 		"reflection_probes": false,
-		"shadow_mode": false
+		"shadows": false
 	}
 }
 

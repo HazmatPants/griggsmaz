@@ -47,7 +47,10 @@ default_font_size = 30
 [node name="AlarmClock" type="RigidBody3D"]
 script = ExtResource("1_1e6cl")
 weight = 2.0
+display_name = "Alarm Clock"
 metadata/grabbable = true
+metadata/LeftClickMethod = "leftClick"
+metadata/LeftClickNode = NodePath("SubViewport")
 
 [node name="Screen" type="MeshInstance3D" parent="."]
 transform = Transform3D(-3.86846e-08, 0.885, -3.86846e-08, 0, -3.86846e-08, -0.885, -0.885, -3.86846e-08, 1.69096e-15, 0.0975565, 0, 0)

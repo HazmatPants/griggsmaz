@@ -1,7 +1,8 @@
-[gd_scene load_steps=9 format=3 uid="uid://dc7l8xehcc418"]
+[gd_scene load_steps=10 format=3 uid="uid://dc7l8xehcc418"]
 
 [ext_resource type="Texture2D" uid="uid://dcwbxg4y45jal" path="res://assets/textures/ui/crosshair2.png" id="1_dj8aq"]
 [ext_resource type="Script" uid="uid://3777ip7ok5xn" path="res://scripts/ui.gd" id="1_ro3t7"]
+[ext_resource type="Script" uid="uid://bnugp6osfnv5o" path="res://scripts/inventoryUI.gd" id="3_3wlde"]
 [ext_resource type="Shader" uid="uid://bncslxpqswxrq" path="res://assets/shaders/blur.gdshader" id="3_5en4g"]
 [ext_resource type="Shader" uid="uid://b777pjq22cm6s" path="res://assets/shaders/vignette.gdshader" id="4_75u2n"]
 [ext_resource type="Shader" uid="uid://cfb8vogvv1k1h" path="res://assets/shaders/nightvision.gdshader" id="4_ua6yw"]
@@ -36,15 +37,15 @@ text = "Interact [F]"
 horizontal_alignment = 1
 
 [node name="Crosshair" type="TextureRect" parent="."]
-anchors_preset = -1
-anchor_left = 0.499
-anchor_top = 0.504
-anchor_right = 0.499
-anchor_bottom = 0.504
-offset_left = -31.848
-offset_top = -31.592
-offset_right = 32.152
-offset_bottom = 32.408
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -32.0
+offset_top = -32.0
+offset_right = 32.0
+offset_bottom = 32.0
 grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("1_dj8aq")
@@ -71,6 +72,84 @@ offset_bottom = 20.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
+
+[node name="Inventory" type="Control" parent="Control"]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("3_3wlde")
+
+[node name="HBox" type="HBoxContainer" parent="Control/Inventory"]
+custom_minimum_size = Vector2(400, 500)
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -201.655
+offset_top = -250.0
+offset_right = 242.345
+offset_bottom = 250.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ListPanel" type="Panel" parent="Control/Inventory/HBox"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="Control/Inventory/HBox/ListPanel"]
+layout_mode = 0
+offset_right = 200.0
+offset_bottom = 478.0
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="List" type="VBoxContainer" parent="Control/Inventory/HBox/ListPanel/MarginContainer"]
+layout_mode = 2
+
+[node name="Control" type="Control" parent="Control/Inventory/HBox"]
+layout_mode = 2
+
+[node name="Properties" type="Panel" parent="Control/Inventory/HBox/Control"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+offset_right = 214.0
+offset_bottom = 500.0
+
+[node name="MarginContainer" type="MarginContainer" parent="Control/Inventory/HBox/Control"]
+layout_mode = 2
+offset_right = 214.0
+offset_bottom = 510.0
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/Inventory/HBox/Control/MarginContainer"]
+custom_minimum_size = Vector2(200, 500)
+layout_mode = 2
+
+[node name="Name" type="Label" parent="Control/Inventory/HBox/Control/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Select an item"
+horizontal_alignment = 1
+
+[node name="Weight" type="Label" parent="Control/Inventory/HBox/Control/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Weight" type="Label" parent="Control/Inventory"]
+top_level = true
+layout_mode = 2
+offset_left = 377.0
+offset_top = 556.0
+offset_right = 421.0
+offset_bottom = 573.0
+text = "0/100"
+
+[node name="PopupMenu" type="PopupMenu" parent="Control/Inventory"]
 
 [node name="BlurRect" type="ColorRect" parent="."]
 material = SubResource("ShaderMaterial_ua6yw")
@@ -104,9 +183,14 @@ grow_vertical = 2
 mouse_filter = 2
 
 [node name="LowHealthOverlay" type="ColorRect" parent="."]
+modulate = Color(1, 1, 1, 0)
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_left = -2.0
+offset_top = 1.0
+offset_right = -2.0
+offset_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2

@@ -1,10 +1,11 @@
-[gd_scene load_steps=164 format=4 uid="uid://dl28unae5bin0"]
+[gd_scene load_steps=165 format=4 uid="uid://dl28unae5bin0"]
 
 [ext_resource type="Material" uid="uid://b8cwye2rrrmwi" path="res://assets/materials/concrete.tres" id="1_baglu"]
 [ext_resource type="Script" uid="uid://cst0itywnsoq3" path="res://scripts/base.gd" id="1_ei55q"]
 [ext_resource type="Script" uid="uid://dylpoa3vbpyfg" path="res://scripts/quakecontroller.gd" id="1_sa2y1"]
 [ext_resource type="Material" uid="uid://drh8m4l73ytvw" path="res://assets/materials/glass.tres" id="2_h5ip5"]
 [ext_resource type="SteamAudioMaterial" uid="uid://bljhgad6g2vnm" path="res://addons/godot-steam-audio/materials/concrete_material.tres" id="3_s5nuq"]
+[ext_resource type="Texture2D" uid="uid://bch1wt17x0wo8" path="res://assets/textures/NightSkyHDRI009_4K-HDR.exr" id="3_sa2y1"]
 [ext_resource type="PackedScene" uid="uid://dlehkrd75ljll" path="res://scenes/double_glass_sliding_door.tscn" id="4_40w10"]
 [ext_resource type="SteamAudioMaterial" uid="uid://76vceaiftu7i" path="res://addons/godot-steam-audio/materials/glass_material.tres" id="5_lefm6"]
 [ext_resource type="PackedScene" uid="uid://cycyr22y5agba" path="res://scenes/player.tscn" id="5_xvvcp"]
@@ -54,14 +55,16 @@ material = SubResource("StandardMaterial3D_wklje")
 radius = 0.01
 height = 0.02
 
-[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_82vju"]
+[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_sa2y1"]
+panorama = ExtResource("3_sa2y1")
 
 [sub_resource type="Sky" id="Sky_vs80n"]
-sky_material = SubResource("ProceduralSkyMaterial_82vju")
+sky_material = SubResource("PanoramaSkyMaterial_sa2y1")
 
 [sub_resource type="Environment" id="Environment_hh5oj"]
-background_mode = 1
+background_mode = 2
 sky = SubResource("Sky_vs80n")
+sky_rotation = Vector3(3.14159, 0, 0)
 ambient_light_source = 2
 ambient_light_energy = 0.0
 tonemap_mode = 3
@@ -846,10 +849,10 @@ blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_t87tc")
 
 [sub_resource type="BoxMesh" id="BoxMesh_ycryd"]
-size = Vector3(10.428, 0.23, 8.119)
+size = Vector3(10.758, 0.23, 8.119)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_isyof"]
-size = Vector3(10.4284, 0.24, 8.11875)
+size = Vector3(10.5853, 0.24, 8.11875)
 
 [sub_resource type="BoxMesh" id="BoxMesh_v7bl5"]
 size = Vector3(10.428, 0.23, 8.119)
@@ -1008,6 +1011,7 @@ strafe_roll_speed = 2.0
 [node name="PlayerGUI" parent="." instance=ExtResource("16_vciil")]
 
 [node name="SteamAudioConfig" type="SteamAudioConfig" parent="."]
+scene_type = 0
 max_reflection_sources = 50.0
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.8861, 0)
 
@@ -1346,7 +1350,7 @@ mesh = SubResource("ArrayMesh_1c5u6")
 skeleton = NodePath("")
 
 [node name="Cube2" type="StaticBody3D" parent="Level"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.2883, 0, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.23641, 0, 0)
 metadata/material_type = "concrete"
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Level/Cube2"]
@@ -1358,7 +1362,7 @@ mesh = SubResource("BoxMesh_ycryd")
 material = ExtResource("3_s5nuq")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Level/Cube2"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.62503, 0, -1.53437)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.70348, 0, -1.53437)
 shape = SubResource("BoxShape3D_isyof")
 
 [node name="Cube11" type="StaticBody3D" parent="Level"]
@@ -1784,7 +1788,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.0178, 2.51668, -2.64078)
 size = Vector3(18.3525, 6.67219, 15.4556)
 
 [node name="Sun" type="DirectionalLight3D" parent="."]
-transform = Transform3D(-4.37114e-08, -0.978148, 0.207912, 0, 0.207912, 0.978148, -1, 4.27562e-08, -9.08811e-09, 0.710337, 7.74718, 0)
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0.710337, 7.74718, 0)
 shadow_enabled = true
 directional_shadow_mode = 1
 directional_shadow_max_distance = 50.0

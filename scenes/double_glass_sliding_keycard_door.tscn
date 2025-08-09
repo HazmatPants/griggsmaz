@@ -12,17 +12,17 @@ size = Vector3(1.5, 3, 0.3)
 
 [sub_resource type="BoxMesh" id="BoxMesh_pai4u"]
 material = ExtResource("3_ah6f7")
-size = Vector3(0.36, 0.945, 0.575)
+size = Vector3(0.21, 0.4, 0.575)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_loko5"]
 albedo_color = Color(0, 0, 0, 1)
 
 [sub_resource type="BoxMesh" id="BoxMesh_4sbrc"]
 material = SubResource("StandardMaterial3D_loko5")
-size = Vector3(0.045, 0.735, 0.604)
+size = Vector3(0.015, 0.4, 0.604)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_qe4k5"]
-size = Vector3(0.355, 0.945, 0.715)
+size = Vector3(0.21, 0.405, 0.715)
 
 [node name="DoubleSlidingDoor" type="Node3D"]
 script = ExtResource("1_pjfmd")
@@ -79,6 +79,7 @@ metadata/Method = "ToggleDoor"
 metadata/InteractWithParent = true
 
 [node name="Button" type="MeshInstance3D" parent="ToggleButton"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0601871, 0, 0)
 mesh = SubResource("BoxMesh_4sbrc")
 skeleton = NodePath("../..")
 

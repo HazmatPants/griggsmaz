@@ -9,6 +9,7 @@ size = Vector3(0.05, 0.175, 0.283)
 [node name="Keycard" type="RigidBody3D"]
 collision_layer = 3
 script = ExtResource("1_oxx7j")
+weight = 0.1
 metadata/grabbable = true
 metadata/access_level = 1
 
@@ -18,4 +19,5 @@ metadata/access_level = 1
 shape = SubResource("BoxShape3D_b3fy7")
 
 [node name="SFXPlayer" type="SteamAudioPlayer" parent="."]
+occlusion_radius = 0.1
 panning_strength = 0.0

@@ -11,10 +11,6 @@ enum ClockType { TWENTY_FOUR_HOUR, TWELVE_HOUR }
 @export_enum("24 Hour", "12 Hour")
 var clock_type: int = ClockType.TWENTY_FOUR_HOUR
 
-func _ready():
-	if clock_type == ClockType.TWENTY_FOUR_HOUR:
-		am_pm_label.text = ""
-
 func _process(delta: float) -> void:
 	timer += delta
 	if timer >= 0.5:
@@ -23,6 +19,8 @@ func _process(delta: float) -> void:
 		update_time()
 
 func update_time():
+	if clock_type == ClockType.TWENTY_FOUR_HOUR:
+		am_pm_label.text = ""
 	var time: String
 	if clock_type == ClockType.TWELVE_HOUR:
 		time = get_12_hour_time()
@@ -53,3 +51,8 @@ func get_12_hour_time() -> String:
 	am_pm_label.text = am_pm
 
 	return "%02d:%s" % [hour, minute]
+
+func leftClick():
+	$"../SFXPlayer".play_stream(load("res://assets/sound/sfx/ui/toast_short.wav"))
+	clock_type = ClockType.TWENTY_FOUR_HOUR if clock_type == ClockType.TWELVE_HOUR else ClockType.TWELVE_HOUR  
+	GLOBAL.PlayerGUI.show_popup("Switched to 12-hour clock" if clock_type == ClockType.TWELVE_HOUR else "Switched to 24-hour clock")

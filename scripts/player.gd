@@ -21,10 +21,12 @@ var mouse_look_enabled := true
 var look_rotation: Vector2 = Vector2.ZERO
 
 @onready var camera: Camera3D = $Camera3D
+@onready var frontRay: RayCast3D = $FrontRay
 @onready var interactray: RayCast3D = $Camera3D/InteractRay
 @onready var footstepRay: RayCast3D = $FootstepRay
 @onready var grab_point: Node3D = $Camera3D/GrabPoint
 @onready var hand_position: Node3D = $Camera3D/HandPosition
+@onready var inventory: Node = $Inventory
 var held_object: RigidBody3D = null
 var object_in_hand: RigidBody3D = null
 var held_object_distance: float = 3.0
@@ -188,10 +190,23 @@ const sfx_deny := preload("res://assets/sound/sfx/ui/suit_denydevice.wav")
 
 const sfx_fall_damage := preload("res://assets/sound/sfx/player/pl_fallpain3.wav")
 
-func play_random_sfx(sound_list, volume: float=0):
+var sfx_inv := [
+	preload("res://assets/sound/sfx/ui/inventory/inventory_0.wav"),
+	preload("res://assets/sound/sfx/ui/inventory/inventory_1.wav"),
+	preload("res://assets/sound/sfx/ui/inventory/inventory_2.wav"),
+	preload("res://assets/sound/sfx/ui/inventory/inventory_3.wav")
+]
+
+func play_random_sfx(sound_list, volume: float=0, spatialize=true):
 	var idx = randi() % sound_list.size()
-	audio_player.max_db = volume
-	audio_player.play_stream(sound_list[idx], 0.0, 0.0, randf_range(0.95, 1.05))
+	if spatialize:
+		audio_player.max_db = volume
+		audio_player.play_stream(sound_list[idx], 0.0, 0.0, randf_range(0.95, 1.05))
+	else:
+		local_audio_player.stream = sound_list[idx]
+		local_audio_player.volume_db = volume
+		local_audio_player.pitch_scale = randf_range(0.95, 1.05)
+		local_audio_player.play()
 
 func footstep_sound(type: String="step", volume: float=0.0):
 	if footstepRay.is_colliding():
@@ -280,15 +295,15 @@ func _physics_process(delta):
 	var current_footstep_interval = sprint_footstep_interval if sprinting else footstep_interval
 
 
-	if input_enabled:
-		if not is_on_floor():
-			velocity += gravity * delta
-			fall_velocity = velocity.y
+	if not is_on_floor():
+		velocity += gravity * delta
+		fall_velocity = velocity.y
 
-			if fall_velocity < 0:
-				max_fall_speed = min(max_fall_speed, fall_velocity)
-		else:
-			velocity.y = 0
+		if fall_velocity < 0:
+			max_fall_speed = min(max_fall_speed, fall_velocity)
+	else:
+		velocity.y = 0
+		if input_enabled:
 			if Input.is_action_just_pressed("jump"):
 				velocity.y = jump_velocity
 				viewpunch_velocity += jump_viewpunch
@@ -388,7 +403,7 @@ func _physics_process(delta):
 		grab_point.global_transform.origin = grab_point.global_transform.origin.lerp(target_position, 0.3)
 		move_held_object_physical(delta, grab_point.global_transform.origin, held_object)
 	elif object_in_hand:
-		move_held_object_physical(delta, hand_position.global_transform.origin, object_in_hand, 900, 35, false)
+		move_held_object_physical(delta, hand_position.global_transform.origin, object_in_hand, 2000, 45, false)
 		object_in_hand.global_transform.basis = lerp(object_in_hand.global_transform.basis, hand_position.global_transform.basis, 0.6)
 
 	if position.y < -20:
@@ -397,6 +412,8 @@ func _physics_process(delta):
 	if health <= 0:
 		die()
 		health = 0.1
+	
+	frontRay.transform = camera.transform
 
 func die():
 	local_audio_player.stream = load("res://assets/sound/sfx/ui/8bitAhh.ogg")
@@ -473,6 +490,17 @@ func drop_object():
 		held_object.gravity_scale = 1.0
 		held_object = null
 
+func drop_object_in_hand(place: bool):
+	if object_in_hand:
+		object_in_hand.gravity_scale = 1.0
+		object_in_hand.collider.disabled = false
+		if place:
+			if frontRay.is_colliding():
+				object_in_hand.global_transform.origin = frontRay.get_collision_point()
+			else:
+				object_in_hand.global_transform.origin = frontRay.to_global(frontRay.target_position)
+		object_in_hand = null
+
 func _process(delta: float) -> void:
 	var blurAmount = ScreenBlur.material.get_shader_parameter("direction")
 	if abs(blurAmount) > Vector2(0, 0):
@@ -519,12 +547,21 @@ func _process(delta: float) -> void:
 		crosshair.texture = image_crosshair_hand
 		interactText.text = "Drop [E]"
 		interactText.visible = true
+	if Input.is_key_pressed(KEY_Q):
+		if object_in_hand:
+			drop_object_in_hand(Input.is_key_pressed(KEY_ALT))
+	if Input.is_action_just_pressed("lmb"):
+		if object_in_hand:
+			if object_in_hand.has_meta("LeftClickNode") and object_in_hand.has_meta("LeftClickMethod"):
+				var node = object_in_hand.get_node(object_in_hand.get_meta("LeftClickNode"))
+				node.call(object_in_hand.get_meta("LeftClickMethod"))
+	if Input.is_action_just_pressed("rmb"):
+		if object_in_hand:
+			if object_in_hand.has_meta("RightClickNode") and object_in_hand.has_meta("RightClickMethod"):
+				var node = object_in_hand.get_node(object_in_hand.get_meta("RightClickNode"))
+				node.call(object_in_hand.get_meta("RightClickMethod"))
 	if Input.is_action_just_pressed("hold_object"):
 		if held_object:
-			if object_in_hand:
-				local_audio_player.stream = sfx_deny
-				local_audio_player.play()
-			else:
 				if held_object.weight < 10:
 					object_in_hand = held_object
 					print("Put object ", object_in_hand, " in hand")
@@ -535,6 +572,10 @@ func _process(delta: float) -> void:
 					playerGUI.show_popup("Too heavy!", sfx_deny)
 		else:
 			if object_in_hand:
-				object_in_hand.gravity_scale = 1.0
-				object_in_hand.collider.disabled = false
-				object_in_hand = null
+				if inventory.pickup_item(object_in_hand, object_in_hand.name, object_in_hand.weight):
+					play_random_sfx(sfx_inv, 0, false)
+					object_in_hand = null
+				else:
+					local_audio_player.stream = sfx_deny
+					local_audio_player.play()
+					playerGUI.show_popup("Inventory full")

@@ -13,6 +13,7 @@ mass = 0.7
 freeze_mode = 1
 continuous_cd = true
 script = ExtResource("1_tv3j3")
+weight = 0.1
 metadata/grabbable = true
 
 [node name="mesh" parent="." instance=ExtResource("2_ewsl7")]
@@ -25,6 +26,7 @@ shape = SubResource("BoxShape3D_58nei")
 [node name="SFXPlayer" type="SteamAudioPlayer" parent="."]
 distance_attenuation = true
 air_absorption = true
+occlusion_radius = 0.3
 reflection = true
 attenuation_model = 3
 panning_strength = 0.0

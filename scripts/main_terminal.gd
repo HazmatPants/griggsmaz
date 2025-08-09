@@ -218,9 +218,16 @@ func cmd_debug(args):
 					var time = GLOBAL.TIME
 					var normalized_time = GLOBAL.get_normalized_time()
 					var light_energy = str(sin(PI * normalized_time))
-					print_to_terminal("Time: %s\nNormalized time: %s\nLight energy: %s" % [time, normalized_time, light_energy])
+					var sun_rot = get_node("/root/base/Sun").rotation_degrees.x
+					print_to_terminal("Time: %s\nNormalized time: %s\nLight energy: %s\nSun rotation: %s" % [time, normalized_time, light_energy, sun_rot])
 				_:
 					print_to_terminal("debug: time: invalid subsubcommand, valid subsubcommands: 'set', 'add', 'get'")
+		"player":
+			var subsubcommand = args[1]
+			match subsubcommand:
+				"print_inv":
+					print_to_terminal(str(player.inventory.inventory))
+					print(player.inventory.inventory)
 		_:
 			print_to_terminal("debug: invalid subcommand, valid subcommands: 'time'")
 

@@ -1,7 +1,8 @@
-[gd_scene load_steps=7 format=3 uid="uid://cycyr22y5agba"]
+[gd_scene load_steps=8 format=3 uid="uid://cycyr22y5agba"]
 
 [ext_resource type="Script" uid="uid://dkldpm77yyej" path="res://scripts/player.gd" id="1_3vyb7"]
 [ext_resource type="Script" uid="uid://cha4ohhtlgmy5" path="res://scripts/camera.gd" id="2_g2els"]
+[ext_resource type="Script" uid="uid://doajqtcu1exww" path="res://scripts/inventory.gd" id="3_qhqgy"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_3vyb7"]
 albedo_color = Color(0.1812, 0.1812, 0.1812, 1)
@@ -19,6 +20,11 @@ size = Vector3(0.575, 0.355, 0.125)
 [node name="Player" type="CharacterBody3D"]
 script = ExtResource("1_3vyb7")
 
+[node name="FrontRay" type="RayCast3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.637485, 0)
+target_position = Vector3(0, 0, -1.5)
+hit_from_inside = true
+
 [node name="Camera3D" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.637485, 0)
 cull_mask = 1048573
@@ -34,7 +40,7 @@ mesh = SubResource("BoxMesh_g2els")
 [node name="SteamAudioListener" type="SteamAudioListener" parent="Camera3D"]
 
 [node name="InteractRay" type="RayCast3D" parent="Camera3D"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, -0.587774)
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0)
 target_position = Vector3(0, -1.5, 0)
 collision_mask = 2
 collide_with_areas = true
@@ -79,11 +85,5 @@ panning_strength = 0.0
 
 [node name="LocalSFXPlayer" type="AudioStreamPlayer" parent="."]
 
-[node name="Viewport" type="SubViewport" parent="."]
-size = Vector2i(32, 18)
-
-[node name="Camera3D" type="Camera3D" parent="Viewport"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.638906, 0)
-cull_mask = 1048573
-fov = 85.0
-near = 0.01
+[node name="Inventory" type="Node" parent="."]
+script = ExtResource("3_qhqgy")
