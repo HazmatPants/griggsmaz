@@ -1,4 +1,4 @@
-[gd_scene load_steps=165 format=4 uid="uid://dl28unae5bin0"]
+[gd_scene load_steps=167 format=4 uid="uid://dl28unae5bin0"]
 
 [ext_resource type="Material" uid="uid://b8cwye2rrrmwi" path="res://assets/materials/concrete.tres" id="1_baglu"]
 [ext_resource type="Script" uid="uid://cst0itywnsoq3" path="res://scripts/base.gd" id="1_ei55q"]
@@ -39,7 +39,9 @@
 [ext_resource type="SteamAudioMaterial" uid="uid://cqx8833t2v8mo" path="res://addons/godot-steam-audio/materials/metal_material.tres" id="35_b73mi"]
 [ext_resource type="PackedScene" uid="uid://bdkeh1hao5xve" path="res://scenes/emergency_light.tscn" id="36_65va3"]
 [ext_resource type="Script" uid="uid://b0jq5gojbnvcx" path="res://scripts/power_box.gd" id="37_b73mi"]
+[ext_resource type="Script" uid="uid://duadu5p0d2bbf" path="res://scripts/ambient_sound.gd" id="39_7wyq8"]
 [ext_resource type="PackedScene" uid="uid://ckmm7vcwpsswh" path="res://scenes/keycard.tscn" id="39_yjh04"]
+[ext_resource type="AudioStream" uid="uid://boeac1tpl6dxp" path="res://assets/sound/sfx/ui/alarm.wav" id="41_wklje"]
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_wklje"]
 emission_shape_scale = Vector3(17.54, 0.12, 9.79)
@@ -1010,6 +1012,17 @@ strafe_roll_speed = 2.0
 
 [node name="PlayerGUI" parent="." instance=ExtResource("16_vciil")]
 
+[node name="SteamAudioPlayer" type="SteamAudioPlayer" parent="."]
+distance_attenuation = true
+air_absorption = true
+occlusion_radius = 0.0
+reflection = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.266, 2.3903, 0)
+stream = ExtResource("41_wklje")
+attenuation_model = 3
+autoplay = true
+panning_strength = 0.0
+
 [node name="SteamAudioConfig" type="SteamAudioConfig" parent="."]
 global_log_level = 3
 max_reflection_sources = 50.0
@@ -1802,6 +1815,7 @@ max_polyphony = 2
 [node name="AmbientSound2" type="AudioStreamPlayer" parent="."]
 volume_db = -10.0
 max_polyphony = 2
+script = ExtResource("39_7wyq8")
 
 [node name="EmergencyLight" parent="." instance=ExtResource("36_65va3")]
 transform = Transform3D(-1.02722e-08, -0.235, 0, 0.235, -1.02722e-08, 0, 0, 0, 0.235, 6.74671, 2.92687, 0.177722)

@@ -1,6 +1,17 @@
 extends AudioStreamPlayer
 
-@export var sound_list: Array[AudioStream] = []
+@export var sound_list: Array[AudioStream] = [
+	preload("res://assets/sound/sfx/ambient/eep1.mp3"),
+	preload("res://assets/sound/sfx/ambient/eep2.mp3"),
+	preload("res://assets/sound/sfx/ambient/eep_call_1.mp3"),
+	preload("res://assets/sound/sfx/ambient/eep_call_2.mp3"),
+	preload("res://assets/sound/sfx/ambient/eep_call_3.mp3"),
+	preload("res://assets/sound/sfx/ambient/eep_call_4.mp3"),
+	preload("res://assets/sound/sfx/ambient/eep_ping_1.mp3"),
+	preload("res://assets/sound/sfx/ambient/eep_ping_2.mp3"),
+	preload("res://assets/sound/sfx/ambient/eep_ping_3.mp3"),
+	preload("res://assets/sound/sfx/ambient/eep_ping_4.mp3"),
+]
 @export_range(10, 600, 1) var min_delay_seconds := 30
 @export_range(10, 600, 1) var max_delay_seconds := 90
 

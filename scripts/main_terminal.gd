@@ -1,6 +1,7 @@
 extends StaticBody3D
 
 @onready var viewportContainer := $SubViewportContainer
+@onready var viewport := $SubViewportContainer/Viewport
 @onready var terminalInput := $SubViewportContainer/Viewport/Control/VBoxContainer/LineEdit
 @onready var terminalOutput :=$SubViewportContainer/Viewport/Control/VBoxContainer/CodeEdit
 @onready var currentPathLabel := $SubViewportContainer/Viewport/Control/VBoxContainer/CWD
@@ -11,6 +12,9 @@ extends StaticBody3D
 @onready var playerGUI = get_tree().get_root().get_node("base/PlayerGUI/Control")
 
 var terminal_focus := false
+
+var SIGINT := false
+var TIMER: SceneTreeTimer = null
 
 @onready var fs = {
 	"/": {
@@ -28,6 +32,11 @@ var terminal_focus := false
 		},
 		"mnt": {
 			
+		},
+		"usr": {
+			"bin": {
+				
+			}
 		}
 	}
 }
@@ -56,6 +65,13 @@ func _process(_delta):
 		if terminal_focus:
 			close_terminal()
 
+func wait_sec(seconds: float) -> void:
+	if SIGINT:
+		return
+	TIMER = get_tree().create_timer(seconds)
+	await TIMER.timeout
+	TIMER = null
+
 func interact():
 	if not terminal_focus:
 		GLOBAL.CanPause = false
@@ -72,12 +88,20 @@ func close_terminal():
 	GLOBAL.CanPause = true
 	player.input_enabled = true
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+	terminalInput.release_focus()
 	terminal_focus = false
 	viewportContainer.visible = false
 	playerGUI.remove_child(viewportContainer)
 	add_child(viewportContainer)
 
 func _input(event):
+	if event is InputEventKey and event.pressed:
+		if event.keycode == KEY_C and event.ctrl_pressed:
+			if TIMER:
+				TIMER.timeout.emit()
+				TIMER = null
+			SIGINT = true
+			print_to_terminal("^C")
 	if terminal_focus and event is InputEventKey and event.pressed and not event.echo:
 		if event.keycode in [KEY_SHIFT, KEY_CTRL, KEY_ALT, KEY_META]:
 			return
@@ -141,11 +165,13 @@ func parse_and_execute(input: String) -> void:
 func parse_command(cmd: String):
 	terminalInput.editable = false
 	print_to_terminal("$ " + cmd)
+	SIGINT = false
 	
 	await parse_and_execute(cmd)
 	
 	terminalInput.editable = true
-	terminalInput.edit()
+	if terminal_focus:
+		terminalInput.edit()
 
 func run_command(command, args):
 	# implemented commands
@@ -193,11 +219,17 @@ func run_command(command, args):
 		"aplay":
 			cmd_aplay(args)
 		"pacman":
+			if args.size() == 0:
+				print_to_terminal("pacman: missing subcommand")
+				return
 			var subcommand = args[0]
 			match subcommand:
 				"update":
 					await Pacman.update_package_list()
 				"install":
+					if args.size() == 1:
+						print_to_terminal("pacman: install: missing target package")
+						return
 					await Pacman.install_package(args[1])
 				"list":
 					var pkg_list = []
@@ -206,9 +238,19 @@ func run_command(command, args):
 					print_to_terminal("Available packages:\n" + "\n".join(pkg_list))
 				_:
 					print_to_terminal("pacman: invalid subcommand")
+		"yes":
+			while true:
+				if SIGINT:
+					break
+				if args.size() == 0:
+					print_to_terminal("y")
+				else:
+					print_to_terminal(args[0])
+				await get_tree().create_timer(0.001).timeout
 		_:
-			if Pacman.external_commands.has(command):
-				var ref: Callable = Pacman.external_commands[command]
+			var usrbin = resolve_path("/usr/bin")
+			if usrbin.has(command):
+				var ref: Callable = usrbin[command]
 				return ref.call(args)
 			return "shell: command not found: " + command
 
@@ -255,6 +297,7 @@ func cmd_cam(args):
 func print_to_terminal(text: String):
 	terminalOutput.text += "\n" + text
 	terminalOutput.scroll_vertical = len(terminalOutput.text)
+	viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS
 
 func get_current_dir() -> Dictionary:
 	var dir = fs["/"]
@@ -499,6 +542,8 @@ func get_file_description(file: Variant) -> String:
 			return "Array data"
 		TYPE_PACKED_BYTE_ARRAY:
 			return "Block special"
+		TYPE_CALLABLE:
+			return "Executable"
 		TYPE_OBJECT: 
 			if file is AudioStreamWAV:
 				return "WAVE AudioStream"
@@ -528,7 +573,9 @@ func floppy_mount() -> String:
 
 	for i in randi_range(3, 5):
 		floppyDrive.play_access_sound()
-		await get_tree().create_timer(randf_range(0.5, 1.0)).timeout
+		await wait_sec(randf_range(0.5, 1.0))
+		if SIGINT:
+			return "Interrupted"
 	
 	floppyDrive.play_access_sound()
 	if floppyDrive.DiskController.ReadOnly:
@@ -575,7 +622,9 @@ func floppy_umount(args: Array) -> String:
 	else:
 		for i in randi_range(3, 5):
 			floppyDrive.play_access_sound()
-			await get_tree().create_timer(randf_range(0.5, 1.0)).timeout
+			await wait_sec(randf_range(0.5, 1.0))
+			if SIGINT:
+				return "Interrupted"
 		floppyDrive.DiskController.DiskContents = resolve_path("/mnt/floppy0")
 		floppyDrive.play_access_sound()
 

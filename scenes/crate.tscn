@@ -10,10 +10,9 @@ material = ExtResource("1_b66cd")
 
 [node name="Crate" type="RigidBody3D"]
 collision_layer = 3
-mass = 5.0
+mass = 50.0
 script = ExtResource("1_dwt0d")
-weight = 12.0
-display_name = "Crate"
+weight = 50.0
 metadata/grabbable = true
 metadata/material_type = "squeakywood"
 metadata/impact_sound_material = "wood"
