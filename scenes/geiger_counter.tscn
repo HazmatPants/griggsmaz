@@ -1,0 +1,55 @@
+[gd_scene load_steps=7 format=3 uid="uid://cltbthwndjqcc"]
+
+[ext_resource type="Script" uid="uid://dauqorda5lyar" path="res://scripts/prop.gd" id="1_jphqv"]
+[ext_resource type="Script" uid="uid://c6axwos77f37x" path="res://scripts/GeigerCounter.gd" id="2_m3ck6"]
+[ext_resource type="AudioStream" uid="uid://j0xos43vfnyn" path="res://assets/sound/sfx/ui/geiger.wav" id="3_m3ck6"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_kavqf"]
+size = Vector3(0.275, 0.185, 0.185)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_5xyyy"]
+albedo_color = Color(1, 0.733333, 0, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_2bc0s"]
+material = SubResource("StandardMaterial3D_5xyyy")
+size = Vector3(0.275, 0.185, 0.185)
+
+[node name="GeigerCounter" type="RigidBody3D"]
+collision_layer = 3
+script = ExtResource("1_jphqv")
+metadata/grabbable = true
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, 0)
+shape = SubResource("BoxShape3D_kavqf")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, 0)
+mesh = SubResource("BoxMesh_2bc0s")
+
+[node name="GeigerController" type="Node3D" parent="."]
+script = ExtResource("2_m3ck6")
+min_click_interval = 0.005
+
+[node name="SFXPlayer" type="SteamAudioPlayer" parent="GeigerController"]
+distance_attenuation = true
+air_absorption = true
+reflection = true
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 0, 0)
+stream = ExtResource("3_m3ck6")
+attenuation_model = 3
+max_polyphony = 20
+panning_strength = 0.0
+
+[node name="RadiationLabel" type="Label3D" parent="GeigerController"]
+transform = Transform3D(-2.84124e-09, 0, 0.065, 0, 0.065, 0, -0.065, 0, -2.84124e-09, 0.0928099, 0.0723926, 0.129547)
+text = "Radiation:"
+font_size = 64
+horizontal_alignment = 0
+
+[node name="SFXPlayer" type="SteamAudioPlayer" parent="."]
+distance_attenuation = true
+air_absorption = true
+reflection = true
+attenuation_model = 3
+panning_strength = 0.0

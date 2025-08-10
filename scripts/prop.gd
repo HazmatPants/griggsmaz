@@ -1,6 +1,6 @@
 extends RigidBody3D
 
-@onready var audio_player: AudioStreamPlayer3D = $SFXPlayer
+@onready var audio_player: SteamAudioPlayer = $SFXPlayer
 @onready var material_type: String = get_meta("impact_sound_material") if has_meta("impact_sound_material") else "default"
 @onready var collider: CollisionShape3D = $CollisionShape3D
 

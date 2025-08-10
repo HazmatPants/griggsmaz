@@ -20,6 +20,9 @@ size = Vector3(0.575, 0.355, 0.125)
 [node name="Player" type="CharacterBody3D"]
 script = ExtResource("1_3vyb7")
 
+[node name="Inventory" type="Node3D" parent="."]
+script = ExtResource("3_qhqgy")
+
 [node name="FrontRay" type="RayCast3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.637485, 0)
 target_position = Vector3(0, 0, -1.5)
@@ -84,6 +87,3 @@ attenuation_model = 3
 panning_strength = 0.0
 
 [node name="LocalSFXPlayer" type="AudioStreamPlayer" parent="."]
-
-[node name="Inventory" type="Node" parent="."]
-script = ExtResource("3_qhqgy")

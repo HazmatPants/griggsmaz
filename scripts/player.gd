@@ -97,6 +97,17 @@ var fall_velocity: float = 0.0
 var max_health: float = 100.0
 var health: float = max_health
 
+@export var shielding_thickness: float = 0.0
+@export var shielding_mu: float = 0.7
+
+var accumulated_dose: float = 0.0 # total dose units
+var dose_rate: float = 0.0 # current instantaneous dose per second
+
+# thresholds
+const THRESHOLD_NAUSEA = 200.0
+const THRESHOLD_SICK = 500.0
+const THRESHOLD_LETHAL = 2000.0
+
 const sfx_foot_step = {
 	"default": [
 		preload("res://assets/sound/sfx/footsteps/default/default_step1.wav"),
@@ -239,7 +250,34 @@ func _unhandled_input(event):
 			rotation.y = look_rotation.x
 			camera.rotation.x = look_rotation.y
 
+func _handle_radiation_effects():
+	if accumulated_dose > THRESHOLD_LETHAL:
+		_apply_instant_death()
+	elif accumulated_dose > THRESHOLD_SICK:
+		_apply_sickness()
+	elif accumulated_dose > THRESHOLD_NAUSEA:
+		_apply_nausea()
+
+func _apply_nausea():
+	pass
+
+func _apply_sickness():
+	pass
+
+func _apply_instant_death():
+	health = 0
+
 func _physics_process(delta):
+	# ask manager for raw flux at our position
+	var raw_flux = RadiationManager.flux_at(global_transform.origin, delta)
+	# apply shielding: exponential attenuation I = I0 * e^(-mu * thickness)
+	var attenuation = exp(-shielding_mu * shielding_thickness)
+	dose_rate = raw_flux * attenuation
+	# accumulate dose (dose_rate is per second); multiply by delta seconds
+	accumulated_dose += dose_rate * delta
+
+	_handle_radiation_effects()
+
 	var input_dir = Vector3.ZERO
 	var forward = -transform.basis.z.normalized()
 	var right = transform.basis.x.normalized()
@@ -402,7 +440,7 @@ func _physics_process(delta):
 		var target_position = camera.global_transform.origin + camera.global_transform.basis.z * -held_object_distance
 		grab_point.global_transform.origin = grab_point.global_transform.origin.lerp(target_position, 0.3)
 		move_held_object_physical(delta, grab_point.global_transform.origin, held_object)
-	elif object_in_hand:
+	if object_in_hand:
 		move_held_object_physical(delta, hand_position.global_transform.origin, object_in_hand, 2000, 45, false)
 		object_in_hand.global_transform.basis = lerp(object_in_hand.global_transform.basis, hand_position.global_transform.basis, 0.6)
 
@@ -562,6 +600,7 @@ func _process(delta: float) -> void:
 				node.call(object_in_hand.get_meta("RightClickMethod"))
 	if Input.is_action_just_pressed("hold_object"):
 		if held_object:
+			if not object_in_hand:
 				if held_object.weight < 10:
 					object_in_hand = held_object
 					print("Put object ", object_in_hand, " in hand")

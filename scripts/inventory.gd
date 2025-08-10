@@ -1,4 +1,4 @@
-extends Node
+extends Node3D
 
 @onready var frontRay = get_parent().get_node("Camera3D/InteractRay")
 
@@ -18,6 +18,7 @@ var next_item_id: int = 0
 func pickup_item(object: RigidBody3D, itemname: String, weight: float) -> bool:
 	object.freeze = true
 	object.visible = false
+	object.global_transform = global_transform
 	object.get_parent().remove_child(object)
 	add_child(object)
 	return try_add_item(itemname, weight, object)
@@ -29,6 +30,10 @@ func hold_item(id: int):
 	var base = get_node("/root/base")
 	var player = get_node("/root/base/Player")
 	var object: RigidBody3D = inventory[id]["object"]
+	if player.object_in_hand:
+		var playerGUI = get_node("/root/base/PlayerGUI")
+		playerGUI.show_popup("Already holding something!", playerGUI.sfx_popup)
+		return
 	
 	# Reparent back into the world
 	object.get_parent().remove_child(object)

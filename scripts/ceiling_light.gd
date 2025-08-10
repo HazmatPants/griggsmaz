@@ -9,6 +9,9 @@ extends Node3D
 
 var base_had_power
 
+func _ready() -> void:
+	light.distance_fade_enabled = true
+
 func _process(delta: float) -> void:
 	power = base.power
 	light.visible = power

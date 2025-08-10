@@ -1,7 +1,6 @@
 extends DirectionalLight3D
 
 func _process(delta: float) -> void:
-	shadow_enabled = GLOBAL.settings["video"]["shadows"]
 	var normalized_time := GLOBAL.get_normalized_time() # 0..1
 
 	# Map 0..1 -> -90..90 degrees (sun stays above horizon)

@@ -69,6 +69,11 @@ func PKG_debug(args):
 				"print_inv":
 					term.print_to_terminal(str(player.inventory.inventory))
 					print(player.inventory.inventory)
+				"get_rad":
+					term.print_to_terminal(str("Accumulated Dose: %s\nDose Rate: %s" % [player.accumulated_dose, player.dose_rate]))
+					print("Accumulated Dose: %s\nDose Rate: %s" % [player.accumulated_dose, player.dose_rate])
+				_:
+					term.print_to_terminal("debug: player: invalid subsubcommand")
 		_:
 			term.print_to_terminal("debug: invalid subcommand, valid subcommands: 'time'")
 

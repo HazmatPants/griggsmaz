@@ -11,6 +11,8 @@ var TIME: float = 360 # in-game minutes
 
 var CanPause: bool = true
 
+var alarm: bool = false
+
 @onready var PlayerGUI = get_node("/root/base/PlayerGUI")
 
 var settings: Dictionary = {

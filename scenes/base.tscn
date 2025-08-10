@@ -1,4 +1,4 @@
-[gd_scene load_steps=167 format=4 uid="uid://dl28unae5bin0"]
+[gd_scene load_steps=169 format=4 uid="uid://dl28unae5bin0"]
 
 [ext_resource type="Material" uid="uid://b8cwye2rrrmwi" path="res://assets/materials/concrete.tres" id="1_baglu"]
 [ext_resource type="Script" uid="uid://cst0itywnsoq3" path="res://scripts/base.gd" id="1_ei55q"]
@@ -41,7 +41,9 @@
 [ext_resource type="Script" uid="uid://b0jq5gojbnvcx" path="res://scripts/power_box.gd" id="37_b73mi"]
 [ext_resource type="Script" uid="uid://duadu5p0d2bbf" path="res://scripts/ambient_sound.gd" id="39_7wyq8"]
 [ext_resource type="PackedScene" uid="uid://ckmm7vcwpsswh" path="res://scenes/keycard.tscn" id="39_yjh04"]
-[ext_resource type="AudioStream" uid="uid://boeac1tpl6dxp" path="res://assets/sound/sfx/ui/alarm.wav" id="41_wklje"]
+[ext_resource type="PackedScene" uid="uid://cltbthwndjqcc" path="res://scenes/geiger_counter.tscn" id="43_npva4"]
+[ext_resource type="PackedScene" uid="uid://d4kd11ph4fpd" path="res://scenes/alarm_light.tscn" id="44_npva4"]
+[ext_resource type="Script" uid="uid://ctcqoaruuw2x7" path="res://scripts/RadiationSource.gd" id="44_v7bl5"]
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_wklje"]
 emission_shape_scale = Vector3(17.54, 0.12, 9.79)
@@ -1012,17 +1014,6 @@ strafe_roll_speed = 2.0
 
 [node name="PlayerGUI" parent="." instance=ExtResource("16_vciil")]
 
-[node name="SteamAudioPlayer" type="SteamAudioPlayer" parent="."]
-distance_attenuation = true
-air_absorption = true
-occlusion_radius = 0.0
-reflection = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.266, 2.3903, 0)
-stream = ExtResource("41_wklje")
-attenuation_model = 3
-autoplay = true
-panning_strength = 0.0
-
 [node name="SteamAudioConfig" type="SteamAudioConfig" parent="."]
 global_log_level = 3
 max_reflection_sources = 50.0
@@ -1804,6 +1795,8 @@ size = Vector3(18.3525, 6.67219, 15.4556)
 [node name="Sun" type="DirectionalLight3D" parent="."]
 transform = Transform3D(-4.37114e-08, -0.986286, -0.165048, 0, -0.165048, 0.986286, -1, 4.31119e-08, 7.21446e-09, 0.710337, 7.74718, 0)
 shadow_enabled = true
+directional_shadow_mode = 0
+directional_shadow_fade_start = 0.036
 script = ExtResource("34_ei55q")
 
 [node name="AmbientSound" type="AudioStreamPlayer" parent="."]
@@ -1865,8 +1858,25 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.326202)
 mesh = SubResource("BoxMesh_b73mi")
 skeleton = NodePath("../..")
 
+[node name="GeigerCounter" parent="." instance=ExtResource("43_npva4")]
+transform = Transform3D(0.474733, 0, 0.88013, 0, 1, 0, -0.88013, 0, 0.474733, 8.57201, 1.40809, -8.80804)
+weight = 5.0
+
+[node name="RadiationSource" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20.8844, 2.10306, 0)
+script = ExtResource("44_v7bl5")
+
 [node name="Keycard" parent="." instance=ExtResource("39_yjh04")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.73484, 0.490212, -1.01532)
+transform = Transform3D(0.448586, -0.89374, 0, 0.89374, 0.448586, 0, 0, 0, 1, 8.61143, 1.30403, -9.19147)
+
+[node name="alarm_light" parent="." instance=ExtResource("44_npva4")]
+transform = Transform3D(-5.02681e-09, 0.115, 1.00536e-08, 0.115, 5.02681e-09, 4.39458e-16, 0, 1.00536e-08, -0.115, 0.23794, 3.25447, -2.27288)
+
+[node name="alarm_light2" parent="." instance=ExtResource("44_npva4")]
+transform = Transform3D(-5.02681e-09, 0.115, 1.00536e-08, 0.115, 5.02681e-09, 4.39458e-16, 0, 1.00536e-08, -0.115, -9.34103, 3.66238, 3.37074)
+
+[node name="alarm_light3" parent="." instance=ExtResource("44_npva4")]
+transform = Transform3D(-6.59187e-16, 2.5134e-08, -0.115, 0.115, 5.02681e-09, 4.39457e-16, 5.02681e-09, -0.115, -2.5134e-08, 22.0222, 3.66238, 4.05379)
 
 [editable path="Level/Console/CameraTerminal"]
 [editable path="FloppyDisk"]
