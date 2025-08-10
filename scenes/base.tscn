@@ -1011,7 +1011,7 @@ strafe_roll_speed = 2.0
 [node name="PlayerGUI" parent="." instance=ExtResource("16_vciil")]
 
 [node name="SteamAudioConfig" type="SteamAudioConfig" parent="."]
-scene_type = 0
+global_log_level = 3
 max_reflection_sources = 50.0
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.8861, 0)
 
@@ -1775,6 +1775,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9, 1.18435, 1.8214)
 collision_layer = 3
 
 [node name="ReflectionProbes" type="Node3D" parent="."]
+visible = false
 
 [node name="ReflectionProbe" type="ReflectionProbe" parent="ReflectionProbes"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.85554, 2.60419, 0)
@@ -1788,10 +1789,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.0178, 2.51668, -2.64078)
 size = Vector3(18.3525, 6.67219, 15.4556)
 
 [node name="Sun" type="DirectionalLight3D" parent="."]
-transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0.710337, 7.74718, 0)
+transform = Transform3D(-4.37114e-08, -0.986286, -0.165048, 0, -0.165048, 0.986286, -1, 4.31119e-08, 7.21446e-09, 0.710337, 7.74718, 0)
 shadow_enabled = true
-directional_shadow_mode = 1
-directional_shadow_max_distance = 50.0
 script = ExtResource("34_ei55q")
 
 [node name="AmbientSound" type="AudioStreamPlayer" parent="."]

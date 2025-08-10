@@ -7,7 +7,7 @@ extends StaticBody3D
 @onready var CameraTerminal := $"../CameraTerminal"
 @onready var floppyDrive := $"../FloppyDiskDrive"
 
-@onready var player = get_tree().get_root().get_node("base/Player")
+@onready var player = get_node("/root/base/Player")
 @onready var playerGUI = get_tree().get_root().get_node("base/PlayerGUI/Control")
 
 var terminal_focus := false
@@ -66,7 +66,7 @@ func interact():
 		remove_child(viewportContainer)
 		playerGUI.add_child(viewportContainer)
 		
-		terminalInput.grab_focus()
+		terminalInput.edit()
 
 func close_terminal():
 	GLOBAL.CanPause = true
@@ -139,10 +139,13 @@ func parse_and_execute(input: String) -> void:
 			print_to_terminal(result)
 
 func parse_command(cmd: String):
-	terminalInput.grab_focus()
+	terminalInput.editable = false
 	print_to_terminal("$ " + cmd)
 	
-	parse_and_execute(cmd)
+	await parse_and_execute(cmd)
+	
+	terminalInput.editable = true
+	terminalInput.edit()
 
 func run_command(command, args):
 	# implemented commands
@@ -161,6 +164,11 @@ func run_command(command, args):
 			mkdir: create directory
 			cat: print on the standard output
 			file: determine file type
+			aplay: play audio files
+			pacman: package manager - install new commands
+				update: update package list
+				list: show package list
+				install: install a package
 			"
 		"clear":
 			terminalOutput.text = ""
@@ -182,54 +190,27 @@ func run_command(command, args):
 			return cmd_file(args)
 		"cam":
 			cmd_cam(args)
-		"time":
-			return cmd_time()
 		"aplay":
 			cmd_aplay(args)
-		"debug":
-			cmd_debug(args)
-		_:
-			return "gish: command not found: " + command
-
-func cmd_debug(args):
-	if args.size() == 0:
-		print_to_terminal("debug: missing subcommand, valid subcommands: 'time'")
-		return
-
-	var subcommand = args[0]
-
-	match subcommand:
-		"time":
-			var subsubcommand = args[1]
-			match subsubcommand:
-				"set":
-					if args.size() == 1:
-						print_to_terminal("debug: time: set: missing target time")
-						return
-					
-					GLOBAL.TIME = args[2]
-				"add":
-					if args.size() == 1:
-						print_to_terminal("debug: time: add: missing target time")
-						return
-					
-					GLOBAL.TIME += args[2]
-				"get":
-					var time = GLOBAL.TIME
-					var normalized_time = GLOBAL.get_normalized_time()
-					var light_energy = str(sin(PI * normalized_time))
-					var sun_rot = get_node("/root/base/Sun").rotation_degrees.x
-					print_to_terminal("Time: %s\nNormalized time: %s\nLight energy: %s\nSun rotation: %s" % [time, normalized_time, light_energy, sun_rot])
+		"pacman":
+			var subcommand = args[0]
+			match subcommand:
+				"update":
+					await Pacman.update_package_list()
+				"install":
+					await Pacman.install_package(args[1])
+				"list":
+					var pkg_list = []
+					for pkg in Pacman.local_package_list.keys():
+						pkg_list.append(pkg)
+					print_to_terminal("Available packages:\n" + "\n".join(pkg_list))
 				_:
-					print_to_terminal("debug: time: invalid subsubcommand, valid subsubcommands: 'set', 'add', 'get'")
-		"player":
-			var subsubcommand = args[1]
-			match subsubcommand:
-				"print_inv":
-					print_to_terminal(str(player.inventory.inventory))
-					print(player.inventory.inventory)
+					print_to_terminal("pacman: invalid subcommand")
 		_:
-			print_to_terminal("debug: invalid subcommand, valid subcommands: 'time'")
+			if Pacman.external_commands.has(command):
+				var ref: Callable = Pacman.external_commands[command]
+				return ref.call(args)
+			return "shell: command not found: " + command
 
 func cmd_aplay(args):
 	if args.size() == 0:
@@ -631,6 +612,3 @@ func _disk_ejected():
 		if mnt and "floppy0" in mnt:
 			mnt.erase("floppy0")
 	delete_file("/dev/disk0")
-
-func cmd_time():
-	return "%s (%s)" % [str(GLOBAL.TIME), GLOBAL.get_time_string()]
