@@ -1,0 +1,23 @@
+[gd_scene load_steps=4 format=3 uid="uid://c8o5gm8nk77mm"]
+
+[ext_resource type="PackedScene" uid="uid://m4ee1sw52ehn" path="res://assets/models/cassette_tape.glb" id="1_j8bhq"]
+[ext_resource type="Script" uid="uid://dauqorda5lyar" path="res://scripts/prop.gd" id="1_m7u6d"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_m7u6d"]
+size = Vector3(0.192, 0.135, 0.022)
+
+[node name="CassetteTape" type="RigidBody3D"]
+collision_layer = 3
+script = ExtResource("1_m7u6d")
+weight = 0.1
+metadata/grabbable = true
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, 0)
+shape = SubResource("BoxShape3D_m7u6d")
+
+[node name="Sketchfab_Scene" parent="." instance=ExtResource("1_j8bhq")]
+transform = Transform3D(-5.15794e-08, 0, 1.18, 0, 1.18, 0, -1.18, 0, -5.15794e-08, 0, 0, 0)
+
+[node name="SFXPlayer" type="SteamAudioPlayer" parent="."]
+panning_strength = 0.0

@@ -460,6 +460,7 @@ func die():
 	await get_tree().create_timer(0.2).timeout
 
 	get_tree().quit()
+
 func move_held_object_physical(_delta, target_pos, object, spring_strength=200.0, damping=20.0, can_rotate=true):
 	var current_pos = object.global_transform.origin
 	var direction = target_pos - current_pos
@@ -526,6 +527,7 @@ func drop_object():
 	if held_object:
 		print("Dropped: ", held_object)
 		held_object.gravity_scale = 1.0
+		mouse_look_enabled = true
 		held_object = null
 
 func drop_object_in_hand(place: bool):

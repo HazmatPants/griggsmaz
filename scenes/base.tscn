@@ -1,4 +1,4 @@
-[gd_scene load_steps=167 format=4 uid="uid://dl28unae5bin0"]
+[gd_scene load_steps=168 format=4 uid="uid://dl28unae5bin0"]
 
 [ext_resource type="Material" uid="uid://b8cwye2rrrmwi" path="res://assets/materials/concrete.tres" id="1_baglu"]
 [ext_resource type="Script" uid="uid://cst0itywnsoq3" path="res://scripts/base.gd" id="1_ei55q"]
@@ -41,6 +41,7 @@
 [ext_resource type="Script" uid="uid://b0jq5gojbnvcx" path="res://scripts/power_box.gd" id="37_b73mi"]
 [ext_resource type="Script" uid="uid://duadu5p0d2bbf" path="res://scripts/ambient_sound.gd" id="39_7wyq8"]
 [ext_resource type="PackedScene" uid="uid://ckmm7vcwpsswh" path="res://scenes/keycard.tscn" id="39_yjh04"]
+[ext_resource type="PackedScene" uid="uid://c8o5gm8nk77mm" path="res://scenes/cassette_tape.tscn" id="43_wt3to"]
 [ext_resource type="PackedScene" uid="uid://d4kd11ph4fpd" path="res://scenes/alarm_light.tscn" id="44_npva4"]
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_wklje"]
@@ -1867,6 +1868,9 @@ transform = Transform3D(-5.02681e-09, 0.115, 1.00536e-08, 0.115, 5.02681e-09, 4.
 
 [node name="alarm_light3" parent="." instance=ExtResource("44_npva4")]
 transform = Transform3D(-6.59187e-16, 2.5134e-08, -0.115, 0.115, 5.02681e-09, 4.39457e-16, 5.02681e-09, -0.115, -2.5134e-08, 22.0222, 3.66238, 4.05379)
+
+[node name="CassetteTape" parent="." instance=ExtResource("43_wt3to")]
+transform = Transform3D(0.558773, -0.781399, -0.277829, -4.11855e-08, 0.335008, -0.942215, 0.82932, 0.526485, 0.187193, -8.71501, 1.13749, 2.76546)
 
 [editable path="Level/Console/CameraTerminal"]
 [editable path="FloppyDisk"]

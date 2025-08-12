@@ -12,7 +12,7 @@ config_version=5
 
 config/name="Griggsmaz"
 config/version="1.0"
-run/main_scene="uid://dl28unae5bin0"
+run/main_scene="uid://c4gcdye00gqt"
 config/features=PackedStringArray("4.4", "Forward Plus")
 boot_splash/show_image=false
 config/icon="res://icon.svg"
