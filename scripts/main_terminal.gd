@@ -8,6 +8,7 @@ extends StaticBody3D
 @onready var CameraTerminal := $"../CameraTerminal"
 @onready var floppyDrive := $"../FloppyDiskDrive"
 
+@onready var base = get_node("/root/base")
 @onready var player = get_node("/root/base/Player")
 @onready var playerGUI = get_tree().get_root().get_node("base/PlayerGUI/Control")
 
@@ -52,6 +53,9 @@ var key_sounds := GLOBAL.load_sounds_from_dir("res://assets/sound/sfx/ui/keypres
 var back_key_sounds := GLOBAL.load_sounds_from_dir("res://assets/sound/sfx/ui/keypress/back")
 var enter_key_sounds := GLOBAL.load_sounds_from_dir("res://assets/sound/sfx/ui/keypress/enter")
 
+var blackscreen: StandardMaterial3D
+var defaultscreen: StandardMaterial3D
+
 func _ready() -> void:
 	viewportContainer.visible = false
 	terminalOutput.text = "Welcome to GIOS v0.1!\nType \"help\" for a list of commands"
@@ -59,6 +63,23 @@ func _ready() -> void:
 	
 	floppyDrive.DiskInserted.connect(_disk_inserted)
 	floppyDrive.DiskEjected.connect(_disk_ejected)
+
+	defaultscreen = $Screen.mesh.material
+
+	blackscreen = StandardMaterial3D.new()
+	blackscreen.albedo_color = Color(0, 0, 0, 1)
+	blackscreen.roughness = defaultscreen.roughness
+	
+	base.PowerOff.connect(_PowerOff)
+	base.PowerOn.connect(_PowerOn)
+
+func _PowerOff():
+	$Screen.mesh.material = blackscreen
+	if terminal_focus:
+		close_terminal()
+
+func _PowerOn():
+	$Screen.mesh.material = defaultscreen
 
 func _process(_delta):
 	if Input.is_action_just_pressed("escape"):
@@ -73,16 +94,17 @@ func wait_sec(seconds: float) -> void:
 	TIMER = null
 
 func interact():
-	if not terminal_focus:
-		GLOBAL.CanPause = false
-		player.input_enabled = false
-		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
-		terminal_focus = true
-		viewportContainer.visible = true
-		remove_child(viewportContainer)
-		playerGUI.add_child(viewportContainer)
-		
-		terminalInput.edit()
+	if base.power:
+		if not terminal_focus:
+			GLOBAL.CanPause = false
+			player.input_enabled = false
+			Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+			terminal_focus = true
+			viewportContainer.visible = true
+			remove_child(viewportContainer)
+			playerGUI.add_child(viewportContainer)
+			
+			terminalInput.edit()
 
 func close_terminal():
 	GLOBAL.CanPause = true
@@ -236,6 +258,15 @@ func run_command(command, args):
 					for pkg in Pacman.local_package_list.keys():
 						pkg_list.append(pkg)
 					print_to_terminal("Available packages:\n" + "\n".join(pkg_list))
+				"info":
+					if args.size() == 1:
+						print_to_terminal("pacman: install: missing target package")
+						return
+					
+					var pkg_info = Pacman.get_pkg_info_string(args[1])
+					if pkg_info == "":
+						print_to_terminal("pacman: info: package '%s' does not exist" % args[1])
+					print_to_terminal(pkg_info)
 				_:
 					print_to_terminal("pacman: invalid subcommand")
 		"yes":

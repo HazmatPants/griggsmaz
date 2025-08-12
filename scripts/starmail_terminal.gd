@@ -4,9 +4,28 @@ extends StaticBody3D
 @onready var msg_count_label := $Screen/Viewport/Control/TitleContainer/MessageCount
 @onready var audio_player := $SFXPlayer
 
+@onready var base = get_node("/root/base")
+
+var blackscreen: StandardMaterial3D
+var defaultscreen: StandardMaterial3D
+
 func _ready() -> void:
 	print()
 	start_sending_random_mails()
+	defaultscreen = $Screen.mesh.material
+
+	blackscreen = StandardMaterial3D.new()
+	blackscreen.albedo_color = Color(0, 0, 0, 1)
+	blackscreen.roughness = defaultscreen.roughness
+	
+	base.PowerOff.connect(_PowerOff)
+	base.PowerOn.connect(_PowerOn)
+
+func _PowerOff():
+	$Screen.mesh.material = blackscreen
+
+func _PowerOn():
+	$Screen.mesh.material = defaultscreen
 
 var senders: Array[String] = [
 	"Gordon Freeman",

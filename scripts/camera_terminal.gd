@@ -8,11 +8,29 @@ extends StaticBody3D
 var active_camera_name: String = "cam1"
 @onready var active_camera: Camera3D = cameras[active_camera_name]
 @onready var viewport := $SubViewport
-@onready var playerGUI = get_tree().get_root().get_node("base/PlayerGUI/")
+@onready var playerGUI = get_node("/root/base/PlayerGUI/")
+@onready var base = get_node("/root/base")
+
+var blackscreen: StandardMaterial3D
+var defaultscreen: StandardMaterial3D
 
 func _ready() -> void:
 	$Screen.get_active_material(0).albedo_texture.viewport_path = NodePath("Level/Console/CameraTerminal/SubViewport")
 	refresh_screen(5)
+	defaultscreen = $Screen.mesh.material
+
+	blackscreen = StandardMaterial3D.new()
+	blackscreen.albedo_color = Color(0, 0, 0, 1)
+	blackscreen.roughness = defaultscreen.roughness
+	
+	base.PowerOff.connect(_PowerOff)
+	base.PowerOn.connect(_PowerOn)
+
+func _PowerOff():
+	$Screen.mesh.material = blackscreen
+
+func _PowerOn():
+	$Screen.mesh.material = defaultscreen
 
 func switch_camera(to: Camera3D):
 	active_camera_name = to.name

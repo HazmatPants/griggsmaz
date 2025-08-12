@@ -140,6 +140,8 @@ horizontal_alignment = 1
 [node name="Weight" type="Label" parent="Control/Inventory/HBox/Control/MarginContainer/VBoxContainer"]
 layout_mode = 2
 
+[node name="PopupMenu" type="PopupMenu" parent="Control/Inventory"]
+
 [node name="Weight" type="Label" parent="Control/Inventory"]
 top_level = true
 layout_mode = 2
@@ -149,7 +151,13 @@ offset_right = 421.0
 offset_bottom = 573.0
 text = "0/100"
 
-[node name="PopupMenu" type="PopupMenu" parent="Control/Inventory"]
+[node name="CashLabel" type="Label" parent="Control/Inventory"]
+layout_mode = 0
+offset_left = 24.0
+offset_top = 252.0
+offset_right = 220.0
+offset_bottom = 304.0
+text = "Cash: 0.0"
 
 [node name="BlurRect" type="ColorRect" parent="."]
 material = SubResource("ShaderMaterial_ua6yw")

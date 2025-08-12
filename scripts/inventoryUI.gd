@@ -21,6 +21,8 @@ func _ready() -> void:
 	context_menu.id_pressed.connect(_on_context_menu_pressed)
 
 func refresh_inventory():
+	$CashLabel.text = "Cash: %s" % BankManager.cash
+	
 	$Weight.text = "%s/%s" % [
 		inventory.get_total_weight(),
 		inventory.max_weight

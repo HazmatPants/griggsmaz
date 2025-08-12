@@ -22,6 +22,7 @@ config/icon="res://icon.svg"
 GLOBAL="*res://scripts/GLOBAL.gd"
 Pacman="*res://scripts/pacman.gd"
 RadiationManager="*res://scripts/RadiationManager.gd"
+BankManager="*res://scripts/bank_manager.gd"
 
 [editor_plugins]
 

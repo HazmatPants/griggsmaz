@@ -346,13 +346,13 @@ func _physics_process(delta):
 				velocity.y = jump_velocity
 				viewpunch_velocity += jump_viewpunch
 				footstep_sound("impact")
-		
-			if Input.is_action_pressed("crouch"):
-				crouching = true
-				$CollisionShape3D.shape.height = lerp($CollisionShape3D.shape.height, crouch_scale, 0.1)
-			else:
-				crouching = false
-				$CollisionShape3D.shape.height = lerp($CollisionShape3D.shape.height, default_scale, 0.1)
+	if input_enabled:
+		if Input.is_action_pressed("crouch"):
+			crouching = true
+			$CollisionShape3D.shape.height = lerp($CollisionShape3D.shape.height, crouch_scale, 0.1)
+		else:
+			crouching = false
+			$CollisionShape3D.shape.height = lerp($CollisionShape3D.shape.height, default_scale, 0.1)
 
 	move_and_slide()
 
