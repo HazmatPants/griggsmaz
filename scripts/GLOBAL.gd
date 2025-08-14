@@ -13,7 +13,8 @@ var CanPause: bool = true
 
 var alarm: bool = false
 
-@onready var PlayerGUI = get_node("/root/base/PlayerGUI")
+var Player
+var PlayerGUI
 
 var settings: Dictionary = {
 	"video": {

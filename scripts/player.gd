@@ -238,6 +238,7 @@ func footstep_sound(type: String="step", volume: float=0.0):
 		play_random_sfx(sound_list, volume)
 
 func _ready():
+	GLOBAL.Player = self
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	base_camera_position = camera.position
 
@@ -530,7 +531,7 @@ func drop_object():
 		mouse_look_enabled = true
 		held_object = null
 
-func drop_object_in_hand(place: bool):
+func drop_object_in_hand(place: bool=false):
 	if object_in_hand:
 		object_in_hand.gravity_scale = 1.0
 		object_in_hand.collider.disabled = false
@@ -569,7 +570,12 @@ func _process(delta: float) -> void:
 				else:
 					interactText.text = "Grab [E]"
 		else:
-			interactText.text = "Interact [E]"
+			if collider.has_method("interact_text"):
+				interactText.text = collider.interact_text + " [E]"
+			elif collider.has_meta("interact_text"):
+				interactText.text = collider.get_meta("interact_text") + " [E]"
+			else:
+				interactText.text = "Interact [E]"
 		if Input.is_action_just_pressed("interact"):
 			if collider.name == "LockButton":
 				print("Interacted with: ", collider.get_parent().name)

@@ -103,6 +103,7 @@ mesh = SubResource("CapsuleMesh_oigqx")
 collision_layer = 2
 metadata/Method = "ToggleDoor"
 metadata/InteractWithParent = true
+metadata/interact_text = "Toggle Door"
 
 [node name="Button" type="MeshInstance3D" parent="ToggleButton"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.31, 0, 0)
@@ -118,6 +119,7 @@ shape = SubResource("BoxShape3D_qe4k5")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.31, 0.405493, 0)
 collision_layer = 2
 metadata/Method = "ToggleLock"
+metadata/interact_text = "Toggle Lock"
 
 [node name="Button" type="MeshInstance3D" parent="LockButton"]
 mesh = SubResource("BoxMesh_xx0j5")

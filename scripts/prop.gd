@@ -5,8 +5,8 @@ extends RigidBody3D
 @onready var collider: CollisionShape3D = $CollisionShape3D
 
 @export var weight: float = 1.0
-@export var cooldown_time: float = 0.1
-
+@export var interact_text = "Interact"
+var cooldown_time: float = 0.1
 var last_contact_times := {}
 const SOFT_IMPACT_THRESHOLD := 1.5
 const HARD_IMPACT_THRESHOLD := 6.0

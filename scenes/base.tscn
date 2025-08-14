@@ -1,4 +1,4 @@
-[gd_scene load_steps=168 format=4 uid="uid://dl28unae5bin0"]
+[gd_scene load_steps=169 format=4 uid="uid://dl28unae5bin0"]
 
 [ext_resource type="Material" uid="uid://b8cwye2rrrmwi" path="res://assets/materials/concrete.tres" id="1_baglu"]
 [ext_resource type="Script" uid="uid://cst0itywnsoq3" path="res://scripts/base.gd" id="1_ei55q"]
@@ -23,7 +23,6 @@
 [ext_resource type="SteamAudioMaterial" uid="uid://cp5pfey82wrv5" path="res://addons/godot-steam-audio/materials/default_material.tres" id="20_wklje"]
 [ext_resource type="PackedScene" uid="uid://ctg2bknrr3dxr" path="res://scenes/main_terminal.tscn" id="21_82vju"]
 [ext_resource type="AudioStream" uid="uid://b0f47mlfwyvow" path="res://assets/sound/sfx/ambient/pcWorking_loop.ogg" id="22_aomoi"]
-[ext_resource type="Texture2D" uid="uid://5q502ufvw47a" path="res://assets/textures/decals/signs/hearing_protection_sign.jpg" id="22_pmwj3"]
 [ext_resource type="AudioStream" uid="uid://bwujlvj4x3kgr" path="res://assets/sound/sfx/ambient/vent.ogg" id="26_03t26"]
 [ext_resource type="Script" uid="uid://kimemt2xqbeq" path="res://scripts/processor.gd" id="27_vs80n"]
 [ext_resource type="PackedScene" uid="uid://dqc0untajmnri" path="res://scenes/floppy_disk.tscn" id="29_c8kgi"]
@@ -41,8 +40,10 @@
 [ext_resource type="Script" uid="uid://b0jq5gojbnvcx" path="res://scripts/power_box.gd" id="37_b73mi"]
 [ext_resource type="Script" uid="uid://duadu5p0d2bbf" path="res://scripts/ambient_sound.gd" id="39_7wyq8"]
 [ext_resource type="PackedScene" uid="uid://ckmm7vcwpsswh" path="res://scenes/keycard.tscn" id="39_yjh04"]
+[ext_resource type="PackedScene" uid="uid://c5pdks53twxbr" path="res://scenes/money.tscn" id="43_npva4"]
 [ext_resource type="PackedScene" uid="uid://c8o5gm8nk77mm" path="res://scenes/cassette_tape.tscn" id="43_wt3to"]
 [ext_resource type="PackedScene" uid="uid://d4kd11ph4fpd" path="res://scenes/alarm_light.tscn" id="44_npva4"]
+[ext_resource type="PackedScene" uid="uid://3q60mmwtrftw" path="res://scenes/paycheck_dispenser.tscn" id="44_v7bl5"]
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_wklje"]
 emission_shape_scale = Vector3(17.54, 0.12, 9.79)
@@ -387,7 +388,7 @@ blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_hrew6")
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_dmaw2"]
-size = Vector3(9.13181, 2.73199, 0.247803)
+size = Vector3(14.7526, 2.73199, 0.247803)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_oeje5"]
 
@@ -852,10 +853,10 @@ blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_t87tc")
 
 [sub_resource type="BoxMesh" id="BoxMesh_ycryd"]
-size = Vector3(10.758, 0.23, 8.119)
+size = Vector3(10.758, 0.23, 10.439)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_isyof"]
-size = Vector3(10.5853, 0.24, 8.11875)
+size = Vector3(10.5853, 0.24, 10.2783)
 
 [sub_resource type="BoxMesh" id="BoxMesh_v7bl5"]
 size = Vector3(10.428, 0.23, 8.119)
@@ -882,10 +883,10 @@ size = Vector3(2.165, 2.585, 0.285)
 size = Vector3(1.72171, 2.585, 0.16)
 
 [sub_resource type="BoxMesh" id="BoxMesh_33mrd"]
-size = Vector3(5.265, 2.695, 0.215)
+size = Vector3(7.105, 2.695, 0.215)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_aomoi"]
-size = Vector3(4.60721, 2.695, 0.285)
+size = Vector3(6.84419, 2.695, 0.285)
 
 [sub_resource type="BoxMesh" id="BoxMesh_wt3to"]
 size = Vector3(1.83, 2.695, 0.215)
@@ -901,10 +902,10 @@ size = Vector3(1.84492, 1.25229, 0.285)
 
 [sub_resource type="BoxMesh" id="BoxMesh_82vju"]
 material = ExtResource("19_yjh04")
-size = Vector3(0.715, 0.565, 3.98)
+size = Vector3(0.715, 0.565, 7.575)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_s6kkj"]
-size = Vector3(0.715, 0.565, 3.98)
+size = Vector3(0.715, 0.565, 6.97437)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_82vju"]
 resource_local_to_scene = true
@@ -1154,9 +1155,10 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.68688, 1.34473, -3.52166)
 shape = SubResource("BoxShape3D_6irmp")
 
 [node name="Cube_008" type="StaticBody3D" parent="Level"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.39969, 0, 0)
 
 [node name="Cube_008" type="MeshInstance3D" parent="Level/Cube_008"]
-transform = Transform3D(2.15594e-08, 0, 4.57314, 0, 1.33765, 0, -0.120569, 0, 8.17742e-07, -0.880249, 1.33472, -7.64427)
+transform = Transform3D(2.35596e-08, 0, 9.758, 0, 1.338, 0, -0.121, 0, 1.89995e-06, -0.880249, 1.33472, -7.64427)
 material_override = ExtResource("1_baglu")
 mesh = SubResource("ArrayMesh_jgnp5")
 skeleton = NodePath("")
@@ -1165,7 +1167,7 @@ skeleton = NodePath("")
 material = ExtResource("3_s5nuq")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Level/Cube_008"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.963455, 1.2767, -7.6415)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.84691, 1.2767, -7.6415)
 shape = SubResource("BoxShape3D_dmaw2")
 
 [node name="Cube_010" type="StaticBody3D" parent="Level"]
@@ -1353,7 +1355,7 @@ mesh = SubResource("ArrayMesh_1c5u6")
 skeleton = NodePath("")
 
 [node name="Cube2" type="StaticBody3D" parent="Level"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.23641, 0, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.23641, 0, -1.17051)
 metadata/material_type = "concrete"
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Level/Cube2"]
@@ -1365,7 +1367,7 @@ mesh = SubResource("BoxMesh_ycryd")
 material = ExtResource("3_s5nuq")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Level/Cube2"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.70348, 0, -1.53437)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.70348, 0, -1.53875)
 shape = SubResource("BoxShape3D_isyof")
 
 [node name="Cube11" type="StaticBody3D" parent="Level"]
@@ -1385,7 +1387,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.62503, 0, -1.53437)
 shape = SubResource("BoxShape3D_q5qra")
 
 [node name="Cube3" type="StaticBody3D" parent="Level"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.2883, 2.62956, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.2883, 2.62956, -1.05627)
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Level/Cube3"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.62503, 0, -1.53437)
@@ -1444,23 +1446,8 @@ material = ExtResource("3_s5nuq")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.852118, 0.267096, 0.173627)
 shape = SubResource("BoxShape3D_qty1u")
 
-[node name="Cube5" type="StaticBody3D" parent="Level"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.26237, 1.06639, -5.59907)
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Level/Cube5"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.614138, 0.267096, 0.173627)
-material_override = ExtResource("1_baglu")
-mesh = SubResource("BoxMesh_uo6h6")
-
-[node name="SteamAudioGeometry" type="SteamAudioGeometry" parent="Level/Cube5/MeshInstance3D"]
-material = ExtResource("3_s5nuq")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Level/Cube5"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.614138, 0.267096, 0.173627)
-shape = SubResource("BoxShape3D_b085t")
-
 [node name="Cube6" type="StaticBody3D" parent="Level"]
-transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 14.2268, 1.06639, -2.02942)
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 14.2268, 1.06639, -2.93754)
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Level/Cube6"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.47043, 0.228176, 0)
@@ -1471,7 +1458,7 @@ mesh = SubResource("BoxMesh_33mrd")
 material = ExtResource("3_s5nuq")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Level/Cube6"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.12842, 0.228176, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.34695, 0.228176, 0)
 shape = SubResource("BoxShape3D_aomoi")
 
 [node name="Cube9" type="StaticBody3D" parent="Level"]
@@ -1504,11 +1491,6 @@ material = ExtResource("3_s5nuq")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.69082, -0.493181, 0)
 shape = SubResource("BoxShape3D_wklje")
 
-[node name="Decal3" type="Decal" parent="Level"]
-transform = Transform3D(0.121, 0, 0, 0, -2.59646e-08, -0.8, 0, 0.594, -3.49691e-08, 6.63094, 1.01804, -5.26372)
-size = Vector3(3.88245, 0.991699, 0.771362)
-texture_albedo = ExtResource("22_pmwj3")
-
 [node name="pillar" parent="Level" instance=ExtResource("7_hh5oj")]
 transform = Transform3D(0.555556, 0, 0, 0, 0.555556, 0, 0, 0, 0.555556, -82.3207, 5.88555, -12.2341)
 
@@ -1534,7 +1516,7 @@ door_type = 1
 transform = Transform3D(4.37114e-08, -1, 1.50996e-07, -1, -4.37114e-08, 4.37114e-08, -4.37114e-08, -1.50996e-07, -1, 3.87186, 1.89916, -3.61274)
 
 [node name="Mesh" type="MeshInstance3D" parent="Level/VentDuct"]
-transform = Transform3D(1, -5.05188e-16, 0, -1.82688e-14, 1, -7.10543e-14, -2.13163e-14, 7.10543e-14, 1, 0, 0, 0)
+transform = Transform3D(1, -5.05178e-16, 0, -2.53742e-14, 1, -7.10543e-14, -2.13163e-14, 7.10543e-14, 1, 2.38419e-07, 2.38419e-07, 1.82024)
 mesh = SubResource("BoxMesh_82vju")
 skeleton = NodePath("../../root/@EditorNode@21272/@Panel@14/@VBoxContainer@15/DockHSplitLeftL/DockHSplitLeftR/DockHSplitMain/@VBoxContainer@26/DockVSplitCenter/@VSplitContainer@54/@VBoxContainer@55/@EditorMainScreen@102/MainScreen/@CanvasItemEditor@11482/@VSplitContainer@11134/@HSplitContainer@11136/@HSplitContainer@11138/@Control@11139/@SubViewportContainer@11140/@SubViewport@11141/base/Level/Forcefield")
 
@@ -1542,6 +1524,7 @@ skeleton = NodePath("../../root/@EditorNode@21272/@Panel@14/@VBoxContainer@15/Do
 material = ExtResource("35_b73mi")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Level/VentDuct"]
+transform = Transform3D(1, -5.05185e-16, 0, -5.05181e-16, 1, 8.52651e-14, 0, -8.52651e-14, 1, 1.19209e-07, -0.0018909, 1.52019)
 shape = SubResource("BoxShape3D_s6kkj")
 
 [node name="AirVent" parent="Level" instance=ExtResource("14_ot4hf")]
@@ -1559,7 +1542,7 @@ autoplay = true
 panning_strength = 0.0
 
 [node name="AirVent2" parent="Level" instance=ExtResource("14_ot4hf")]
-transform = Transform3D(-4.37114e-09, -9.86865e-16, -0.1, -0.1, -4.37114e-09, 4.37114e-09, -4.37114e-09, 0.1, -1.4803e-15, 13.3696, 1.86509, -5.26125)
+transform = Transform3D(4.37114e-09, -0.1, 4.37114e-09, -0.1, -4.37114e-09, 4.37114e-09, -4.37114e-09, -4.37114e-09, -0.1, 14.1111, 1.86509, -5.26125)
 
 [node name="Vent" type="SteamAudioPlayer" parent="Level/AirVent2"]
 distance_attenuation = true
@@ -1740,22 +1723,22 @@ transform = Transform3D(0.555556, 0, 0, 0, 0.555556, 0, 0, 0, 0.555556, 6.02067,
 transform = Transform3D(0.555556, 0, 0, 0, 0.555556, 0, 0, 0, 0.555556, 11.6579, 2.37435, -0.430923)
 
 [node name="CeilingLight5" parent="Level" instance=ExtResource("15_ot4hf")]
-transform = Transform3D(0.555556, 0, 0, 0, 0.555556, 0, 0, 0, 0.555556, 7.35939, 2.37435, -4.07219)
+transform = Transform3D(0.555556, 0, 0, 0, 0.555556, 0, 0, 0, 0.555556, 7.35939, 2.37435, -5.26106)
 
 [node name="CeilingLight7" parent="Level" instance=ExtResource("15_ot4hf")]
-transform = Transform3D(0.555556, 0, 0, 0, 0.555556, 0, 0, 0, 0.555556, 11.8368, 2.37937, -4.0678)
+transform = Transform3D(0.555556, 0, 0, 0, 0.555556, 0, 0, 0, 0.555556, 11.8368, 2.37937, -5.25667)
 
 [node name="DoubleSlidingDoor2" parent="Level" instance=ExtResource("31_qty1u")]
 transform = Transform3D(0, 0, -0.444, 0, 0.444, 0, 0.444, 0, 0, 14.2149, 0.76367, -0.0631123)
 
 [node name="Crate" parent="." instance=ExtResource("34_rtpsq")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.18263, 0.716, -8.96724)
+transform = Transform3D(0.921342, 0, -0.388754, 0, 1, 0, 0.388754, 0, 0.921342, 7.49552, 0.716, -8.77788)
 
 [node name="Crate2" parent="." instance=ExtResource("34_rtpsq")]
-transform = Transform3D(0.995101, 0, -0.0988682, 0, 1, 0, 0.0988682, 0, 0.995101, 8.28367, 0.716, -8.96724)
+transform = Transform3D(0.995101, 0, -0.0988682, 0, 1, 0, 0.0988682, 0, 0.995101, 7.93748, 0.716, -9.85217)
 
 [node name="Crate3" parent="." instance=ExtResource("34_rtpsq")]
-transform = Transform3D(0.995101, 0, -0.0988682, 0, 1, 0, 0.0988682, 0, 0.995101, 7.46963, 1.73626, -8.96724)
+transform = Transform3D(0.995101, 0, -0.0988682, 0, 1, 0, 0.0988682, 0, 0.995101, 7.70977, 1.73626, -9.21853)
 
 [node name="FloppyDisk" parent="." instance=ExtResource("29_c8kgi")]
 transform = Transform3D(0.515668, -0.744109, -0.424721, 0.821925, 0.569595, 0, 0.241919, -0.349089, 0.905324, -8.89148, 1.14642, 2.53443)
@@ -1794,7 +1777,7 @@ size = Vector3(18.3525, 6.67219, 15.4556)
 [node name="Sun" type="DirectionalLight3D" parent="."]
 transform = Transform3D(-4.37114e-08, -0.986286, -0.165048, 0, -0.165048, 0.986286, -1, 4.31119e-08, 7.21446e-09, 0.710337, 7.74718, 0)
 shadow_enabled = true
-directional_shadow_mode = 0
+directional_shadow_mode = 1
 directional_shadow_fade_start = 0.036
 script = ExtResource("34_ei55q")
 
@@ -1816,16 +1799,16 @@ transform = Transform3D(-1.02722e-08, -0.235, 0, 0.235, -1.02722e-08, 0, 0, 0, 0
 transform = Transform3D(-1.02722e-08, 3.88235e-23, -0.235, 0.235, -1.02722e-08, -1.02722e-08, -1.02722e-08, -0.235, 4.49011e-16, 21.4627, 2.96735, -5.00863)
 
 [node name="EmergencyLight3" parent="." instance=ExtResource("36_65va3")]
-transform = Transform3D(-1.02722e-08, 3.88235e-23, -0.235, 0.235, -1.02722e-08, -1.02722e-08, -1.02722e-08, -0.235, 4.49011e-16, 18.4454, 1.93373, -9.39428)
+transform = Transform3D(-1.02722e-08, 3.88235e-23, -0.235, 0.235, -1.02722e-08, -1.02722e-08, -1.02722e-08, -0.235, 4.49011e-16, 18.4454, 1.93373, -13.4443)
 
 [node name="EmergencyLight5" parent="." instance=ExtResource("36_65va3")]
-transform = Transform3D(-1.02722e-08, 3.88235e-23, -0.235, 0.235, -1.02722e-08, -1.02722e-08, -1.02722e-08, -0.235, 4.49011e-16, 13.3365, 2.80214, -9.39428)
+transform = Transform3D(-1.02722e-08, 3.88235e-23, -0.235, 0.235, -1.02722e-08, -1.02722e-08, -1.02722e-08, -0.235, 4.49011e-16, 13.3365, 2.80214, -13.4556)
 
 [node name="EmergencyLight4" parent="." instance=ExtResource("36_65va3")]
-transform = Transform3D(-1.02722e-08, 3.88235e-23, -0.235, 0.235, -1.02722e-08, -1.02722e-08, -1.02722e-08, -0.235, 4.49011e-16, 22.9367, 1.93373, -9.39428)
+transform = Transform3D(-1.02722e-08, 3.88235e-23, -0.235, 0.235, -1.02722e-08, -1.02722e-08, -1.02722e-08, -0.235, 4.49011e-16, 22.9367, 1.93373, -13.4443)
 
 [node name="PowerBox" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.3554, 1.47213, -8.94984)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.3554, 1.47213, -12.9877)
 script = ExtResource("37_b73mi")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="PowerBox"]
@@ -1871,6 +1854,12 @@ transform = Transform3D(-6.59187e-16, 2.5134e-08, -0.115, 0.115, 5.02681e-09, 4.
 
 [node name="CassetteTape" parent="." instance=ExtResource("43_wt3to")]
 transform = Transform3D(0.558773, -0.781399, -0.277829, -4.11855e-08, 0.335008, -0.942215, 0.82932, 0.526485, 0.187193, -8.71501, 1.13749, 2.76546)
+
+[node name="Money" parent="." instance=ExtResource("43_npva4")]
+transform = Transform3D(0.258819, 4.2222e-08, 0.965926, 0.93573, 0.248081, -0.250728, -0.239628, 0.968739, 0.0642081, 0.415568, 1.29962, 2.75623)
+
+[node name="PaycheckDispenser" parent="." instance=ExtResource("44_v7bl5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.327969, 1.4242, 2.76537)
 
 [editable path="Level/Console/CameraTerminal"]
 [editable path="FloppyDisk"]

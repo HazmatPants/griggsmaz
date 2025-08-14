@@ -39,6 +39,7 @@ func eject_disk():
 		audio_player.play_stream(sound_eject)
 		print("Disk ejected")
 		DiskEjected.emit()
+		$Area3D.set_meta("interact_text", "Insert Disk")
 
 		Disk = null
 		DiskData = null
@@ -56,6 +57,7 @@ func insert_disk(disk: Node3D):
 
 	print("Disk inserted with data: ", data)
 	DiskInserted.emit()
+	$Area3D.set_meta("interact_text", "Eject Disk")
 
 	play_access_sound()
 

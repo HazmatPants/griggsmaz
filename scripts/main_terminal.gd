@@ -10,7 +10,7 @@ extends StaticBody3D
 
 @onready var base = get_node("/root/base")
 @onready var player = get_node("/root/base/Player")
-@onready var playerGUI = get_tree().get_root().get_node("base/PlayerGUI/Control")
+@onready var playerGUI = get_node("/root/base/PlayerGUI")
 
 var terminal_focus := false
 
@@ -72,6 +72,8 @@ func _ready() -> void:
 	
 	base.PowerOff.connect(_PowerOff)
 	base.PowerOn.connect(_PowerOn)
+	
+	Pacman.term = self
 
 func _PowerOff():
 	$Screen.mesh.material = blackscreen

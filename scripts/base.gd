@@ -11,6 +11,7 @@ signal PowerOn
 signal PowerOff
 
 func _ready() -> void:
+	GLOBAL.PlayerGUI = get_node("PlayerGUI") 
 	try_blackout()
 
 func _process(_delta: float) -> void:

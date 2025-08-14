@@ -1,0 +1,44 @@
+[gd_scene load_steps=6 format=3 uid="uid://3q60mmwtrftw"]
+
+[ext_resource type="Script" uid="uid://cjh4tp3yf2wby" path="res://scripts/paycheck_dispenser.gd" id="1_wjj7f"]
+[ext_resource type="PackedScene" uid="uid://c3bap22n3ek1d" path="res://assets/models/money_dispenser.glb" id="2_ba30v"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ayuwk"]
+size = Vector3(0.215, 0.06, 0.585)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_wjj7f"]
+size = Vector3(0.215, 0.311382, 0.585)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ba30v"]
+size = Vector3(0.217263, 0.151472, 0.0245679)
+
+[node name="StaticBody3D" type="StaticBody3D"]
+script = ExtResource("1_wjj7f")
+
+[node name="PaycheckDispenser" type="Node3D" parent="."]
+
+[node name="money_dispenser" parent="PaycheckDispenser" instance=ExtResource("2_ba30v")]
+transform = Transform3D(0.11, 0, 0, 0, 0.11, 0, 0, 0, 0.11, 0, 0, 0)
+
+[node name="SFXPlayer" type="SteamAudioPlayer" parent="PaycheckDispenser"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.152413, 0.0834251, 0)
+panning_strength = 0.0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(0.729935, 0.683516, 0, -0.683516, 0.729935, 0, 0, 0, 1, 0.0145702, -0.145699, 0)
+shape = SubResource("BoxShape3D_ayuwk")
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0602513, 0)
+shape = SubResource("BoxShape3D_wjj7f")
+
+[node name="CollisionShape3D3" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00120953, -0.137237, -0.288538)
+shape = SubResource("BoxShape3D_ba30v")
+
+[node name="CollisionShape3D4" type="CollisionShape3D" parent="."]
+transform = Transform3D(0.999999, 0, 0, 0, 0.999999, 0, 0, 0, 1, 0.00113155, -0.137237, 0.28855)
+shape = SubResource("BoxShape3D_ba30v")
+
+[node name="DispensePosition" type="Node3D" parent="."]
+transform = Transform3D(0.899619, 0.436676, 0, -0.436676, 0.899619, 0, 0, 0, 1, 0.107894, -0.133518, 0)

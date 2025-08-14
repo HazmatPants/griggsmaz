@@ -4,7 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://ctk07vmq3xdal" path="res://assets/models/floppy_disk_drive.glb" id="2_sabtq"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_kq1t8"]
-size = Vector3(0.178, 0.054, 0.267)
+size = Vector3(0.178, 0.054, 0.0349893)
 
 [node name="FloppyDiskDrive" type="Node3D"]
 script = ExtResource("1_8sf52")
@@ -13,9 +13,10 @@ script = ExtResource("1_8sf52")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.163674)
 collision_layer = 3
 metadata/InteractWithParent = true
+metadata/interact_text = "Insert Disk"
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.163479)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.0474736)
 shape = SubResource("BoxShape3D_kq1t8")
 
 [node name="floppy_disk_drive" parent="." instance=ExtResource("2_sabtq")]

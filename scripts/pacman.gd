@@ -1,6 +1,6 @@
 extends Node
 
-@onready var term := get_node("/root/base/Level/Console/MainTerminal")
+@onready var term = get_node("/root/base/Level/Console/MainTerminal")
 @onready var player = get_node("/root/base/Player")
 
 var remote_packages: Dictionary = {
@@ -59,7 +59,7 @@ func PKG_bankctl(args):
 			amount = float(amount)
 			
 			if BankManager.withdraw(amount):
-				term.print_to_terminal("Withdrew %s. Balance now: %s" % [amount, BankManager.balance])
+				term.print_to_terminal("Withdrew %s. Balance now: %s\n(check dispenser)" % [amount, BankManager.balance])
 			else:
 				term.print_to_terminal("bankctl: withdraw: insufficient balance")
 		"deposit":
