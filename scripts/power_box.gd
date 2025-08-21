@@ -1,6 +1,6 @@
 extends Node3D
 
-@onready var base = get_node("/root/base/")
+@onready var base = GLOBAL.PlayerScene
 @onready var audio_player := $SFXPlayer
 @onready var lever := $LeverPivot
 
@@ -14,7 +14,7 @@ func interact():
 	await get_tree().create_timer(0.3).timeout
 	base.power = not base.power
 
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	if lever_state:
 		lever.rotation.x = lerp_angle(lever.rotation.x, deg_to_rad(-87), 0.2)
 	else:

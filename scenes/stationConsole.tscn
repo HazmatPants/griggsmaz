@@ -1,0 +1,89 @@
+[gd_scene load_steps=14 format=3 uid="uid://bj4fg73gtrwy1"]
+
+[ext_resource type="PackedScene" uid="uid://ctg2bknrr3dxr" path="res://scenes/main_terminal.tscn" id="1_fu1gd"]
+[ext_resource type="PackedScene" uid="uid://dn8x1fkjjesbj" path="res://scenes/floppy_disk_drive.tscn" id="2_s50wr"]
+[ext_resource type="Material" uid="uid://ho2k2cllt7sm" path="res://assets/materials/rough_metal.tres" id="3_kjp74"]
+[ext_resource type="SteamAudioMaterial" uid="uid://cqx8833t2v8mo" path="res://addons/godot-steam-audio/materials/metal_material.tres" id="4_7gqkr"]
+[ext_resource type="Script" uid="uid://kimemt2xqbeq" path="res://scripts/processor.gd" id="5_fyslv"]
+[ext_resource type="Material" uid="uid://c6udtga0g2ybo" path="res://assets/materials/shiny_metal.tres" id="6_aqkin"]
+[ext_resource type="AudioStream" uid="uid://b0f47mlfwyvow" path="res://assets/sound/sfx/ambient/pcWorking_loop.ogg" id="7_pgpbm"]
+[ext_resource type="PackedScene" uid="uid://d3rb7ujfws0qy" path="res://assets/models/air_vent.tscn" id="8_dc8ik"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_s6kkj"]
+material = ExtResource("3_kjp74")
+size = Vector3(0.99, 1, 5.7)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_rtpsq"]
+size = Vector3(0.779, 1, 5.7)
+
+[sub_resource type="BoxMesh" id="BoxMesh_7wyq8"]
+material = ExtResource("3_kjp74")
+size = Vector3(0.57, 2.08, 1.725)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_wt3to"]
+size = Vector3(0.57, 2.08, 1.725)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_wklje"]
+material = ExtResource("6_aqkin")
+top_radius = 0.1
+bottom_radius = 0.1
+height = 0.667
+
+[node name="Console" type="StaticBody3D"]
+transform = Transform3D(0.555556, 0, 0, 0, 0.555556, 0, 0, 0, 0.555556, 0, 0, 0)
+metadata/material_type = "metal"
+
+[node name="MainTerminal" parent="." instance=ExtResource("1_fu1gd")]
+transform = Transform3D(0.965926, -0.258819, 0, 0.258819, 0.965926, 0, 0, 0, 1, -0.131664, 0.152987, 0)
+
+[node name="FloppyDiskDrive" parent="." instance=ExtResource("2_s50wr")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0.170883, -0.00903559, 3.58117)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 2.08616e-07, 0, -2.08616e-07, 1, 0, 0, 0, 1, 0.0348902, -0.549417, 0)
+mesh = SubResource("BoxMesh_s6kkj")
+
+[node name="SteamAudioGeometry" type="SteamAudioGeometry" parent="MeshInstance3D"]
+material = ExtResource("4_7gqkr")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 2.08616e-07, 0, -2.08616e-07, 1, 0, 0, 0, 1, 0.139453, -0.549, 0)
+shape = SubResource("BoxShape3D_rtpsq")
+
+[node name="Processor" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 4.28735)
+script = ExtResource("5_fyslv")
+metadata/material_type = "metal"
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Processor"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00821495, 0.0941516, 0)
+mesh = SubResource("BoxMesh_7wyq8")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Processor"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0173244, 0.0949999, 0)
+shape = SubResource("BoxShape3D_wt3to")
+
+[node name="Pipe" type="MeshInstance3D" parent="Processor"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, -0.280137, -0.494301, -1.16573)
+mesh = SubResource("CylinderMesh_wklje")
+skeleton = NodePath("../MeshInstance3D")
+
+[node name="SteamAudioPlayer" type="SteamAudioPlayer" parent="Processor"]
+distance_attenuation = true
+air_absorption = true
+reflection = true
+transform = Transform3D(0.999999, 0, 0, 0, 0.999999, 0, 0, 0, 0.999999, 0.629954, 0, 0)
+stream = ExtResource("7_pgpbm")
+attenuation_model = 3
+autoplay = true
+panning_strength = 0.0
+
+[node name="DiskSoundPlayer" type="SteamAudioPlayer" parent="Processor"]
+max_polyphony = 4
+panning_strength = 0.0
+
+[node name="Fan" parent="Processor" instance=ExtResource("8_dc8ik")]
+transform = Transform3D(3.49691e-09, -3.49691e-09, 0.08, -0.08, -3.49691e-09, 3.49691e-09, 3.49691e-09, -0.08, -3.49691e-09, 0.00298119, 0.841557, -0.865738)
+
+[node name="Fan2" parent="Processor" instance=ExtResource("8_dc8ik")]
+transform = Transform3D(3.49691e-09, -3.49691e-09, 0.08, -0.08, -3.49691e-09, 3.49691e-09, 3.49691e-09, -0.08, -3.49691e-09, 0.00298119, 0.318466, -0.865738)

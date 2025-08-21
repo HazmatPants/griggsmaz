@@ -3,7 +3,7 @@ extends Node3D
 @onready var audio_player = $SFXPlayer
 @onready var audio_player2 = $SFXPlayer2
 
-@onready var player = get_tree().get_root().get_node("base/Player")
+@onready var player = GLOBAL.Player
 
 var Disk: RigidBody3D = null
 var DiskData

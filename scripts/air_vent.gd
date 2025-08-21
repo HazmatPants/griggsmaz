@@ -1,7 +1,7 @@
 extends Node3D
 
 @onready var spinny = $Spinny
-@onready var base = get_node("/root/base")
+@onready var base = GLOBAL.PlayerScene
 @onready var power: bool
 @onready var player := $Vent
 

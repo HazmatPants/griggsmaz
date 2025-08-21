@@ -1,0 +1,234 @@
+[gd_scene load_steps=28 format=3 uid="uid://c61qesiym3x4c"]
+
+[ext_resource type="PackedScene" uid="uid://ctg2bknrr3dxr" path="res://scenes/main_terminal.tscn" id="1_wmj4f"]
+[ext_resource type="Script" uid="uid://cjia86g85rtev" path="res://scripts/starmail_terminal.gd" id="2_ohspa"]
+[ext_resource type="Material" uid="uid://ho2k2cllt7sm" path="res://assets/materials/rough_metal.tres" id="3_dw2pf"]
+[ext_resource type="FontFile" uid="uid://dgkwgfyrwu1fk" path="res://assets/fonts/CONSOLA.TTF" id="4_btven"]
+[ext_resource type="AudioStream" uid="uid://kt67lyq2sn37" path="res://assets/sound/sfx/ui/email.wav" id="5_vc0ju"]
+[ext_resource type="PackedScene" uid="uid://jhd52y4bpkog" path="res://scenes/camera_terminal.tscn" id="6_eo3c5"]
+[ext_resource type="PackedScene" uid="uid://dn8x1fkjjesbj" path="res://scenes/floppy_disk_drive.tscn" id="7_ubnd6"]
+[ext_resource type="SteamAudioMaterial" uid="uid://cqx8833t2v8mo" path="res://addons/godot-steam-audio/materials/metal_material.tres" id="8_3ckml"]
+[ext_resource type="Script" uid="uid://kimemt2xqbeq" path="res://scripts/processor.gd" id="9_uxmd5"]
+[ext_resource type="Material" uid="uid://c6udtga0g2ybo" path="res://assets/materials/shiny_metal.tres" id="10_xxbjg"]
+[ext_resource type="AudioStream" uid="uid://b0f47mlfwyvow" path="res://assets/sound/sfx/ambient/pcWorking_loop.ogg" id="11_ogqcj"]
+[ext_resource type="PackedScene" uid="uid://d3rb7ujfws0qy" path="res://assets/models/air_vent.tscn" id="12_o54bl"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_82vju"]
+resource_local_to_scene = true
+size = Vector3(0.3, 0.5, 0.796875)
+
+[sub_resource type="BoxMesh" id="BoxMesh_ei55q"]
+material = ExtResource("3_dw2pf")
+size = Vector3(0.3, 0.5, 0.795)
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_rtpsq"]
+viewport_path = NodePath("Level/Console/StarmailTerminal/Screen/Viewport")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ei55q"]
+resource_local_to_scene = true
+albedo_texture = SubResource("ViewportTexture_rtpsq")
+metallic = 0.15
+metallic_specular = 0.77
+roughness = 0.22
+emission_texture = SubResource("ViewportTexture_rtpsq")
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_ei55q"]
+resource_local_to_scene = true
+material = SubResource("StandardMaterial3D_ei55q")
+size = Vector2(0.75, 0.45)
+
+[sub_resource type="LabelSettings" id="LabelSettings_65va3"]
+font = ExtResource("4_btven")
+font_size = 46
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_yjh04"]
+resource_local_to_scene = true
+size = Vector3(0.3, 0.5, 0.796875)
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_sa2y1"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_7wyq8"]
+resource_local_to_scene = true
+albedo_texture = SubResource("ViewportTexture_sa2y1")
+metallic = 0.19
+metallic_specular = 0.83
+roughness = 0.3
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_wt3to"]
+resource_local_to_scene = true
+material = SubResource("StandardMaterial3D_7wyq8")
+size = Vector2(0.75, 0.45)
+
+[sub_resource type="BoxMesh" id="BoxMesh_s6kkj"]
+material = ExtResource("3_dw2pf")
+size = Vector3(0.99, 1, 5.7)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_rtpsq"]
+size = Vector3(0.779, 1, 5.7)
+
+[sub_resource type="BoxMesh" id="BoxMesh_7wyq8"]
+material = ExtResource("3_dw2pf")
+size = Vector3(0.57, 2.08, 1.725)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_wt3to"]
+size = Vector3(0.57, 2.08, 1.725)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_wklje"]
+material = ExtResource("10_xxbjg")
+top_radius = 0.1
+bottom_radius = 0.1
+height = 0.667
+
+[node name="Console" type="StaticBody3D"]
+transform = Transform3D(0.555556, 0, 0, 0, 0.555556, 0, 0, 0, 0.555556, 0, 0, 0)
+metadata/material_type = "metal"
+
+[node name="MainTerminal" parent="." instance=ExtResource("1_wmj4f")]
+transform = Transform3D(0.965926, -0.258819, 0, 0.258819, 0.965926, 0, 0, 0, 1, -0.131664, 0.152987, 0)
+
+[node name="StarmailTerminal" type="StaticBody3D" parent="."]
+transform = Transform3D(0.933012, -0.25, 0.258819, 0.258819, 0.965925, 4.99188e-07, -0.25, 0.0669872, 0.965926, -0.0070219, 0.145767, 0.824196)
+script = ExtResource("2_ohspa")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StarmailTerminal"]
+transform = Transform3D(1, -2.38419e-07, -6.85453e-07, -7.45058e-09, 1, -8.71718e-07, 0, 7.45058e-09, 0.999999, 0, 0, -4.76837e-07)
+shape = SubResource("BoxShape3D_82vju")
+
+[node name="Monitor" type="MeshInstance3D" parent="StarmailTerminal"]
+mesh = SubResource("BoxMesh_ei55q")
+
+[node name="Screen" type="MeshInstance3D" parent="StarmailTerminal"]
+transform = Transform3D(4.47035e-08, 1, 7.82311e-08, 1.49012e-08, -3.72529e-08, -1, -1, 0, -1.49012e-08, 0.152192, 0.00527692, -0.00669372)
+mesh = SubResource("PlaneMesh_ei55q")
+skeleton = NodePath("../../root/@EditorNode@21272/@Panel@14/@VBoxContainer@15/DockHSplitLeftL/DockHSplitLeftR/DockHSplitMain/@VBoxContainer@26/DockVSplitCenter/@VSplitContainer@54/@VBoxContainer@55/@EditorMainScreen@102/MainScreen/@CanvasItemEditor@11482/@VSplitContainer@11134/@HSplitContainer@11136/@HSplitContainer@11138/@Control@11139/@SubViewportContainer@11140/@SubViewport@11141/base/Level/Console/StarmailTerminal")
+
+[node name="Viewport" type="SubViewport" parent="StarmailTerminal/Screen"]
+own_world_3d = true
+transparent_bg = true
+size = Vector2i(800, 512)
+
+[node name="Control" type="Control" parent="StarmailTerminal/Screen/Viewport"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 800.0
+offset_bottom = 512.0
+
+[node name="TitleContainer" type="HBoxContainer" parent="StarmailTerminal/Screen/Viewport/Control"]
+layout_mode = 0
+offset_left = 15.0
+offset_top = 15.0
+offset_right = 600.0
+offset_bottom = 62.0
+
+[node name="Title" type="Label" parent="StarmailTerminal/Screen/Viewport/Control/TitleContainer"]
+layout_mode = 2
+text = "Starmail"
+label_settings = SubResource("LabelSettings_65va3")
+
+[node name="MessageCount" type="Label" parent="StarmailTerminal/Screen/Viewport/Control/TitleContainer"]
+modulate = Color(0.385493, 0.385492, 0.385492, 1)
+layout_mode = 2
+text = "  -  0 messages"
+label_settings = SubResource("LabelSettings_65va3")
+
+[node name="ScrollContainer" type="ScrollContainer" parent="StarmailTerminal/Screen/Viewport/Control"]
+layout_mode = 2
+offset_left = 15.0
+offset_top = 80.0
+offset_right = 815.0
+offset_bottom = 592.0
+follow_focus = true
+draw_focus_border = true
+
+[node name="MailList" type="VBoxContainer" parent="StarmailTerminal/Screen/Viewport/Control/ScrollContainer"]
+layout_mode = 2
+
+[node name="HSeparator" type="HSeparator" parent="StarmailTerminal/Screen/Viewport/Control"]
+layout_mode = 2
+offset_left = 15.0
+offset_top = 70.0
+offset_right = 765.0
+offset_bottom = 74.0
+
+[node name="SFXPlayer" type="SteamAudioPlayer" parent="StarmailTerminal"]
+distance_attenuation = true
+air_absorption = true
+reflection = true
+transform = Transform3D(0.999999, 4.47035e-08, -1.19209e-07, 5.58794e-09, 0.999999, -2.83122e-07, 0, -7.45058e-09, 0.999999, 0.26112, 0.0181241, 0.0663261)
+stream = ExtResource("5_vc0ju")
+attenuation_model = 3
+volume_db = 12.0
+max_db = 6.0
+panning_strength = 0.0
+
+[node name="CameraTerminal" parent="." instance=ExtResource("6_eo3c5")]
+transform = Transform3D(0.933012, -0.25, -0.258819, 0.258819, 0.965925, 0, 0.25, -0.0669873, 0.965925, -0.0310879, 0.145693, -0.825177)
+
+[node name="CollisionShape3D" parent="CameraTerminal" index="0"]
+shape = SubResource("BoxShape3D_yjh04")
+
+[node name="Screen" parent="CameraTerminal" index="1"]
+mesh = SubResource("PlaneMesh_wt3to")
+
+[node name="SubViewport" parent="CameraTerminal" index="4"]
+size = Vector2i(800, 512)
+
+[node name="cam1" parent="CameraTerminal/SubViewport" index="0"]
+transform = Transform3D(0.938204, -0.192796, 0.287409, -0.0248526, 0.790784, 0.611591, -0.345191, -0.58094, 0.737124, 4.6274, 4.28052, 5.89714)
+
+[node name="cam2" parent="CameraTerminal/SubViewport" index="1"]
+transform = Transform3D(0.640391, -0.469311, 0.607985, 0, 0.791597, 0.611044, -0.768049, -0.391307, 0.506932, 25.1097, 4.20323, 3.50102)
+
+[node name="FloppyDiskDrive" parent="." instance=ExtResource("7_ubnd6")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0.170883, -0.00903559, 3.58117)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 2.08616e-07, 0, -2.08616e-07, 1, 0, 0, 0, 1, 0.0348902, -0.549417, 0)
+mesh = SubResource("BoxMesh_s6kkj")
+
+[node name="SteamAudioGeometry" type="SteamAudioGeometry" parent="MeshInstance3D"]
+material = ExtResource("8_3ckml")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 2.08616e-07, 0, -2.08616e-07, 1, 0, 0, 0, 1, 0.139453, -0.549, 0)
+shape = SubResource("BoxShape3D_rtpsq")
+
+[node name="Processor" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 4.28735)
+script = ExtResource("9_uxmd5")
+metadata/material_type = "metal"
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Processor"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00821495, 0.0941516, 0)
+mesh = SubResource("BoxMesh_7wyq8")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Processor"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0173244, 0.0949999, 0)
+shape = SubResource("BoxShape3D_wt3to")
+
+[node name="Pipe" type="MeshInstance3D" parent="Processor"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, -0.280137, -0.494301, -1.16573)
+mesh = SubResource("CylinderMesh_wklje")
+skeleton = NodePath("../MeshInstance3D")
+
+[node name="SteamAudioPlayer" type="SteamAudioPlayer" parent="Processor"]
+distance_attenuation = true
+air_absorption = true
+reflection = true
+transform = Transform3D(0.999999, 0, 0, 0, 0.999999, 0, 0, 0, 0.999999, 0.629954, 0, 0)
+stream = ExtResource("11_ogqcj")
+attenuation_model = 3
+autoplay = true
+panning_strength = 0.0
+
+[node name="DiskSoundPlayer" type="SteamAudioPlayer" parent="Processor"]
+max_polyphony = 4
+panning_strength = 0.0
+
+[node name="Fan" parent="Processor" instance=ExtResource("12_o54bl")]
+transform = Transform3D(3.49691e-09, -3.49691e-09, 0.08, -0.08, -3.49691e-09, 3.49691e-09, 3.49691e-09, -0.08, -3.49691e-09, 0.00298119, 0.841557, -0.865738)
+
+[node name="Fan2" parent="Processor" instance=ExtResource("12_o54bl")]
+transform = Transform3D(3.49691e-09, -3.49691e-09, 0.08, -0.08, -3.49691e-09, 3.49691e-09, 3.49691e-09, -0.08, -3.49691e-09, 0.00298119, 0.318466, -0.865738)
+
+[editable path="CameraTerminal"]

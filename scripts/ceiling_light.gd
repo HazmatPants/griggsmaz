@@ -2,7 +2,7 @@ extends Node3D
 
 @onready var dome := $Node3D/Sphere
 @onready var light := $OmniLight3D
-@onready var base = get_node("/root/base")
+@onready var base = GLOBAL.PlayerScene
 @onready var player := $SteamAudioPlayer
 
 var power: bool

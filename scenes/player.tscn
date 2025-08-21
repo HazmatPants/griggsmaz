@@ -54,13 +54,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.65122)
 [node name="HandPosition" type="Node3D" parent="Camera3D"]
 transform = Transform3D(1.31134e-07, 0, -1, 0, 1, 0, 1, 0, 1.31134e-07, 0.428411, -0.215955, -0.416155)
 
-[node name="SpotLight3D" type="SpotLight3D" parent="Camera3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.738785)
-light_energy = 2.0
-shadow_enabled = true
-spot_range = 7.21629
-spot_angle = 39.489
-
 [node name="NVGLight" type="SpotLight3D" parent="Camera3D"]
 visible = false
 light_energy = 16.0

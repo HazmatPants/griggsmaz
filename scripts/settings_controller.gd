@@ -5,8 +5,9 @@ extends Node
 @onready var SettingReflectionProbes := $"../ReflectionProbes/CheckButton"
 @onready var SettingShadowMode := $"../ShadowMode/CheckButton"
 
-@onready var probes = get_tree().get_root().get_node("base/ReflectionProbes")
-@onready var wenv = get_tree().get_root().get_node("base/WorldEnvironment")
+@onready var playerscene = GLOBAL.PlayerScene
+@onready var probes = playerscene.get_node("ReflectionProbes")
+@onready var wenv = playerscene.get_node("WorldEnvironment")
 
 func _ready():
 	SettingBloom.pressed.connect(_UpdateSettings)
@@ -21,7 +22,8 @@ func _UpdateSettings():
 	GLOBAL.settings["video"]["shadows"] = SettingShadowMode.button_pressed
 	wenv.environment.glow_enabled = GLOBAL.settings["video"]["bloom"] 
 	wenv.environment.ssr_enabled = GLOBAL.settings["video"]["ssr"]
-	probes.visible = GLOBAL.settings["video"]["reflection_probes"]
+	if probes:
+		probes.visible = GLOBAL.settings["video"]["reflection_probes"]
 
 func apply_settings_to_ui(settings: Dictionary):
 	SettingBloom.button_pressed = settings["video"]["bloom"]

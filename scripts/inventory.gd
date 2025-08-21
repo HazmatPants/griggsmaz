@@ -27,8 +27,8 @@ func hold_item(id: int):
 	if not inventory.has(id):
 		return
 	
-	var base = get_node("/root/base")
-	var player = get_node("/root/base/Player")
+	var base = GLOBAL.PlayerScene
+	var player = GLOBAL.Player
 	var object: RigidBody3D = inventory[id]["object"]
 	if player.object_in_hand:
 		var playerGUI = get_node("/root/base/PlayerGUI")

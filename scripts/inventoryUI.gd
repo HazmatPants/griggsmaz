@@ -1,9 +1,9 @@
 extends Control
 
-@onready var player = get_node("/root/base/Player")
-@onready var frontRay = get_node("/root/base/Player/Camera3D/InteractRay")
-@onready var playerGUI = get_node("/root/base/PlayerGUI")
-@onready var inventory = get_node("/root/base/Player/Inventory")
+@onready var player = GLOBAL.Player
+@onready var frontRay = player.get_node("Camera3D/InteractRay")
+@onready var playerGUI = GLOBAL.PlayerGUI
+@onready var inventory = player.get_node("Inventory")
 @onready var invList = $HBox/ListPanel/MarginContainer/List
 @onready var invProperties = $HBox/Control/MarginContainer/VBoxContainer
 @onready var context_menu: PopupMenu = $PopupMenu

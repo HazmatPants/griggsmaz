@@ -8,9 +8,9 @@ extends StaticBody3D
 @onready var CameraTerminal := $"../CameraTerminal"
 @onready var floppyDrive := $"../FloppyDiskDrive"
 
-@onready var base = get_node("/root/base")
-@onready var player = get_node("/root/base/Player")
-@onready var playerGUI = get_node("/root/base/PlayerGUI")
+@onready var base = GLOBAL.PlayerScene
+@onready var player = GLOBAL.Player
+@onready var playerGUI = GLOBAL.PlayerGUI
 
 var terminal_focus := false
 
@@ -24,9 +24,7 @@ var TIMER: SceneTreeTimer = null
 			"radioman.wav": preload("res://assets/sound/music/radioman.wav")
 		},
 		"dev": {
-			"sda": generate_random_bytes(1024),
-			"cam1": CameraTerminal.get_node("SubViewport/cam1"),
-			"cam2": CameraTerminal.get_node("SubViewport/cam2")
+			"sda": generate_random_bytes(1024)
 		},
 		"etc": {
 			"mtab": {}

@@ -8,8 +8,8 @@ extends StaticBody3D
 var active_camera_name: String = "cam1"
 @onready var active_camera: Camera3D = cameras[active_camera_name]
 @onready var viewport := $SubViewport
-@onready var playerGUI = get_node("/root/base/PlayerGUI/")
-@onready var base = get_node("/root/base")
+@onready var playerGUI = GLOBAL.PlayerGUI
+@onready var base =GLOBAL.PlayerScene
 
 var blackscreen: StandardMaterial3D
 var defaultscreen: StandardMaterial3D

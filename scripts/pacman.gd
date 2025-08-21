@@ -1,7 +1,7 @@
 extends Node
 
 @onready var term = get_node("/root/base/Level/Console/MainTerminal")
-@onready var player = get_node("/root/base/Player")
+@onready var player = GLOBAL.Player
 
 var remote_packages: Dictionary = {
 	"time": {

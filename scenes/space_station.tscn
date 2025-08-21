@@ -1,0 +1,249 @@
+[gd_scene load_steps=32 format=3 uid="uid://33qh2pjsserx"]
+
+[ext_resource type="PackedScene" uid="uid://cycyr22y5agba" path="res://scenes/player.tscn" id="1_3mvrh"]
+[ext_resource type="Script" uid="uid://xcs5hnlft37s" path="res://scripts/day_cycle.gd" id="1_dhgmd"]
+[ext_resource type="Script" uid="uid://cst0itywnsoq3" path="res://scripts/base.gd" id="1_oe38e"]
+[ext_resource type="PackedScene" uid="uid://dc7l8xehcc418" path="res://scenes/UI.tscn" id="2_dhgmd"]
+[ext_resource type="Texture2D" uid="uid://bch1wt17x0wo8" path="res://assets/textures/NightSkyHDRI009_4K-HDR.exr" id="2_gsi4i"]
+[ext_resource type="Material" uid="uid://ho2k2cllt7sm" path="res://assets/materials/rough_metal.tres" id="2_vb2ps"]
+[ext_resource type="PackedScene" uid="uid://dkda6vxgbbfdq" path="res://scenes/alarm_clock.tscn" id="5_ioyf8"]
+[ext_resource type="PackedScene" uid="uid://2rek1u00vvrh" path="res://scenes/pause_menu.tscn" id="7_43gc5"]
+[ext_resource type="PackedScene" uid="uid://ba3qc1k6j3okd" path="res://scenes/ceiling_light.tscn" id="7_wwul6"]
+[ext_resource type="Material" uid="uid://drh8m4l73ytvw" path="res://assets/materials/glass.tres" id="8_pkdvi"]
+[ext_resource type="PackedScene" uid="uid://bj4fg73gtrwy1" path="res://scenes/stationConsole.tscn" id="9_oe38e"]
+[ext_resource type="PackedScene" uid="uid://dteji45y5tn88" path="res://scenes/power_box.tscn" id="10_rwn7t"]
+[ext_resource type="PackedScene" uid="uid://pl78f6gf7geg" path="res://scenes/flashlight.tscn" id="11_iha3j"]
+[ext_resource type="PackedScene" uid="uid://c1ubpr414ra1f" path="res://scenes/probe.tscn" id="14_btfrg"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gsi4i"]
+emission_enabled = true
+emission = Color(1, 1, 0.717647, 1)
+emission_energy_multiplier = 20000.0
+
+[sub_resource type="SphereMesh" id="SphereMesh_43gc5"]
+material = SubResource("StandardMaterial3D_gsi4i")
+radius = 250.0
+height = 500.0
+
+[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_43gc5"]
+panorama = ExtResource("2_gsi4i")
+
+[sub_resource type="Sky" id="Sky_gsi4i"]
+sky_material = SubResource("PanoramaSkyMaterial_43gc5")
+
+[sub_resource type="Environment" id="Environment_dhgmd"]
+background_mode = 2
+background_color = Color(0.0165517, 0.0165517, 0.0165517, 1)
+background_energy_multiplier = 0.2
+sky = SubResource("Sky_gsi4i")
+ambient_light_source = 3
+tonemap_mode = 3
+ssao_enabled = true
+glow_enabled = true
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_wwul6"]
+size = Vector3(13.46, 1, 15.1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_btfrg"]
+material = ExtResource("2_vb2ps")
+size = Vector3(13.46, 1, 15.1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_dhgmd"]
+size = Vector3(13.46, 1, 15.1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_ioyf8"]
+material = ExtResource("2_vb2ps")
+size = Vector3(13.46, 1, 15.1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_6npc3"]
+custom_solver_bias = 1.0
+size = Vector3(1, 6.135, 15.1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_xm5mp"]
+material = ExtResource("2_vb2ps")
+size = Vector3(1, 6.135, 15.1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_kb32m"]
+custom_solver_bias = 1.0
+size = Vector3(0.55, 2.575, 8.425)
+
+[sub_resource type="BoxMesh" id="BoxMesh_25aj6"]
+material = ExtResource("8_pkdvi")
+size = Vector3(0.55, 2.575, 8.425)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_x34hc"]
+custom_solver_bias = 1.0
+size = Vector3(1, 1.105, 15.1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_cypy1"]
+material = ExtResource("2_vb2ps")
+size = Vector3(1, 1.105, 15.1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_125g2"]
+custom_solver_bias = 1.0
+size = Vector3(1, 2.575, 2.665)
+
+[sub_resource type="BoxMesh" id="BoxMesh_yt2e1"]
+material = ExtResource("2_vb2ps")
+size = Vector3(1, 2.575, 2.665)
+
+[node name="SpaceStation" type="Node3D"]
+script = ExtResource("1_oe38e")
+
+[node name="EditorLight" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 5.54377, 0)
+light_energy = 13.952
+light_bake_mode = 1
+editor_only = true
+
+[node name="PauseMenu" parent="." instance=ExtResource("7_43gc5")]
+
+[node name="PlayerGUI" parent="." instance=ExtResource("2_dhgmd")]
+
+[node name="Sun" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 3.59077, 0)
+shadow_enabled = true
+script = ExtResource("1_dhgmd")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Sun"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 4000)
+mesh = SubResource("SphereMesh_43gc5")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_dhgmd")
+
+[node name="SteamAudioConfig" type="SteamAudioConfig" parent="."]
+global_log_level = 3
+max_reflection_duration = 5.0
+max_reflection_sources = 50.0
+
+[node name="Player" parent="." instance=ExtResource("1_3mvrh")]
+
+[node name="CeilingLight" parent="." instance=ExtResource("7_wwul6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.15046, 0)
+
+[node name="Floor" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.50431, 0)
+metadata/material_type = "metal"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Floor"]
+shape = SubResource("BoxShape3D_wwul6")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Floor"]
+mesh = SubResource("BoxMesh_btfrg")
+
+[node name="SteamAudioGeometry" type="SteamAudioGeometry" parent="Floor/MeshInstance3D"]
+
+[node name="Ceiling" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.90122, 0)
+metadata/material_type = "metal"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ceiling"]
+shape = SubResource("BoxShape3D_dhgmd")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ceiling"]
+mesh = SubResource("BoxMesh_ioyf8")
+
+[node name="SteamAudioGeometry" type="SteamAudioGeometry" parent="Ceiling/MeshInstance3D"]
+
+[node name="Wall" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.07159, 1.12669, 0)
+metadata/material_type = "metal"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Wall"]
+shape = SubResource("BoxShape3D_6npc3")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Wall"]
+mesh = SubResource("BoxMesh_xm5mp")
+
+[node name="SteamAudioGeometry" type="SteamAudioGeometry" parent="Wall/MeshInstance3D"]
+
+[node name="Wall2" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.25506, 1.12669, 0)
+metadata/material_type = "metal"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Wall2"]
+shape = SubResource("BoxShape3D_6npc3")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Wall2"]
+mesh = SubResource("BoxMesh_xm5mp")
+
+[node name="SteamAudioGeometry" type="SteamAudioGeometry" parent="Wall2/MeshInstance3D"]
+
+[node name="Window" type="StaticBody3D" parent="."]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 1.202, -6.975)
+metadata/material_type = "metal"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Window"]
+shape = SubResource("BoxShape3D_kb32m")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Window"]
+mesh = SubResource("BoxMesh_25aj6")
+
+[node name="SteamAudioGeometry" type="SteamAudioGeometry" parent="Window/MeshInstance3D"]
+
+[node name="WindowB" type="StaticBody3D" parent="Window"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.000256062, -1.6277, -1.11982e-11)
+metadata/material_type = "metal"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Window/WindowB"]
+shape = SubResource("BoxShape3D_x34hc")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Window/WindowB"]
+mesh = SubResource("BoxMesh_cypy1")
+
+[node name="SteamAudioGeometry" type="SteamAudioGeometry" parent="Window/WindowB/MeshInstance3D"]
+
+[node name="WindowT" type="StaticBody3D" parent="Window"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.000256062, 1.73161, -1.11982e-11)
+metadata/material_type = "metal"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Window/WindowT"]
+shape = SubResource("BoxShape3D_x34hc")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Window/WindowT"]
+mesh = SubResource("BoxMesh_cypy1")
+
+[node name="SteamAudioGeometry" type="SteamAudioGeometry" parent="Window/WindowT/MeshInstance3D"]
+
+[node name="WindowL" type="StaticBody3D" parent="Window"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.000447869, -5.29211)
+metadata/material_type = "metal"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Window/WindowL"]
+shape = SubResource("BoxShape3D_125g2")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Window/WindowL"]
+mesh = SubResource("BoxMesh_yt2e1")
+
+[node name="SteamAudioGeometry" type="SteamAudioGeometry" parent="Window/WindowL/MeshInstance3D"]
+
+[node name="WindowR" type="StaticBody3D" parent="Window"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.000447869, 5.44778)
+metadata/material_type = "metal"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Window/WindowR"]
+shape = SubResource("BoxShape3D_125g2")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Window/WindowR"]
+mesh = SubResource("BoxMesh_yt2e1")
+
+[node name="SteamAudioGeometry" type="SteamAudioGeometry" parent="Window/WindowR/MeshInstance3D"]
+
+[node name="AlarmClock" parent="." instance=ExtResource("5_ioyf8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.79681, -0.90681, -0.00357294)
+collision_layer = 3
+
+[node name="Console" parent="." instance=ExtResource("9_oe38e")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -0.0303203, 0.0235249, -6.23045)
+
+[node name="PowerBox" parent="." instance=ExtResource("10_rwn7t")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.43352, 0, 0)
+
+[node name="AmbientSound2" type="AudioStreamPlayer" parent="."]
+
+[node name="Flashlight" parent="." instance=ExtResource("11_iha3j")]
+transform = Transform3D(-0.484061, 0, 0.875034, 0, 1, 0, -0.875034, 0, -0.484061, 0.894261, -0.447317, -1.72872)
+
+[node name="Probe" parent="." instance=ExtResource("14_btfrg")]
+transform = Transform3D(0.763695, -0.645578, 0, 0.645578, 0.763695, 0, 0, 0, 1, 0.720238, 3.24636, -64.5883)

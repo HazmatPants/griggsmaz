@@ -4,7 +4,7 @@ extends StaticBody3D
 @onready var msg_count_label := $Screen/Viewport/Control/TitleContainer/MessageCount
 @onready var audio_player := $SFXPlayer
 
-@onready var base = get_node("/root/base")
+@onready var base = GLOBAL.PlayerScene
 
 var blackscreen: StandardMaterial3D
 var defaultscreen: StandardMaterial3D

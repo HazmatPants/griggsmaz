@@ -3,7 +3,7 @@ extends Node
 var DAYS: int = 0
 # how many days have passed
 
-var TIME: float = 360 # in-game minutes
+var TIME: float = 900 # in-game minutes
 # 1 in-game minute is 3 real seconds
 # 1 in-game hour is 3 real minutes
 # 1 in-game day is 72 real minutes
@@ -13,8 +13,9 @@ var CanPause: bool = true
 
 var alarm: bool = false
 
-var Player
-var PlayerGUI
+var Player: CharacterBody3D = null
+var PlayerScene: Node = null
+var PlayerGUI: CanvasLayer = null
 
 var settings: Dictionary = {
 	"video": {
@@ -24,6 +25,15 @@ var settings: Dictionary = {
 		"shadows": false
 	}
 }
+
+signal PlayerInit
+
+func _ready() -> void:
+	var playerdata = get_player()
+	Player = playerdata["player"]
+	PlayerScene = playerdata["scene"]
+	PlayerGUI = playerdata["playerGUI"]
+	PlayerInit.emit()
 
 func load_sounds_from_dir(path: String) -> Array[AudioStream]:
 	var sounds: Array[AudioStream] = []
@@ -55,3 +65,14 @@ func get_time_string() -> String:
 
 func get_normalized_time() -> float:
 	return TIME / 1440
+
+func get_player():
+	for node in get_parent().get_children():
+		if node is Node3D:
+			var data = {
+				"player": node.get_node("Player"),
+				"playerGUI": node.get_node("PlayerGUI"),
+				"scene": node
+			}
+			return data
+	return null

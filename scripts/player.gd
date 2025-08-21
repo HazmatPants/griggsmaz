@@ -238,6 +238,7 @@ func footstep_sound(type: String="step", volume: float=0.0):
 		play_random_sfx(sound_list, volume)
 
 func _ready():
+	GLOBAL.PlayerScene = get_parent()
 	GLOBAL.Player = self
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	base_camera_position = camera.position

@@ -1,0 +1,48 @@
+[gd_scene load_steps=7 format=3 uid="uid://dteji45y5tn88"]
+
+[ext_resource type="Script" uid="uid://b0jq5gojbnvcx" path="res://scripts/power_box.gd" id="1_v8vcw"]
+[ext_resource type="Material" uid="uid://ho2k2cllt7sm" path="res://assets/materials/rough_metal.tres" id="2_ahbf4"]
+[ext_resource type="Material" uid="uid://c6udtga0g2ybo" path="res://assets/materials/shiny_metal.tres" id="3_ovgoq"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_qty1u"]
+material = ExtResource("2_ahbf4")
+size = Vector3(1, 1.545, 0.365)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_sa2y1"]
+size = Vector3(1, 1.575, 0.465)
+
+[sub_resource type="BoxMesh" id="BoxMesh_b73mi"]
+material = ExtResource("3_ovgoq")
+size = Vector3(0.055, 0.095, 0.76)
+
+[node name="PowerBox" type="Node3D"]
+script = ExtResource("1_v8vcw")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.299132, -0.382312)
+mesh = SubResource("BoxMesh_qty1u")
+
+[node name="Area3D" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.32235, -0.197811)
+collision_layer = 3
+metadata/InteractWithParent = true
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.110107)
+shape = SubResource("BoxShape3D_sa2y1")
+
+[node name="SFXPlayer" type="SteamAudioPlayer" parent="."]
+distance_attenuation = true
+air_absorption = true
+reflection = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.382336, 0.212512)
+attenuation_model = 3
+panning_strength = 0.0
+
+[node name="LeverPivot" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -0.525328, 0.295976, -0.29574)
+
+[node name="Lever" type="MeshInstance3D" parent="LeverPivot"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.326202)
+mesh = SubResource("BoxMesh_b73mi")
+skeleton = NodePath("../..")

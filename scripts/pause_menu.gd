@@ -2,7 +2,7 @@ extends CanvasLayer
 
 var is_paused := false
 
-@onready var playerGUI = get_tree().get_root().get_node("base/PlayerGUI")
+@onready var playerGUI = GLOBAL.PlayerGUI
 
 @onready var ResumeButton := $BG/ButtonContainer/ResumeButton
 @onready var SettingsButton := $BG/ButtonContainer/SettingsButton
@@ -14,11 +14,13 @@ var is_paused := false
 func _ready():
 	visible = false
 	SettingsContainer.visible = false
+	GLOBAL.PlayerInit.connect(PlayerInit)
 	ResumeButton.pressed.connect(_on_resumebutton_pressed)
 	SettingsButton.pressed.connect(_on_settingsbutton_pressed)
 	QuitButton.pressed.connect(_on_quitbutton_pressed)
 	SettingsCloseButton.pressed.connect(_on_settingsclosebutton_pressed)
-	
+
+func PlayerInit():
 	GLOBAL.settings = get_settings()
 	SettingsController.apply_settings_to_ui(GLOBAL.settings)
 	SettingsController._UpdateSettings()

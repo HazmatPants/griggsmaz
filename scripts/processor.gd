@@ -12,7 +12,7 @@ var sound_access := [
 	preload("res://assets/sound/sfx/disk/hdd/hdd_access7.ogg")
 ]
 
-@onready var base = get_node("/root/base")
+@onready var base = GLOBAL.PlayerScene
 @onready var power: bool
 
 var base_had_power

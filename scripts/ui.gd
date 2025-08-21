@@ -1,7 +1,7 @@
 extends CanvasLayer
 
 @onready var audio_player := $SFXPlayer
-@onready var player := get_node("/root/base/Player")
+@onready var player := $"../Player"
 @onready var low_health_overlay := $LowHealthOverlay
 @onready var blur_overlay := $BlurRect
 #@onready var wenv: WorldEnvironment = get_node("/root/base/WorldEnvironment/")
