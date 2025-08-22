@@ -95,7 +95,6 @@ func PKG_debug(args):
 			if args.size() == 1:
 				term.print_to_terminal("debug: time: missing subsubcommand")
 				return
-			get_tree().create_timer(1).free()
 			var subsubcommand = args[1]
 			match subsubcommand:
 				"set":

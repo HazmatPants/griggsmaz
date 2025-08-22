@@ -1,4 +1,4 @@
-[gd_scene load_steps=32 format=3 uid="uid://33qh2pjsserx"]
+[gd_scene load_steps=39 format=3 uid="uid://33qh2pjsserx"]
 
 [ext_resource type="PackedScene" uid="uid://cycyr22y5agba" path="res://scenes/player.tscn" id="1_3mvrh"]
 [ext_resource type="Script" uid="uid://xcs5hnlft37s" path="res://scripts/day_cycle.gd" id="1_dhgmd"]
@@ -6,14 +6,25 @@
 [ext_resource type="PackedScene" uid="uid://dc7l8xehcc418" path="res://scenes/UI.tscn" id="2_dhgmd"]
 [ext_resource type="Texture2D" uid="uid://bch1wt17x0wo8" path="res://assets/textures/NightSkyHDRI009_4K-HDR.exr" id="2_gsi4i"]
 [ext_resource type="Material" uid="uid://ho2k2cllt7sm" path="res://assets/materials/rough_metal.tres" id="2_vb2ps"]
+[ext_resource type="Shader" uid="uid://cxyk4c8onhdae" path="res://assets/shaders/atmosphere.gdshader" id="5_6npc3"]
 [ext_resource type="PackedScene" uid="uid://dkda6vxgbbfdq" path="res://scenes/alarm_clock.tscn" id="5_ioyf8"]
+[ext_resource type="Script" uid="uid://dq4p7b6ckcfju" path="res://scripts/atmosphere.gd" id="6_6npc3"]
 [ext_resource type="PackedScene" uid="uid://2rek1u00vvrh" path="res://scenes/pause_menu.tscn" id="7_43gc5"]
 [ext_resource type="PackedScene" uid="uid://ba3qc1k6j3okd" path="res://scenes/ceiling_light.tscn" id="7_wwul6"]
 [ext_resource type="Material" uid="uid://drh8m4l73ytvw" path="res://assets/materials/glass.tres" id="8_pkdvi"]
 [ext_resource type="PackedScene" uid="uid://bj4fg73gtrwy1" path="res://scenes/stationConsole.tscn" id="9_oe38e"]
 [ext_resource type="PackedScene" uid="uid://dteji45y5tn88" path="res://scenes/power_box.tscn" id="10_rwn7t"]
 [ext_resource type="PackedScene" uid="uid://pl78f6gf7geg" path="res://scenes/flashlight.tscn" id="11_iha3j"]
-[ext_resource type="PackedScene" uid="uid://c1ubpr414ra1f" path="res://scenes/probe.tscn" id="14_btfrg"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_btfrg"]
+albedo_color = Color(1, 0.333333, 0, 1)
+emission = Color(1, 1, 0.717647, 1)
+emission_energy_multiplier = 20000.0
+
+[sub_resource type="SphereMesh" id="SphereMesh_6npc3"]
+material = SubResource("StandardMaterial3D_btfrg")
+radius = 250.0
+height = 500.0
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gsi4i"]
 emission_enabled = true
@@ -22,6 +33,30 @@ emission_energy_multiplier = 20000.0
 
 [sub_resource type="SphereMesh" id="SphereMesh_43gc5"]
 material = SubResource("StandardMaterial3D_gsi4i")
+radius = 250.0
+height = 500.0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_6npc3"]
+transparency = 1
+albedo_color = Color(1, 0.833333, 0, 0.12549)
+emission = Color(1, 1, 0, 1)
+
+[sub_resource type="TorusMesh" id="TorusMesh_xm5mp"]
+material = SubResource("StandardMaterial3D_6npc3")
+inner_radius = 309.777
+outer_radius = 545.276
+ring_segments = 3
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_xm5mp"]
+render_priority = 0
+shader = ExtResource("5_6npc3")
+shader_parameter/atmosphere_color = Color(0.4, 0.6, 1, 1)
+shader_parameter/intensity = 5.0
+shader_parameter/falloff = 6.407
+shader_parameter/light_direction = Vector3(0, 1, 0)
+
+[sub_resource type="SphereMesh" id="SphereMesh_x34hc"]
+material = SubResource("ShaderMaterial_xm5mp")
 radius = 250.0
 height = 500.0
 
@@ -90,24 +125,33 @@ size = Vector3(1, 2.575, 2.665)
 [node name="SpaceStation" type="Node3D"]
 script = ExtResource("1_oe38e")
 
-[node name="EditorLight" type="DirectionalLight3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 5.54377, 0)
-light_energy = 13.952
-light_bake_mode = 1
-editor_only = true
-
 [node name="PauseMenu" parent="." instance=ExtResource("7_43gc5")]
 
 [node name="PlayerGUI" parent="." instance=ExtResource("2_dhgmd")]
 
-[node name="Sun" type="DirectionalLight3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 3.59077, 0)
+[node name="Planet" type="MeshInstance3D" parent="."]
+transform = Transform3D(20, 0, 0, 0, -8.74228e-07, 20, 0, -20, -8.74228e-07, 0, 0, -12826.6)
+mesh = SubResource("SphereMesh_6npc3")
+skeleton = NodePath("Sun")
+
+[node name="Sun" type="DirectionalLight3D" parent="Planet"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -6.10352e-05, 823.846)
 shadow_enabled = true
 script = ExtResource("1_dhgmd")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Sun"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 4000)
+[node name="SunMesh" type="MeshInstance3D" parent="Planet/Sun"]
+transform = Transform3D(51.215, 0, 0, 0, 51.215, 0, 0, 0, 51.215, 0, -0.000976563, 15473.6)
 mesh = SubResource("SphereMesh_43gc5")
+
+[node name="Ring" type="MeshInstance3D" parent="Planet"]
+transform = Transform3D(0.983779, 0.000473955, 1.56824e-08, -0.0377741, 0.000547332, 0.977578, 0.175364, -0.00254096, 0.210574, 0, 0, 0)
+mesh = SubResource("TorusMesh_xm5mp")
+
+[node name="Atmosphere" type="MeshInstance3D" parent="Planet"]
+transform = Transform3D(1.06, 0, 0, 0, 1.06, 3.76588e-15, 0, -3.76588e-15, 1.06, 0, 0, 0)
+mesh = SubResource("SphereMesh_x34hc")
+skeleton = NodePath("")
+script = ExtResource("6_6npc3")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_dhgmd")
@@ -244,6 +288,3 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.43352, 0, 0)
 
 [node name="Flashlight" parent="." instance=ExtResource("11_iha3j")]
 transform = Transform3D(-0.484061, 0, 0.875034, 0, 1, 0, -0.875034, 0, -0.484061, 0.894261, -0.447317, -1.72872)
-
-[node name="Probe" parent="." instance=ExtResource("14_btfrg")]
-transform = Transform3D(0.763695, -0.645578, 0, 0.645578, 0.763695, 0, 0, 0, 1, 0.720238, 3.24636, -64.5883)
