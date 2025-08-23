@@ -2,7 +2,7 @@ extends Control
 
 @onready var StartButton := $StartButton
 
-var base = preload("res://scenes/base.tscn")
+var base = preload("res://scenes/space_station.tscn")
 
 func _ready() -> void:
 	StartButton.pressed.connect(_StartButton_pressed)
