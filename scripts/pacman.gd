@@ -12,14 +12,6 @@ var remote_packages: Dictionary = {
 			"time": func(args): return PKG_time_time(args)
 		}
 	},
-	"debug-tools": {
-		"display_name": "Debug Tools",
-		"version": "1.3",
-		"description": "A command used for debugging the game.",
-		"commands": {
-			"debug": func(args): return PKG_debug(args)
-		}
-	},
 	"bankctl": {
 		"display_name": "Bank Control",
 		"version": "1.0",
@@ -82,66 +74,6 @@ func PKG_bankctl(args):
 
 func PKG_time_time(_args):
 	return "%s (%s)" % [str(GLOBAL.TIME), GLOBAL.get_time_string()]
-
-func PKG_debug(args):
-	if args.size() == 0:
-		term.print_to_terminal("debug: missing subcommand, valid subcommands: 'time', 'player'")
-		return
-
-	var subcommand = args[0]
-
-	match subcommand:
-		"time":
-			if args.size() == 1:
-				term.print_to_terminal("debug: time: missing subsubcommand")
-				return
-			var subsubcommand = args[1]
-			match subsubcommand:
-				"set":
-					if args.size() == 1:
-						term.print_to_terminal("debug: time: set: missing target time")
-						return
-
-					var time = args[2]
-
-					if not time.is_valid_float():
-						term.print_to_terminal("debug: time: not a number")
-						return
-	
-					GLOBAL.TIME = time
-				"add":
-					if args.size() == 1:
-						term.print_to_terminal("debug: time: add: missing target time")
-						return
-
-					var time = args[2]
-
-					if not time.is_valid_float():
-						term.print_to_terminal("debug: time: not a number")
-						return
-
-					GLOBAL.TIME += time
-				"get":
-					var time = GLOBAL.TIME
-					var normalized_time = GLOBAL.get_normalized_time()
-					var light_energy = str(sin(PI * normalized_time))
-					var sun_rot = get_node("/root/base/Sun").rotation_degrees.x
-					term.print_to_terminal("Time: %s\nNormalized time: %s\nLight energy: %s\nSun rotation: %s" % [time, normalized_time, light_energy, sun_rot])
-				_:
-					term.print_to_terminal("debug: time: invalid subsubcommand, valid subsubcommands: 'set', 'add', 'get'")
-		"player":
-			var subsubcommand = args[1]
-			match subsubcommand:
-				"print_inv":
-					term.print_to_terminal(str(player.inventory.inventory))
-					print(player.inventory.inventory)
-				"get_rad":
-					term.print_to_terminal(str("Accumulated Dose: %s\nDose Rate: %s" % [player.accumulated_dose, player.dose_rate]))
-					print("Accumulated Dose: %s\nDose Rate: %s" % [player.accumulated_dose, player.dose_rate])
-				_:
-					term.print_to_terminal("debug: player: invalid subsubcommand")
-		_:
-			term.print_to_terminal("debug: invalid subcommand, valid subcommands: 'time', 'player'")
 
 func update_package_list() -> void:
 	term.print_to_terminal("Contacting package server...")

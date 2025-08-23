@@ -16,6 +16,25 @@
 [ext_resource type="PackedScene" uid="uid://dteji45y5tn88" path="res://scenes/power_box.tscn" id="10_rwn7t"]
 [ext_resource type="PackedScene" uid="uid://pl78f6gf7geg" path="res://scenes/flashlight.tscn" id="11_iha3j"]
 
+[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_43gc5"]
+panorama = ExtResource("2_gsi4i")
+
+[sub_resource type="Sky" id="Sky_gsi4i"]
+sky_material = SubResource("PanoramaSkyMaterial_43gc5")
+
+[sub_resource type="Environment" id="Environment_dhgmd"]
+background_mode = 2
+background_color = Color(0.0165517, 0.0165517, 0.0165517, 1)
+background_energy_multiplier = 0.2
+sky = SubResource("Sky_gsi4i")
+ambient_light_source = 1
+ambient_light_color = Color(0.0768358, 0.0768358, 0.0768358, 1)
+ambient_light_sky_contribution = 0.0
+ambient_light_energy = 16.0
+tonemap_mode = 3
+ssao_enabled = true
+glow_enabled = true
+
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_btfrg"]
 albedo_color = Color(1, 0.333333, 0, 1)
 emission = Color(1, 1, 0.717647, 1)
@@ -59,22 +78,6 @@ shader_parameter/light_direction = Vector3(0, 1, 0)
 material = SubResource("ShaderMaterial_xm5mp")
 radius = 250.0
 height = 500.0
-
-[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_43gc5"]
-panorama = ExtResource("2_gsi4i")
-
-[sub_resource type="Sky" id="Sky_gsi4i"]
-sky_material = SubResource("PanoramaSkyMaterial_43gc5")
-
-[sub_resource type="Environment" id="Environment_dhgmd"]
-background_mode = 2
-background_color = Color(0.0165517, 0.0165517, 0.0165517, 1)
-background_energy_multiplier = 0.2
-sky = SubResource("Sky_gsi4i")
-ambient_light_source = 3
-tonemap_mode = 3
-ssao_enabled = true
-glow_enabled = true
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_wwul6"]
 size = Vector3(13.46, 1, 15.1)
@@ -125,9 +128,22 @@ size = Vector3(1, 2.575, 2.665)
 [node name="SpaceStation" type="Node3D"]
 script = ExtResource("1_oe38e")
 
+[node name="Player" parent="." instance=ExtResource("1_3mvrh")]
+
 [node name="PauseMenu" parent="." instance=ExtResource("7_43gc5")]
 
 [node name="PlayerGUI" parent="." instance=ExtResource("2_dhgmd")]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_dhgmd")
+
+[node name="SteamAudioConfig" type="SteamAudioConfig" parent="."]
+global_log_level = 3
+max_reflection_duration = 5.0
+max_reflection_sources = 50.0
+
+[node name="CeilingLight" parent="." instance=ExtResource("7_wwul6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.15046, 0)
 
 [node name="Planet" type="MeshInstance3D" parent="."]
 transform = Transform3D(20, 0, 0, 0, -8.74228e-07, 20, 0, -20, -8.74228e-07, 0, 0, -12826.6)
@@ -152,19 +168,6 @@ transform = Transform3D(1.06, 0, 0, 0, 1.06, 3.76588e-15, 0, -3.76588e-15, 1.06,
 mesh = SubResource("SphereMesh_x34hc")
 skeleton = NodePath("")
 script = ExtResource("6_6npc3")
-
-[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
-environment = SubResource("Environment_dhgmd")
-
-[node name="SteamAudioConfig" type="SteamAudioConfig" parent="."]
-global_log_level = 3
-max_reflection_duration = 5.0
-max_reflection_sources = 50.0
-
-[node name="Player" parent="." instance=ExtResource("1_3mvrh")]
-
-[node name="CeilingLight" parent="." instance=ExtResource("7_wwul6")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.15046, 0)
 
 [node name="Floor" type="StaticBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.50431, 0)

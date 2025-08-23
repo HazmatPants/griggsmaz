@@ -278,6 +278,11 @@ func run_command(command, args):
 				else:
 					print_to_terminal(args[0])
 				await get_tree().create_timer(0.001).timeout
+		"debug":
+			if not GLOBAL.DevMode:
+				print_to_terminal("debug: Developer mode not enabled")
+				return
+			cmd_debug(args)
 		_:
 			var usrbin = resolve_path("/usr/bin")
 			if usrbin.has(command):
@@ -592,6 +597,66 @@ func get_file_description(file: Variant) -> String:
 				return file.get_class()
 		_:
 			return "unknown data type"
+
+func cmd_debug(args):
+	if args.size() == 0:
+		print_to_terminal("debug: missing subcommand, valid subcommands: 'time', 'player'")
+		return
+
+	var subcommand = args[0]
+
+	match subcommand:
+		"time":
+			if args.size() == 1:
+				print_to_terminal("debug: time: missing subsubcommand")
+				return
+			var subsubcommand = args[1]
+			match subsubcommand:
+				"set":
+					if args.size() == 1:
+						print_to_terminal("debug: time: set: missing target time")
+						return
+
+					var time = args[2]
+
+					if not time.is_valid_float():
+						print_to_terminal("debug: time: not a number")
+						return
+	
+					GLOBAL.TIME = time
+				"add":
+					if args.size() == 1:
+						print_to_terminal("debug: time: add: missing target time")
+						return
+
+					var time = args[2]
+
+					if not time.is_valid_float():
+						print_to_terminal("debug: time: not a number")
+						return
+
+					GLOBAL.TIME += time
+				"get":
+					var time = GLOBAL.TIME
+					var normalized_time = GLOBAL.get_normalized_time()
+					var light_energy = str(sin(PI * normalized_time))
+					var sun_rot = get_node("/root/base/Sun").rotation_degrees.x
+					print_to_terminal("Time: %s\nNormalized time: %s\nLight energy: %s\nSun rotation: %s" % [time, normalized_time, light_energy, sun_rot])
+				_:
+					print_to_terminal("debug: time: invalid subsubcommand, valid subsubcommands: 'set', 'add', 'get'")
+		"player":
+			var subsubcommand = args[1]
+			match subsubcommand:
+				"print_inv":
+					print_to_terminal(str(player.inventory.inventory))
+					print(player.inventory.inventory)
+				"get_rad":
+					print_to_terminal(str("Accumulated Dose: %s\nDose Rate: %s" % [player.accumulated_dose, player.dose_rate]))
+					print("Accumulated Dose: %s\nDose Rate: %s" % [player.accumulated_dose, player.dose_rate])
+				_:
+					print_to_terminal("debug: player: invalid subsubcommand")
+		_:
+			print_to_terminal("debug: invalid subcommand, valid subcommands: 'time', 'player'")
 
 func floppy_mount() -> String:
 	if floppyDrive.Disk == null:

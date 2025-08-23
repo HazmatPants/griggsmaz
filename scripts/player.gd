@@ -11,6 +11,9 @@ extends CharacterBody3D
 @export var crouch_scale := 1.0
 @export var crouch_move_speed := 2.0
 @export var crouch_bobbing_speed := 8.0
+
+@export var NOCLIP := false
+
 var crouching := false
 var default_scale := 2.0
 
@@ -294,12 +297,13 @@ func _physics_process(delta):
 			input_dir -= right
 
 	var target_roll = 0.0
-	if input_enabled:
-		if is_on_floor():
-			if Input.is_action_pressed("move_left"):
-				target_roll = deg_to_rad(strafe_roll_amount)
-			elif Input.is_action_pressed("move_right"):
-				target_roll = -deg_to_rad(strafe_roll_amount)
+	if not NOCLIP:
+		if input_enabled:
+			if is_on_floor():
+				if Input.is_action_pressed("move_left"):
+					target_roll = deg_to_rad(strafe_roll_amount)
+				elif Input.is_action_pressed("move_right"):
+					target_roll = -deg_to_rad(strafe_roll_amount)
 
 	current_strafe_roll = lerp(current_strafe_roll, target_roll, delta * strafe_roll_speed)
 
@@ -307,6 +311,8 @@ func _physics_process(delta):
 	var sprinting = Input.is_action_pressed("sprint") and is_on_floor() and not crouching
 	
 	var speed = sprint_speed if sprinting else move_speed if not crouching else crouch_move_speed
+	if NOCLIP:
+		speed = sprint_speed * 100 if Input.is_action_pressed("sprint") else move_speed * 100 
 	var desired_velocity = input_dir * speed
 	# Separate XZ velocity
 	var horizontal_velocity = Vector3(velocity.x, 0, velocity.z)
@@ -323,6 +329,7 @@ func _physics_process(delta):
 			accel = decceleration
 		else:
 			accel = decceleration * 0.05
+	
 
 	horizontal_velocity = horizontal_velocity.lerp(desired_velocity, accel * delta)
 
@@ -333,29 +340,40 @@ func _physics_process(delta):
 	var current_bobbing_speed = sprint_bobbing_speed if sprinting else bobbing_speed if not crouching else crouch_bobbing_speed
 	var current_bobbing_amount = sprint_bobbing_amount if sprinting else bobbing_amount
 	var current_footstep_interval = sprint_footstep_interval if sprinting else footstep_interval
-
-
-	if not is_on_floor():
-		velocity += gravity * delta
-		fall_velocity = velocity.y
-
-		if fall_velocity < 0:
-			max_fall_speed = min(max_fall_speed, fall_velocity)
+	if NOCLIP:
+		if Input.is_action_pressed("jump"):	
+			velocity.y += 1
 	else:
-		velocity.y = 0
-		if input_enabled:
-			if Input.is_action_just_pressed("jump"):
-				velocity.y = jump_velocity
-				viewpunch_velocity += jump_viewpunch
-				footstep_sound("impact")
+		if not is_on_floor():
+			if not NOCLIP:
+				velocity += gravity * delta
+				fall_velocity = velocity.y
+
+				if fall_velocity < 0:
+					max_fall_speed = min(max_fall_speed, fall_velocity)
+		else:
+			velocity.y = 0
+			if input_enabled:
+				if Input.is_action_just_pressed("jump"):
+					velocity.y = jump_velocity
+					viewpunch_velocity += jump_viewpunch
+					footstep_sound("impact")
 	if input_enabled:
 		if Input.is_action_pressed("crouch"):
-			crouching = true
-			$CollisionShape3D.shape.height = lerp($CollisionShape3D.shape.height, crouch_scale, 0.1)
+			if NOCLIP:
+				velocity.y += -1
+			else:
+				crouching = true
+				$CollisionShape3D.shape.height = lerp($CollisionShape3D.shape.height, crouch_scale, 0.1)
 		else:
 			crouching = false
 			$CollisionShape3D.shape.height = lerp($CollisionShape3D.shape.height, default_scale, 0.1)
-
+	
+	if NOCLIP:
+		velocity = velocity.lerp(Vector3.ZERO, 0.1)
+	
+	$CollisionShape3D.disabled = NOCLIP
+	
 	move_and_slide()
 
 	var vel = get_real_velocity()

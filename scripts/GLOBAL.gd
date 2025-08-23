@@ -17,6 +17,9 @@ var Player: CharacterBody3D = null
 var PlayerScene: Node = null
 var PlayerGUI: CanvasLayer = null
 
+# developer options
+var DevMode := false
+
 var settings: Dictionary = {
 	"video": {
 		"bloom": true,
@@ -57,6 +60,19 @@ func _process(delta: float) -> void:
 		TIME = 0
 		DAYS += 1
 
+func _input(event):
+	if event is InputEventKey:
+		if event.pressed:
+			match event.keycode:
+				KEY_KP_MULTIPLY:
+					if event.is_command_or_control_pressed() and event.shift_pressed:
+						DevMode = !DevMode
+						PlayerGUI.show_popup("Developer mode enabled" if DevMode else "Developer mode disabled", PlayerGUI.sfx_popup)
+			if DevMode:
+				match event.keycode:
+					KEY_KP_0:
+						Player.NOCLIP = !Player.NOCLIP
+						PlayerGUI.show_popup("Noclip enabled" if Player.NOCLIP else "Noclip disabled", PlayerGUI.sfx_popup)
 func get_time_string() -> String:
 	var hours = TIME / 60
 	var minutes = int(TIME) % 60
