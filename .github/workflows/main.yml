@@ -1,0 +1,52 @@
+on: 
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  export_and_publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    name: Export and Publish Game
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Export game
+        id: export
+        uses: firebelley/godot-export@v7.0.0
+        with:
+          godot_executable_download_url: https://downloads.tuxfamily.org/godotengine/4.0/Godot_v4.0-stable_linux.x86_64.zip
+          godot_export_templates_download_url: https://downloads.tuxfamily.org/godotengine/4.0/Godot_v4.0-stable_export_templates.tpz
+          relative_project_path: ./
+          archive_output: true
+
+      - name: Create release
+        uses: ncipollo/release-action@v1.18.0
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          generateReleaseNotes: true
+          tag: ${{ github.ref_name }}
+          artifacts: ${{ steps.export.outputs.archive_directory }}/*
+
+      - name: Upload Windows build to itch.io
+        uses: Oval-Tutu/publish-to-itch-with-butler@v1
+        with:
+          api-key: ${{ secrets.BUTLER_API_KEY }}
+          itch_user: HazmatPants
+          itch_game: Griggsmaz
+          channel: windows
+          package: ${{ steps.export.outputs.archive_directory }}/windows.zip
+          version: ${{ github.ref_name }}
+
+      - name: Upload Linux build to itch.io
+        uses: Oval-Tutu/publish-to-itch-with-butler@v1
+        with:
+          api-key: ${{ secrets.BUTLER_API_KEY }}
+          itch_user: HazmatPants
+          itch_game: Griggsmaz
+          channel: linux
+          package: ${{ steps.export.outputs.archive_directory }}/linux.zip
+          version: ${{ github.ref_name }}
