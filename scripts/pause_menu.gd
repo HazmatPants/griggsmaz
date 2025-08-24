@@ -20,6 +20,9 @@ func _ready():
 	QuitButton.pressed.connect(_on_quitbutton_pressed)
 	SettingsCloseButton.pressed.connect(_on_settingsclosebutton_pressed)
 
+	GLOBAL._PlayerInit()
+	playerGUI = GLOBAL.PlayerGUI
+
 func PlayerInit():
 	GLOBAL.settings = get_settings()
 	SettingsController.apply_settings_to_ui(GLOBAL.settings)

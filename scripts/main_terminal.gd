@@ -2,7 +2,7 @@ extends StaticBody3D
 
 @onready var viewportContainer := $SubViewportContainer
 @onready var viewport := $SubViewportContainer/Viewport
-@onready var terminalInput := $SubViewportContainer/Viewport/Control/VBoxContainer/LineEdit
+@onready var terminalInput: LineEdit = $SubViewportContainer/Viewport/Control/VBoxContainer/LineEdit
 @onready var terminalOutput :=$SubViewportContainer/Viewport/Control/VBoxContainer/CodeEdit
 @onready var currentPathLabel := $SubViewportContainer/Viewport/Control/VBoxContainer/CWD
 @onready var CameraTerminal := $"../CameraTerminal"
@@ -44,8 +44,11 @@ var mtab := {}
 
 var current_path = ["/", "home"]
 
-@onready var audio_player := $SFXPlayer
-@onready var aplay := $APlayer
+@onready var audio_player: SteamAudioPlayer = $SFXPlayer
+@onready var audio_player2: SteamAudioPlayer = $SFXPlayer2
+@onready var aplay: SteamAudioPlayer = $APlayer
+
+var sfx_bell := preload("res://assets/sound/sfx/ui/bell.wav")
 
 var key_sounds := GLOBAL.load_sounds_from_dir("res://assets/sound/sfx/ui/keypress/key")
 var back_key_sounds := GLOBAL.load_sounds_from_dir("res://assets/sound/sfx/ui/keypress/back")
@@ -53,6 +56,9 @@ var enter_key_sounds := GLOBAL.load_sounds_from_dir("res://assets/sound/sfx/ui/k
 
 var blackscreen: StandardMaterial3D
 var defaultscreen: StandardMaterial3D
+
+var history = []
+var history_idx = -1
 
 func _ready() -> void:
 	viewportContainer.visible = false
@@ -72,6 +78,10 @@ func _ready() -> void:
 	base.PowerOn.connect(_PowerOn)
 	
 	Pacman.term = self
+	GLOBAL._PlayerInit()
+	base = GLOBAL.PlayerScene
+	player = GLOBAL.Player
+	playerGUI = GLOBAL.PlayerGUI
 
 func _PowerOff():
 	$Screen.mesh.material = blackscreen
@@ -93,6 +103,69 @@ func wait_sec(seconds: float) -> void:
 	await TIMER.timeout
 	TIMER = null
 
+func autocomplete(input: String) -> void:
+	var parts = input.strip_edges().split(" ")
+	var last_part = parts[-1]
+
+	var dir_path: String
+	var fragment: String
+
+	if last_part.find("/") != -1:
+		var path_split = last_part.rsplit("/", 1)
+		dir_path = path_split[0]
+		fragment = path_split[1]
+		if dir_path == "":
+			dir_path = "/"
+	else:
+		dir_path = "."
+		fragment = last_part
+
+	var dir_ref = resolve_path(dir_path)
+	if typeof(dir_ref) != TYPE_DICTIONARY:
+		bell()
+		return  # invalid path
+
+	var matches = []
+	for key in dir_ref.keys():
+		if key.begins_with(fragment):
+			matches.append(key)
+
+	if matches.size() == 0:
+		bell()
+		return
+	elif matches.size() == 1:
+		var completion = matches[0]
+		if typeof(dir_ref[completion]) == TYPE_DICTIONARY:
+			completion += "/"
+		if dir_path == ".":
+			parts[-1] = completion
+		else:
+			parts[-1] = (dir_path.rstrip("/") + "/" + completion).strip_edges()
+	else:
+		var prefix = longest_common_prefix(matches)
+		if dir_path == ".":
+			parts[-1] = prefix
+		else:
+			parts[-1] = (dir_path.rstrip("/") + "/" + prefix).strip_edges()
+
+		bell()
+
+	# Update input safely
+	terminalInput.text = " ".join(parts)
+	terminalInput.caret_column = terminalInput.text.length()
+
+func longest_common_prefix(strings: Array) -> String:
+	if strings.size() == 0:
+		return ""
+	var prefix = strings[0]
+	for s in strings:
+		while not s.begins_with(prefix):
+			prefix = prefix.substr(0, prefix.length() - 1)
+			if prefix == "":
+				return ""
+	return prefix
+
+
 func interact():
 	if base.power:
 		if not terminal_focus:
@@ -106,6 +179,9 @@ func interact():
 			
 			terminalInput.edit()
 
+func bell():
+	audio_player2.play_stream(sfx_bell)
+
 func close_terminal():
 	GLOBAL.CanPause = true
 	player.input_enabled = true
@@ -118,12 +194,38 @@ func close_terminal():
 
 func _input(event):
 	if event is InputEventKey and event.pressed:
-		if event.keycode == KEY_C and event.ctrl_pressed:
-			if TIMER:
-				TIMER.timeout.emit()
-				TIMER = null
-			SIGINT = true
-			print_to_terminal("^C")
+		if event.ctrl_pressed:
+			if event.keycode == KEY_C:
+				if TIMER:
+					TIMER.timeout.emit()
+					TIMER = null
+				SIGINT = true
+				print_to_terminal("^C")
+			elif event.keycode == KEY_L:
+				terminalOutput.text = ""
+
+		if event.keycode == KEY_UP:
+			if history.size() == 0:
+				bell()
+				return
+			if history_idx < history.size() - 1:
+				history_idx += 1
+				terminalInput.text = history[history.size() - 1 - history_idx]
+			else:
+				bell()  # already at oldest command
+
+		elif event.keycode == KEY_DOWN:
+			if history_idx > 0:
+				history_idx -= 1
+				terminalInput.text = history[history.size() - 1 - history_idx]
+			elif history_idx == 0:
+				history_idx = -1
+				terminalInput.text = ""  # back to empty input
+			else:
+				bell()  # already at newest input
+		elif event.keycode == KEY_TAB:
+			autocomplete(terminalInput.text)
+			terminalInput.call_deferred("edit")
 	if terminal_focus and event is InputEventKey and event.pressed and not event.echo:
 		if event.keycode in [KEY_SHIFT, KEY_CTRL, KEY_ALT, KEY_META]:
 			return
@@ -186,6 +288,10 @@ func parse_and_execute(input: String) -> void:
 
 func parse_command(cmd: String):
 	terminalInput.editable = false
+	if history.is_empty() or history[history.size() - 1] != cmd:
+		write_file("/home/.shell_history", cmd, true)
+	history = resolve_path("/home/.shell_history").split("\n", false)
+	history_idx = -1
 	print_to_terminal("$ " + cmd)
 	SIGINT = false
 	

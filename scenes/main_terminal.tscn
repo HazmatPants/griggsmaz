@@ -88,7 +88,9 @@ focus_mode = 2
 custom_minimum_size = Vector2(0, 450)
 layout_mode = 2
 theme = SubResource("Theme_rtpsq")
+theme_override_colors/background_color = Color(0, 0, 0, 1)
 theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("3_amwpv")
 editable = false
 context_menu_enabled = false
 emoji_menu_enabled = false
@@ -115,6 +117,11 @@ emoji_menu_enabled = false
 caret_blink = true
 
 [node name="SFXPlayer" type="SteamAudioPlayer" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.365122, -0.0619643, 0)
+max_polyphony = 4
+panning_strength = 0.0
+
+[node name="SFXPlayer2" type="SteamAudioPlayer" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.365122, -0.0619643, 0)
 max_polyphony = 4
 panning_strength = 0.0

@@ -32,11 +32,15 @@ var settings: Dictionary = {
 signal PlayerInit
 
 func _ready() -> void:
+	_PlayerInit()
+
+func _PlayerInit():
 	var playerdata = get_player()
-	Player = playerdata["player"]
-	PlayerScene = playerdata["scene"]
-	PlayerGUI = playerdata["playerGUI"]
-	PlayerInit.emit()
+	if playerdata != null:
+		Player = playerdata["player"]
+		PlayerScene = playerdata["scene"]
+		PlayerGUI = playerdata["playerGUI"]
+		PlayerInit.emit()
 
 func load_sounds_from_dir(path: String) -> Array[AudioStream]:
 	var sounds: Array[AudioStream] = []
@@ -65,7 +69,7 @@ func _input(event):
 		if event.pressed:
 			match event.keycode:
 				KEY_KP_MULTIPLY:
-					if event.is_command_or_control_pressed() and event.shift_pressed:
+					if event.ctrl_pressed and event.shift_pressed:
 						DevMode = !DevMode
 						PlayerGUI.show_popup("Developer mode enabled" if DevMode else "Developer mode disabled", PlayerGUI.sfx_popup)
 			if DevMode:
@@ -73,6 +77,7 @@ func _input(event):
 					KEY_KP_0:
 						Player.NOCLIP = !Player.NOCLIP
 						PlayerGUI.show_popup("Noclip enabled" if Player.NOCLIP else "Noclip disabled", PlayerGUI.sfx_popup)
+
 func get_time_string() -> String:
 	var hours = TIME / 60
 	var minutes = int(TIME) % 60
