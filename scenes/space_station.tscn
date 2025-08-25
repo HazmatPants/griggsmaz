@@ -617,5 +617,4 @@ reflection = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 31.0883, 0, 0)
 stream = ExtResource("18_125g2")
 attenuation_model = 3
-autoplay = true
 panning_strength = 0.0

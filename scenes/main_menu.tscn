@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://c4gcdye00gqt"]
+[gd_scene load_steps=3 format=3 uid="uid://c4gcdye00gqt"]
 
 [ext_resource type="Script" uid="uid://diiq8y4x1e3so" path="res://scripts/main_menu.gd" id="1_l6cm7"]
+[ext_resource type="AudioStream" uid="uid://cp2wrlsqnonsn" path="res://assets/sound/sfx/ui/intro.wav" id="2_ekxnf"]
 
 [node name="MainMenu" type="Control"]
 layout_mode = 3
@@ -37,6 +38,22 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_font_sizes/font_size = 96
 text = "Griggsmaz"
+uppercase = true
+
+[node name="Name" type="Label" parent="."]
+modulate = Color(0.2035, 0.2035, 0.37, 1)
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -176.0
+offset_top = 74.0
+offset_right = 1038.0
+offset_bottom = 171.0
+grow_horizontal = 2
+scale = Vector2(0.29, 0.29)
+theme_override_font_sizes/font_size = 96
+text = "HazmatPants presents..."
 
 [node name="StartButton" type="Button" parent="."]
 layout_mode = 1
@@ -51,4 +68,9 @@ offset_right = 26.0
 offset_bottom = 12.5
 grow_horizontal = 2
 grow_vertical = 2
+disabled = true
 text = "Start"
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("2_ekxnf")
+volume_db = -6.24

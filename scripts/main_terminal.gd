@@ -389,6 +389,8 @@ func run_command(command, args):
 				print_to_terminal("debug: Developer mode not enabled")
 				return
 			cmd_debug(args)
+		"bell":
+			bell()
 		_:
 			var usrbin = resolve_path("/usr/bin")
 			if usrbin.has(command):
