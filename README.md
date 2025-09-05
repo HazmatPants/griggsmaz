@@ -11,6 +11,6 @@ Join my [Discord](https://discord.gg/G3ECCdZVFz) for notifications for new commi
 
 # Inspirations
 - [Voices of the Void](https://mrdrnose.itch.io/votv)
-- [HBM's Nuclear Tech Mod](https://github.com/HbmMods/Hbm-s-Nuclear-Tech-GIT)
+- [HBM's Nuclear Tech Mod](https://github.com/HbmMods/Hbm-s-Nuclear-Tech-GIT) + [NTM Space](https://github.com/JameH2/Hbm-s-Nuclear-Tech-GIT)
 - [SCP - Containment Breach](https://www.scpcbgame.com/)
 
