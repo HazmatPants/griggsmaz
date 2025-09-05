@@ -1,6 +1,6 @@
 # Griggsmaz
 
-![img](https://img.itch.zone/aW1nLzIyMzM5NjM3LnBuZw==/original/Yd7m4W.png)
+![img](https://img.itch.zone/aW1nLzIyODYwOTQxLnBuZw==/original/RIpDmN.png)
 
 A game created with [Godot Engine](https://github.com/godotengine/godot).
 
